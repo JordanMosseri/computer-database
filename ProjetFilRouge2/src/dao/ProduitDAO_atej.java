@@ -15,7 +15,7 @@ import java.util.List;
 import modele.Computer;
 import modele.Fabriquant;
 
-public class ProduitDAO {
+public class ProduitDAO_atej {
 	
 	
 	private Connection getConnexion() {
