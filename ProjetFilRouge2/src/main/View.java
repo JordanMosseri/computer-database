@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.Scanner;
 
 import modele.Computer;
-import modele.Fabriquant;
+import modele.Company;
 
-public class Vue {
+public class View {
 	
 	Scanner in = new Scanner(System.in);
-	Controleur controleur;
+	Service controleur;
 	
 	public  int afficherMenu(){
 		
@@ -67,11 +67,15 @@ public class Vue {
 		if(dateRecupered == null){
 			dateRecupered=new Date();
 		}
+		Date dateRemovedRecupered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
+		if(dateRemovedRecupered == null){
+			dateRemovedRecupered=new Date();
+		}
 		//Date d = new Date(System.currentTimeMillis());
 		System.out.println();
 		
 		//System.out.println(nom+" "+fab);
-		return new Computer(nom,dateRecupered,new Fabriquant(fab));
+		return new Computer(nom,dateRecupered, dateRemovedRecupered,new Company(fab));
 	}
 	
 	

@@ -1,20 +1,17 @@
 package main;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import modele.Computer;
+import modele.Company;
 import dao.CompanyDAO;
 import dao.ComputerDAO;
-import modele.*;
 
 
 
-public class Controleur {
+public class Service {
 	
 	
 	
@@ -22,8 +19,8 @@ public class Controleur {
 	
 	public static void main(String[] args) {
 		
-		Controleur controleur = new Controleur();
-		Vue vue = new Vue();
+		Service controleur = new Service();
+		View vue = new View();
 		
 		controleur.vue = vue;
 		vue.controleur = controleur;
@@ -33,7 +30,7 @@ public class Controleur {
 		//System.out.println(verifierChaine(MOTIF, "20155-06-99"));
 	}
 	
-	public  Vue vue;
+	public  View vue;
 	
 	public  void lancerProgramme() {
 		
@@ -58,10 +55,10 @@ public class Controleur {
 				creerComputer();
 				break;
 			case 5:
-				update();
+				updateComputer();
 				break;
 			case 6:
-				delete();
+				deleteComputer();
 				break;
 			case 7:
 				continuer=false;
@@ -81,7 +78,7 @@ public class Controleur {
 	}
 	
 	public void listerCompanies(){
-		List<Fabriquant> p = CompanyDAO.getInstance().getListCompanies();
+		List<Company> p = CompanyDAO.getInstance().getListCompanies();
 		vue.println(p);
 	}
 	
@@ -95,7 +92,7 @@ public class Controleur {
 		listerComputers();
 	}
 	
-	public void update(){
+	public void updateComputer(){
 		int id = vue.recupIntFromConsole("Veuillez entrer un id d'ordi: ");
 		String nomRecupered = vue.recupStringFromConsole("Veuillez entrer un nouveau nom d'ordi (vide pour passer): ");
 		if( ! nomRecupered.equals(""))
@@ -106,7 +103,7 @@ public class Controleur {
 		}
 	}
 	
-	public void delete(){
+	public void deleteComputer(){
 		int id2 = vue.recupIntFromConsole("Veuillez entrer un id d'ordi: ");
 		ComputerDAO.getInstance().deleteComputer(id2);
 	}

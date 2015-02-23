@@ -1,22 +1,15 @@
 package dao;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import dao.DAOAbstrait;
 import modele.Computer;
-import modele.Fabriquant;
+import modele.Company;
 
-public class ComputerDAO extends DAOAbstrait{
+public class ComputerDAO extends AbstractDAO{
 	
 	/**
 	 * Constructeur prive
@@ -27,13 +20,16 @@ public class ComputerDAO extends DAOAbstrait{
 	/**
 	 * Instance unique pré-initialisée
 	 */
-	private static ComputerDAO INSTANCE = new ComputerDAO();
+	private static ComputerDAO INSTANCE = null;
 	 
 	/**
 	 * Point d'accès pour l'instance unique du singleton
 	 * @return
 	 */
 	public static ComputerDAO getInstance(){
+		if (INSTANCE == null) {
+			INSTANCE = new ComputerDAO();	
+		}
 		return INSTANCE;
 	}
 	
@@ -53,7 +49,7 @@ public class ComputerDAO extends DAOAbstrait{
 		final String REQUETE_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id "+where;
 		//final String REQUETE_GET_ALL = "SELECT * FROM computer";
 		
-		ArrayList<Computer> liste  = new ArrayList<Computer>();
+		ArrayList<Computer> liste  = null;//new ArrayList<Computer>();
 		mettreVariablesANull();
 		
 		try {
@@ -62,15 +58,7 @@ public class ComputerDAO extends DAOAbstrait{
 			cn = getConnexion();
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(REQUETE_GET_ALL);
-			while (rs.next()) {
-				//System.out.println(rs.getTimestamp("introduced"));if(true)return null;
-				long introduced=0;
-				if(rs.getTimestamp("introduced") != null){
-					introduced=rs.getTimestamp("introduced").getTime();
-				}
-				Computer p =  new Computer(rs.getString("name"), new Date(introduced), new Fabriquant(rs.getString("company.name")));//company.name company_id
-				liste.add(p);
-			}
+			liste = Mapper.mapper(rs);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,17 +79,17 @@ public class ComputerDAO extends DAOAbstrait{
 			
 			cn = getConnexion();
 			
-			company_id = CompanyDAO.getInstance().recupCompanyIdIfExists(comp.fabriquant.nomFabricant);
+			company_id = CompanyDAO.getInstance().recupCompanyIdIfExists(comp.company.name);
 			
 			if(company_id<0){
-				company_id = CompanyDAO.getInstance().insererCompany(comp.fabriquant.nomFabricant);
+				company_id = CompanyDAO.getInstance().insererCompany(comp.company.name);
 			}
 			//System.out.println(company_id);if(true)return;
 			
 			
 			pstmt = cn.prepareStatement("INSERT into computer(name,introduced,company_id) VALUES(?,?,?)");
-			pstmt.setString(1,comp.nom);
-			pstmt.setTimestamp(2,new Timestamp(comp.dateAjout.getTime()));
+			pstmt.setString(1,comp.name);
+			pstmt.setTimestamp(2,new Timestamp(comp.dateAdded.getTime()));
 			pstmt.setInt(3, company_id);
 			pstmt.executeUpdate();
 			

@@ -7,18 +7,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DAOAbstrait {
+public class AbstractDAO {
+	
+	
 	
 	protected ResultSet rs = null ;
 	protected Statement stmt = null;
 	protected PreparedStatement pstmt = null;
 	protected Connection cn = null;
 	
+	static{
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	protected Connection getConnexion() {
 
 		Connection cn = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			
 			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull","root","root");
 
 		} catch (Exception e) {

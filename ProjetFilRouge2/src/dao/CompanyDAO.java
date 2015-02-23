@@ -1,17 +1,12 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import modele.Computer;
-import modele.Fabriquant;
+import modele.Company;
 
-public class CompanyDAO extends DAOAbstrait {
+public class CompanyDAO extends AbstractDAO {
 	
 	/**
 	 * Constructeur prive
@@ -22,24 +17,27 @@ public class CompanyDAO extends DAOAbstrait {
 	/**
 	 * Instance unique pré-initialisée
 	 */
-	private static CompanyDAO INSTANCE = new CompanyDAO();
+	private static CompanyDAO INSTANCE = null;
 	 
 	/**
 	 * Point d'accès pour l'instance unique du singleton
 	 * @return
 	 */
 	public static CompanyDAO getInstance(){
+		if (INSTANCE == null) {
+			INSTANCE = new CompanyDAO();	
+		}
 		return INSTANCE;
 	}
 	
 	//////////////////////
 	
 	
-	public List<Fabriquant> getListCompanies(){
+	public List<Company> getListCompanies(){
 		
 		final String REQUETE_GET_ALL = "SELECT * FROM company";
 		
-		ArrayList<Fabriquant> liste  = new ArrayList<Fabriquant>();
+		ArrayList<Company> liste  = new ArrayList<Company>();
 		mettreVariablesANull();
 		
 		try {
@@ -50,7 +48,7 @@ public class CompanyDAO extends DAOAbstrait {
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(REQUETE_GET_ALL);
 			while (rs.next()) {
-				Fabriquant fab = new Fabriquant(rs.getString("name"));
+				Company fab = new Company(rs.getString("name"));
 				liste.add(fab);
 			}
 			
