@@ -13,14 +13,34 @@ import modele.Fabriquant;
 
 public class CompanyDAO extends DAOAbstrait {
 	
+	/**
+	 * Constructeur prive
+	 */
+	private CompanyDAO() {
+	}
+	
+	/**
+	 * Instance unique pré-initialisée
+	 */
+	private static CompanyDAO INSTANCE = new CompanyDAO();
+	 
+	/**
+	 * Point d'accès pour l'instance unique du singleton
+	 * @return
+	 */
+	public static CompanyDAO getInstance(){
+		return INSTANCE;
+	}
+	
+	//////////////////////
+	
+	
 	public List<Fabriquant> getListCompanies(){
 		
 		final String REQUETE_GET_ALL = "SELECT * FROM company";
 		
 		ArrayList<Fabriquant> liste  = new ArrayList<Fabriquant>();
-		ResultSet rs = null ;
-		Statement stmt = null;
-		Connection cn = null;
+		mettreVariablesANull();
 		
 		try {
 			
@@ -38,26 +58,19 @@ public class CompanyDAO extends DAOAbstrait {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				
-				if (stmt != null)
-					stmt.close();
-				
-				if (cn != null) 
-					cn.close();
-			} catch (SQLException e) {}
+			tryCloseVariables();
 		}
 		
 		return liste;
 	}
 	
-	
+	/**
+	 * Insere une company dans la bdd
+	 * @param nomFab
+	 * @return Id de la company nouvellement cree
+	 */
 	public int insererCompany(String nomFab){
-		ResultSet rs = null ;
-		PreparedStatement stmt = null;
-		Connection cn = null;
+		mettreVariablesANull();
 		
 		int retour = -1;
 		
@@ -65,36 +78,31 @@ public class CompanyDAO extends DAOAbstrait {
 			
 			cn = getConnexion();
 			
-			stmt = cn.prepareStatement("INSERT into company(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
-			stmt.setString(1, nomFab);
-			stmt.executeUpdate();
-			rs = stmt.getGeneratedKeys();
-			if (rs.next()){
+			pstmt = cn.prepareStatement("INSERT into company(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+			pstmt.setString(1, nomFab);
+			pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys();
+			while (rs.next()){
 				retour=rs.getInt(1);
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				
-				if (stmt != null)
-					stmt.close();
-				
-				if (cn != null) 
-					cn.close();
-			} catch (SQLException e) {}
+			tryCloseVariables();
 		}
 		
+		//System.out.println("retour insererCompany="+retour);
 		return retour;
 	}
 	
+	/**
+	 * Verifie si une company existe.
+	 * @param nomFab nom de la company/fabriquant dont l'existance est a verifier
+	 * @return Id de la company dans la bdd si celle-ci existe, -1 si celle-ci n'existe pas
+	 */
 	public int recupCompanyIdIfExists(String nomFab){
-		ResultSet rs = null ;
-		PreparedStatement stmt = null;
-		Connection cn = null;
+		mettreVariablesANull();
 		
 		int retour = -1;
 		
@@ -102,9 +110,9 @@ public class CompanyDAO extends DAOAbstrait {
 			
 			cn = getConnexion();
 			
-			stmt = cn.prepareStatement("SELECT * FROM company WHERE name=?");
-			stmt.setString(1, nomFab);
-			rs = stmt.executeQuery();
+			pstmt = cn.prepareStatement("SELECT * FROM company WHERE name=?");
+			pstmt.setString(1, nomFab);
+			rs = pstmt.executeQuery();
 			if(rs.next()){
 				retour = rs.getInt("id");
 			}
@@ -112,18 +120,10 @@ public class CompanyDAO extends DAOAbstrait {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				
-				if (stmt != null)
-					stmt.close();
-				
-				if (cn != null) 
-					cn.close();
-			} catch (SQLException e) {}
+			tryCloseVariables();
 		}
 		
+		//System.out.println("retour recupCompanyIdIfExists="+retour);
 		return retour;
 	}
 }
