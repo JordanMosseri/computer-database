@@ -3,6 +3,8 @@ package com.excilys.computerdatabase.modele;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.excilys.computerdatabase.util.Constantes;
+
 public class Computer {
 	
 	public int id;
@@ -12,11 +14,40 @@ public class Computer {
 	public Company company;
 	
 	
+	
 	public long getDateAddedLong() {
-		return dateAdded.getTime();
+		if (dateAdded==null) {
+			return 0;
+		}
+		else {
+			return dateAdded.getTime();
+		}
 	}
 	public long getDateRemovedLong() {
-		return dateRemoved.getTime();
+		if (dateRemoved == null) {
+			return 0;
+		}
+		else {
+			return dateRemoved.getTime();
+		}
+	}
+	
+	public String getDateAddedString() {
+		if (dateAdded == null) {
+			return "";
+		}
+		else{
+			return Constantes.dateFormat.format(dateAdded);
+		}
+	}
+	
+	public String getDateRemovedString() {
+		if (dateRemoved == null) {
+			return "";
+		}
+		else{
+			return Constantes.dateFormat.format(dateRemoved);
+		}
 	}
 	
 	public Date getDateAdded() {

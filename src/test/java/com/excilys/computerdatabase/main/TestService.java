@@ -19,24 +19,26 @@ public class TestService {
 	
 	@Test
 	public void testCheckString(){
-		Service c = new Service();
-		assertTrue(c.checkString(Constantes.REGEX_INTEGER, "02"));
-		assertTrue(c.checkString(Constantes.REGEX_INTEGER, "0"));
-		assertTrue(c.checkString(Constantes.REGEX_INTEGER, "1"));
-		assertFalse(c.checkString(Constantes.REGEX_INTEGER, " "));
-		assertFalse(c.checkString(Constantes.REGEX_INTEGER, ""));
-		assertTrue(c.checkString(Constantes.REGEX_INTEGER, "12"));
-		assertTrue(c.checkString(Constantes.REGEX_INTEGER, "123"));
-		assertFalse(c.checkString(Constantes.REGEX_INTEGER, "12.3"));
-		assertFalse(c.checkString(Constantes.REGEX_INTEGER, "12a3"));
-		assertTrue(c.checkString(Constantes.REGEX_INTEGER, "-1"));
-		assertFalse(c.checkString(Constantes.REGEX_INTEGER, "-1.2"));
-		assertFalse(c.checkString(Constantes.REGEX_INTEGER, null));
+		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "02"));
+		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "0"));
+		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "1"));
+		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, " "));
+		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, ""));
+		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "12"));
+		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "123"));
+		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, "12.3"));
+		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, "12a3"));
+		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "-1"));
+		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, "-1.2"));
+		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, null));
 	}
 	
 	@Test
-	public void test2(){
-		
+	public void testStringToInt(){
+		assertEquals(1, Service.stringToInt("1"));
+		assertEquals(12, Service.stringToInt("12"));
+		assertEquals(-1, Service.stringToInt("a"));
+		assertEquals(-1, Service.stringToInt("5a"));
 	}
 	
 	@Test

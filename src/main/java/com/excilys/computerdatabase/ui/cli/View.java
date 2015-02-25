@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.main;
+package com.excilys.computerdatabase.ui.cli;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +9,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.util.Constantes;
@@ -16,9 +17,46 @@ import com.excilys.computerdatabase.util.Constantes;
 public class View {
 	
 	Scanner in = new Scanner(System.in);
-	Service controleur;
+	public Service controleur;
 	
-	
+	public  void lancerProgramme() {
+		
+		boolean continuer = true;
+		
+		while(continuer){
+			
+			int selection = this.showMenuAndGetChoice();
+			
+			
+			switch (selection) {
+			case 1:
+				this.println( controleur.getComputers() );
+				break;
+			case 2:
+				this.println( controleur.getCompanies() );
+				break;
+			case 3:
+				this.println( controleur.showComputerDetails( this.getIntFromConsole("Veuillez entrer un id d'ordi: ") ) );
+				break;
+			case 4:
+				controleur.addComputer( this.getComputerFromConsole() );
+				break;
+			case 5:
+				controleur.updateComputer();
+				break;
+			case 6:
+				controleur.deleteComputer( this.getIntFromConsole("Veuillez entrer un id d'ordi: ") );
+				break;
+			case 7:
+				continuer=false;
+				this.println("Au revoir...");
+				break;
+			default:
+				break;
+			}
+		}
+		
+	}
 	
 	public  int showMenuAndGetChoice(){
 		
@@ -50,12 +88,8 @@ public class View {
 			this.print(message);
 			
 			String strRecuperee = in.nextLine();
-			if (controleur.checkString(Constantes.REGEX_INTEGER, strRecuperee)) {
-				try{
-					//id = in.nextInt();
-					id = Integer.parseInt(strRecuperee);
-				}
-				catch(Exception e){ }//java.util.InputMismatchException
+			id = Service.stringToInt(strRecuperee);
+			if (id >= 0){
 				ok=true;
 			}
 		}
@@ -104,7 +138,7 @@ public class View {
 			}
 			
 			//VERIF
-			ok = controleur.checkString(Constantes.REGEX_DATE, strRecuperee);
+			ok = Service.checkString(Constantes.REGEX_DATE, strRecuperee);
 			
 			/*if(strRecuperee.contains("-")){
 				String[] temp = strRecuperee.split("-");
@@ -119,7 +153,7 @@ public class View {
 		}
 		
 		
-		return controleur.stringToDate(strRecuperee);
+		return Service.stringToDate(strRecuperee);
 	}
 	
 	

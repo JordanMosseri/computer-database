@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.excilys.computerdatabase.main.View;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.ui.cli.View;
+import com.excilys.computerdatabase.util.Logging;
 
 public class ComputerDAO extends AbstractDAO{
 	
@@ -38,16 +39,28 @@ public class ComputerDAO extends AbstractDAO{
 	//////////////////////
 	
 	
+	final String REQUETE_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";
+	//final String REQUETE_GET_ALL = "SELECT * FROM computer";
+	
 	public Computer getComputer(int idComputer){
 		return getOneOrManyComputers("WHERE computer.id='"+idComputer+"'").get(0);
 	}
 	
-	public List<Computer> getListComputers(){
+	public List<Computer> getAll(){
 		return getOneOrManyComputers("");
 	}
 	
-	final String REQUETE_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";
-	//final String REQUETE_GET_ALL = "SELECT * FROM computer";
+	public Paging<Computer> getAll(int offset, int limit){
+		if(offset < 0){
+			throw new IllegalStateException("ComputerDAO getAll : Negative offset.");
+		}
+		return new Paging<Computer>(
+				offset, 
+				getOneOrManyComputers("LIMIT " + offset + ", "+limit), 
+				(offset+1)/limit,
+				getSize()
+				);
+	}
 	
 	private List<Computer> getOneOrManyComputers(String where) {
 		
@@ -73,36 +86,55 @@ public class ComputerDAO extends AbstractDAO{
 	}
 	
 	
-	public void insereComputer(Computer comp) {
+	public boolean insereComputer(Computer comp) {
 		
 		mettreVariablesANull();
 		int company_id=-1;
+		
+		boolean ok=false;
 		
 		try {
 			
 			cn = getConnexion();
 			
-			company_id = CompanyDAO.getInstance().recupCompanyIdIfExists(comp.company.name);
-			
-			if(company_id<0){
-				company_id = CompanyDAO.getInstance().insererCompany(comp.company.name);
+			if(comp.company.id >= 0){
+				if(CompanyDAO.getInstance().companyExists(comp.company.id)){
+					company_id = comp.company.id;
+				}
+				else{
+					throw new IllegalStateException("Inserting computer : companyId >= 0 but doesn't exists in database.");
+				}
 			}
-			//System.out.println(company_id);if(true)return;
+			else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
+				company_id = CompanyDAO.getInstance().getCompanyIdIfNameExists(comp.company.name);
+				
+				if(company_id<0){
+					company_id = CompanyDAO.getInstance().insertCompany(comp.company.name);
+				}
+				//System.out.println(company_id);if(true)return;
+			}
+			else{
+				throw new IllegalStateException("Inserting computer : companyId < 0 and companyName not entered.");
+			}
 			
 			
-			pstmt = cn.prepareStatement("INSERT into computer(name,introduced, discontinued,company_id) VALUES(?,?,?)");
+			
+			pstmt = cn.prepareStatement("INSERT into computer(name,introduced, discontinued,company_id) VALUES(?,?,?,?)");
 			pstmt.setString(1,comp.name);
-			pstmt.setTimestamp(2,new Timestamp(comp.getDateAddedLong()));
-			pstmt.setTimestamp(3, new Timestamp(comp.getDateRemovedLong()));
+			
+			pstmt.setTimestamp(2, comp.getDateAddedLong()==0 ? null : new Timestamp(comp.getDateAddedLong()));//
+			pstmt.setTimestamp(3, comp.getDateRemovedLong()==0 ? null : new Timestamp(comp.getDateRemovedLong()));//
 			pstmt.setInt(4, company_id);
 			pstmt.executeUpdate();
 			
-			
+			ok=true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tryCloseVariables();
 		}
+		
+		return ok;
 		
 	}
 	
@@ -211,6 +243,28 @@ public class ComputerDAO extends AbstractDAO{
 			tryCloseVariables();
 		}
 		return ok;
+	}
+	
+	public int getSize(){
+		mettreVariablesANull();
+		
+		int size = 0;
+		
+		try{
+			cn = getConnexion();
+			
+			pstmt = cn.prepareStatement("SELECT count(*) FROM computer");
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				size = rs.getInt("count(*)");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
+		}
+		return size;
 	}
 	
 	

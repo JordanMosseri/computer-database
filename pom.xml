@@ -5,7 +5,7 @@
 	<groupId>com.excilys.com</groupId>
 	<artifactId>computerdatabase_test_maven</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>computerdatabase_test_maven</name>
 	<url>http://maven.apache.org</url>
@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
+	<!-- <build> <finalName>computerdatabase_test_maven</finalName> </build> -->
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

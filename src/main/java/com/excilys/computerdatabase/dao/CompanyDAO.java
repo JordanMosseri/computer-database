@@ -48,7 +48,7 @@ public class CompanyDAO extends AbstractDAO {
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(REQUETE_GET_ALL);
 			while (rs.next()) {
-				Company fab = new Company(rs.getString("name"));
+				Company fab = new Company(rs.getString("name"), rs.getInt("id"));
 				liste.add(fab);
 			}
 			
@@ -67,7 +67,7 @@ public class CompanyDAO extends AbstractDAO {
 	 * @param nomFab
 	 * @return Id de la company nouvellement cree
 	 */
-	public int insererCompany(String nomFab){
+	public int insertCompany(String nomFab){
 		mettreVariablesANull();
 		
 		int retour = -1;
@@ -99,7 +99,7 @@ public class CompanyDAO extends AbstractDAO {
 	 * @param nomFab nom de la company/fabriquant dont l'existance est a verifier
 	 * @return Id de la company dans la bdd si celle-ci existe, -1 si celle-ci n'existe pas
 	 */
-	public int recupCompanyIdIfExists(String nomFab){
+	public int getCompanyIdIfNameExists(String nomFab){
 		mettreVariablesANull();
 		
 		int retour = -1;
@@ -122,6 +122,31 @@ public class CompanyDAO extends AbstractDAO {
 		}
 		
 		//System.out.println("retour recupCompanyIdIfExists="+retour);
+		return retour;
+	}
+	
+	public boolean companyExists(int id){
+		mettreVariablesANull();
+		
+		boolean retour = false;
+		
+		try{
+			
+			cn = getConnexion();
+			
+			pstmt = cn.prepareStatement("SELECT * FROM company WHERE id=?");
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				retour = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
+		}
+		
 		return retour;
 	}
 }

@@ -9,93 +9,53 @@ import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
-
+import com.excilys.computerdatabase.ui.cli.View;
 import com.excilys.computerdatabase.util.Constantes;
 
 public class Service {
 	
+	//TODO supprimer view
+	public  View view;
 	
-	public  View vue;
 	
-	public  void lancerProgramme() {
-		
-		boolean continuer = true;
-		
-		while(continuer){
-			
-			int selection = vue.showMenuAndGetChoice();
-			
-			
-			switch (selection) {
-			case 1:
-				listerComputers();
-				break;
-			case 2:
-				listerCompanies();
-				break;
-			case 3:
-				showComputerDetails();
-				break;
-			case 4:
-				creerComputer();
-				break;
-			case 5:
-				updateComputer();
-				break;
-			case 6:
-				deleteComputer();
-				break;
-			case 7:
-				continuer=false;
-				vue.println("Au revoir...");
-				break;
-			default:
-				break;
-			}
-		}
-		
-		
+	
+	public List<Computer> getComputers(){
+		return ComputerDAO.getInstance().getAll();
 	}
 	
-	public void listerComputers(){
-		List<Computer> p = ComputerDAO.getInstance().getListComputers();
-		vue.println(p);
+	public List<Company> getCompanies(){
+		return CompanyDAO.getInstance().getListCompanies();
 	}
 	
-	public void listerCompanies(){
-		List<Company> p = CompanyDAO.getInstance().getListCompanies();
-		vue.println(p);
+	public Computer showComputerDetails(int id){
+		return ComputerDAO.getInstance().getComputer(id);
 	}
 	
-	public void showComputerDetails(){
-		Computer c = ComputerDAO.getInstance().getComputer(vue.getIntFromConsole("Veuillez entrer un id d'ordi: "));
-		vue.println(c);
-	}
-	
-	public void creerComputer(){
-		ComputerDAO.getInstance().insereComputer(vue.getComputerFromConsole());
-		listerComputers();
+	public boolean addComputer(Computer c){
+		return ComputerDAO.getInstance().insereComputer(c);
 	}
 	
 	public void updateComputer(){
-		int id = vue.getIntFromConsole("Veuillez entrer un id d'ordi: ");
-		String nomRecupered = vue.getStringFromConsole("Veuillez entrer un nouveau nom d'ordi (vide pour passer): ");
-		if( ! nomRecupered.equals(""))
-			ComputerDAO.getInstance().updateComputer(id, nomRecupered);
-		Date dateRecupered = vue.getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
-		if(dateRecupered != null){
-			ComputerDAO.getInstance().updateComputer(id, dateRecupered);
+		if(view != null){
+			int id = view.getIntFromConsole("Veuillez entrer un id d'ordi: ");
+			String nomRecupered = view.getStringFromConsole("Veuillez entrer un nouveau nom d'ordi (vide pour passer): ");
+			if( ! nomRecupered.equals(""))
+				ComputerDAO.getInstance().updateComputer(id, nomRecupered);
+			Date dateRecupered = view.getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
+			if(dateRecupered != null){
+				ComputerDAO.getInstance().updateComputer(id, dateRecupered);
+			}
 		}
+		
 	}
 	
-	public void deleteComputer(){
-		int id2 = vue.getIntFromConsole("Veuillez entrer un id d'ordi: ");
-		ComputerDAO.getInstance().deleteComputer(id2);
+	public boolean deleteComputer(int id2){
+		return ComputerDAO.getInstance().deleteComputer(id2);
 	}
 	
 	
 	
-	public boolean checkString(String motif, String chaine){
+	public static boolean checkString(String motif, String chaine){
 		if(chaine == null){
 			return false;
 		}
@@ -107,7 +67,7 @@ public class Service {
         return false;
 	}
 	
-	public Date stringToDate(String strRecuperee){
+	public static Date stringToDate(String strRecuperee){
 		Date dateRetour = null;
 		
 		if(checkString(Constantes.REGEX_DATE, strRecuperee)){
@@ -119,6 +79,18 @@ public class Service {
 			return dateRetour;
 		}
 		return null;
+	}
+	
+	public static int stringToInt(String strRecuperee){
+		int id = -1;
+		if (Service.checkString(Constantes.REGEX_INTEGER, strRecuperee)) {
+			try{
+				//id = in.nextInt();
+				id = Integer.parseInt(strRecuperee);
+			}
+			catch(Exception e){ }//java.util.InputMismatchException
+		}
+		return id;
 	}
 	
 	
