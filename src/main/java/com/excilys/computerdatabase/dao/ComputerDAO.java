@@ -194,6 +194,10 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
+	public boolean updateComputer(Computer c){
+		throw new RuntimeException();
+	}
+	
 	/**
 	 * Supprime un ordinateur de la bdd
 	 * @param id

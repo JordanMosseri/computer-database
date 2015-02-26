@@ -14,11 +14,7 @@
 <link href="../css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-    <header class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
-        </div>
-    </header>
+    <jsp:include page="header.html"></jsp:include>
 
     <section id="main">
         <div class="container">
@@ -58,7 +54,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="dashboard.jsp" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

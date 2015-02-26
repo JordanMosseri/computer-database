@@ -46,7 +46,10 @@ public class Service {
 				ComputerDAO.getInstance().updateComputer(id, dateRecupered);
 			}
 		}
-		
+	}
+	
+	public boolean updateComputer(Computer c){
+		return ComputerDAO.getInstance().updateComputer(c);
 	}
 	
 	public boolean deleteComputer(int id2){

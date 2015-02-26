@@ -3,6 +3,7 @@
 <%@ page import="com.excilys.computerdatabase.modele.*"%>
 <%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ page import="com.excilys.computerdatabase.main.*"%>
+<%-- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> --%>
 
 <!DOCTYPE html>
 <html>
@@ -33,11 +34,7 @@
 paging = ComputerDAO.getInstance().getAll(intOffset, 15); 
 %>
 
-    <header class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
-        </div>
-    </header>
+    <jsp:include page="header.html"></jsp:include>
 
     <section id="main">
         <div class="container">
@@ -99,6 +96,7 @@ paging = ComputerDAO.getInstance().getAll(intOffset, 15);
                 <!-- Browse attribute computers -->
                 <tbody id="results">
                 	<%
+                	
                		for(Computer c : paging.actualList){
                 		%>
 	                    <tr>
@@ -106,7 +104,7 @@ paging = ComputerDAO.getInstance().getAll(intOffset, 15);
 	                            <input type="checkbox" name="cb" class="cb" value="0">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.html" onclick=""><%= c.name %></a>
+	                            <a href="editComputer.jsp?id=<%= c.id %>" onclick=""><%= c.name %></a>
 	                        </td>
 	                        <td><%= c.getDateAddedString() %></td>
 	                        <td><%= c.getDateRemovedString() %></td>
@@ -124,40 +122,40 @@ paging = ComputerDAO.getInstance().getAll(intOffset, 15);
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-            <% if(paging.indexPage>0) { %>
-                <li>
-                    <a href="?offset=<%= paging.offset-paging.getLimit() %>" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  </a>
-              </li>
-              <% } %>
-              <%
-              int numberOfPages = paging.totalSize/paging.getLimit();
-              	for(int i=paging.indexPage-2; i<paging.indexPage+2+1; i++){
-              		if(i>=0 && i<numberOfPages) {
-              		%>
-              			<li><a href="#"><%= i %></a></li>
-              		<%
-              		}
-              	}
-              %>
-              <%-- <li><a href="#"><%= paging.indexPage %></a></li> --%>
-              
-              <% if(paging.indexPage<numberOfPages-1) { %>
-              <li>
-                <a href="?offset=<%= paging.offset+paging.getLimit() %>" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-            <% } %>
-        </ul>
-
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
-        </div>
-
+	            <% if(paging.indexPage>0) { %>
+	                <li>
+	                    <a href="?offset=<%= paging.offset-paging.getLimit() %>" aria-label="Previous">
+	                      <span aria-hidden="true">&laquo;</span>
+	                  </a>
+	              </li>
+	              <% } %>
+	              <%
+	              int numberOfPages = paging.totalSize/paging.getLimit();
+	              	for(int i=paging.indexPage-2; i<paging.indexPage+2+1; i++){
+	              		if(i>=0 && i<numberOfPages) {
+	              		%>
+	              			<li><a href="#"><%= i %></a></li>
+	              		<%
+	              		}
+	              	}
+	              %>
+	              <%-- <li><a href="#"><%= paging.indexPage %></a></li> --%>
+	              
+	              <% if(paging.indexPage<numberOfPages-1) { %>
+	              <li>
+	                <a href="?offset=<%= paging.offset+paging.getLimit() %>" aria-label="Next">
+	                    <span aria-hidden="true">&raquo;</span>
+	                </a>
+	            </li>
+	            <% } %>
+	        </ul>
+	
+	        <div class="btn-group btn-group-sm pull-right" role="group" >
+	            <button type="button" class="btn btn-default">10</button>
+	            <button type="button" class="btn btn-default">50</button>
+	            <button type="button" class="btn btn-default">100</button>
+	        </div>
+		</div>
     </footer>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
