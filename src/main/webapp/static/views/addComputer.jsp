@@ -2,11 +2,12 @@
 <%@ page import="com.excilys.computerdatabase.dao.*"%>
 <%@ page import="com.excilys.computerdatabase.modele.*"%>
 <%@ page import="com.excilys.computerdatabase.util.*"%>
+<%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title>Computer Database - Add Computer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -21,7 +22,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="/computerdatabase_test_maven/addComputer" method="POST">
+                    <form action="${pageContext.request.contextPath}/addComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -39,14 +40,8 @@
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId" >
                                 	<option value="0">Please select a company</option>
-                                <%
-		                                List<Company> liste = CompanyDAO.getInstance().getListCompanies();
-                                		for(Company c : liste){
-                                			out.print("<option value=\"" + c.id + "\">" + c.name + "</option>");
-                                		}
-                                %>
                                 
-                                    
+	                                <mylib:listCompanies />
                                     
                                 </select>
                             </div>                  

@@ -25,7 +25,7 @@ public class Mapper {
 			removed=rs.getTimestamp("discontinued").getTime();
 			dateRemoved = new Date(removed);
 		}
-		Computer c =  new Computer(rs.getInt("id"), rs.getString("name"), dateIntroduced, dateRemoved, new Company(rs.getString("company.name")));//company.name company_id
+		Computer c =  new Computer(rs.getInt("id"), rs.getString("name"), dateIntroduced, dateRemoved, new Company(rs.getString("company.name"), rs.getInt("company.id")));//company.name company_id
 		return c;
 	}
 }

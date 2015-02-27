@@ -1,14 +1,15 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.*"%>
 <%@ page import="com.excilys.computerdatabase.dao.*"%>
 <%@ page import="com.excilys.computerdatabase.modele.*"%>
 <%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ page import="com.excilys.computerdatabase.main.*"%>
-<%-- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> --%>
+<%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title>Computer Database - Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -20,26 +21,15 @@
 <body>
 
 
-<%! int intOffset; %>
-<%! Paging<Computer> paging; %>
-<%
-    if (request.getParameter("offset") == null) {
-    	intOffset=0;
-    } else {
-    	String stringOffset = request.getParameter("offset");
-    	intOffset = Service.stringToInt(stringOffset);
-    }
-%>
-<% 
-paging = ComputerDAO.getInstance().getAll(intOffset, 15); 
-%>
+
+	<mylib:initDashboard />
 
     <jsp:include page="header.html"></jsp:include>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <%= paging.getLimit() %> computers found 
+                ${pageScope["paginationObject"].pageSize} computers found 
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -95,25 +85,23 @@ paging = ComputerDAO.getInstance().getAll(intOffset, 15);
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                	<%
                 	
-               		for(Computer c : paging.actualList){
-                		%>
+                	<!-- c is-a Computer -->
+                	<c:forEach var="c" items="${pageScope['paginationObject'].actualList}">
 	                    <tr>
 	                        <td class="editMode">
 	                            <input type="checkbox" name="cb" class="cb" value="0">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.jsp?id=<%= c.id %>" onclick=""><%= c.name %></a>
+	                            <a href="editComputer.jsp?id=${c.id}" onclick="">${c.name}</a>
 	                        </td>
-	                        <td><%= c.getDateAddedString() %></td>
-	                        <td><%= c.getDateRemovedString() %></td>
-	                        <td><%= c.company.name %></td>
+	                        <td>${c.dateAddedString}</td>
+	                        <td>${c.dateRemovedString}</td>
+	                        <td>${c.company.name}</td>
 	
 	                    </tr>
-                    	<%
-                    }
-                    %>
+                    </c:forEach>
+                    
                 </tbody>
             </table>
         </div>
@@ -122,38 +110,26 @@ paging = ComputerDAO.getInstance().getAll(intOffset, 15);
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-	            <% if(paging.indexPage>0) { %>
-	                <li>
-	                    <a href="?offset=<%= paging.offset-paging.getLimit() %>" aria-label="Previous">
-	                      <span aria-hidden="true">&laquo;</span>
-	                  </a>
-	              </li>
-	              <% } %>
-	              <%
-	              int numberOfPages = paging.totalSize/paging.getLimit();
-	              	for(int i=paging.indexPage-2; i<paging.indexPage+2+1; i++){
-	              		if(i>=0 && i<numberOfPages) {
-	              		%>
-	              			<li><a href="#"><%= i %></a></li>
-	              		<%
-	              		}
-	              	}
-	              %>
-	              <%-- <li><a href="#"><%= paging.indexPage %></a></li> --%>
-	              
-	              <% if(paging.indexPage<numberOfPages-1) { %>
-	              <li>
-	                <a href="?offset=<%= paging.offset+paging.getLimit() %>" aria-label="Next">
-	                    <span aria-hidden="true">&raquo;</span>
-	                </a>
-	            </li>
-	            <% } %>
+            	
+            	
+            	<mylib:pagination pagingObject="${pageScope['paginationObject']}" />
+            	
+            		<%-- indexPage="<%= paging.indexPage %>" 
+            		offset="<%= paging.offset %>" 
+            		limit="<%= paging.getLimit() %>" 
+            		totalSize="<%= paging.totalSize %>" --%> 
+            		
+            	
+	            
 	        </ul>
 	
 	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	            <button type="button" class="btn btn-default">10</button>
+	            <!-- <button type="button" class="btn btn-default">10</button>
 	            <button type="button" class="btn btn-default">50</button>
-	            <button type="button" class="btn btn-default">100</button>
+	            <button type="button" class="btn btn-default">100</button> -->
+	            <a href="?pageSize=10" type="button" class="btn btn-default">10</a>
+	            <a href="?pageSize=50" type="button" class="btn btn-default">50</a>
+	            <a href="?pageSize=100" type="button" class="btn btn-default">100</a>
 	        </div>
 		</div>
     </footer>

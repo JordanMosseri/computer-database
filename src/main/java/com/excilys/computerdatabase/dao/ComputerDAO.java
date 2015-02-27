@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.ui.cli.View;
 import com.excilys.computerdatabase.util.Logging;
 
@@ -195,7 +196,7 @@ public class ComputerDAO extends AbstractDAO{
 	}
 	
 	public boolean updateComputer(Computer c){
-		throw new RuntimeException();
+		throw new UnsupportedOperationException("updateComputer(Computer c) : Not implemented yet.");
 	}
 	
 	/**

@@ -1,11 +1,12 @@
 package com.excilys.computerdatabase.modele;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.excilys.computerdatabase.util.Constantes;
 
-public class Computer {
+public class Computer implements Serializable {
 	
 	public int id;
 	public String name;
@@ -13,7 +14,7 @@ public class Computer {
 	private Date dateRemoved;
 	public Company company;
 	
-	
+	public Computer() { }
 	
 	public long getDateAddedLong() {
 		if (dateAdded==null) {
@@ -107,6 +108,21 @@ public class Computer {
         }
  
         return false;
+	}
+	
+	
+	
+	
+	
+	
+	public int getId() {
+		return id;
+	}
+	public String getName() {
+		return name;
+	}
+	public Company getCompany() {
+		return company;
 	}
 	
 }

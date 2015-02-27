@@ -57,9 +57,11 @@ public class ServletEditComputer extends HttpServlet {
 		p.println("intCompanyId="+intCompanyId);
 		
 		Service s = new Service();
-		//boolean ok = s.updateComputer(new Computer(computerId, computerName, dintroduced, ddiscontinued, new Company(intCompanyId)));
+		boolean ok = s.updateComputer(new Computer(computerId, computerName, dintroduced, ddiscontinued, new Company(intCompanyId)));
 		
-		//p.println(ok ? "Computer updated !" : "Error while updating the computer.");
+		p.println(ok ? "Computer updated !" : "Error while updating the computer.");
+		
+		//getServletContext().getRequestDispatcher("/resultat.jsp").forward(request,response);
 	}
 
 }

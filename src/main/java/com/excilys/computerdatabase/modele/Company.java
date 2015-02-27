@@ -1,9 +1,13 @@
 package com.excilys.computerdatabase.modele;
 
-public class Company {
+import java.io.Serializable;
+
+public class Company implements Serializable {
 	
 	public String name=null;
 	public int id=-1;
+	
+	public Company() { }
 
 	public Company(String nomFabricant) {
 		super();
@@ -27,5 +31,22 @@ public class Company {
 	@Override
 	public String toString() {
 		return this.name;
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	public String getName() {
+		return name;
+	}
+
+
+	public int getId() {
+		return id;
 	}
 }
