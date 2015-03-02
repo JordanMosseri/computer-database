@@ -27,12 +27,12 @@
       <attribute><name>pagingObject</name><required>true</required><rtexprvalue>true</rtexprvalue></attribute>
     </tag>
     
-    <tag>
+    <!-- <tag>
       <name>initDashboard</name>
       <tagclass>com.excilys.computerdatabase.ui.tags.InitDashboardTag</tagclass>
       <bodycontent>empty</bodycontent>
       <info>Affiche le contenu du panier</info>
-    </tag>
+    </tag> -->
     
     <tag>
       <name>initEditComputer</name>

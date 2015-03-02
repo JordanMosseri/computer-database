@@ -61,7 +61,7 @@ public class ServletEditComputer extends HttpServlet {
 		
 		p.println(ok ? "Computer updated !" : "Error while updating the computer.");
 		
-		//getServletContext().getRequestDispatcher("/resultat.jsp").forward(request,response);
+		//
 	}
 
 }

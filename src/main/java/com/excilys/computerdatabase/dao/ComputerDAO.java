@@ -98,27 +98,41 @@ public class ComputerDAO extends AbstractDAO{
 			
 			cn = getConnexion();
 			
+			//Company Id is provided
 			if(comp.company.id >= 0){
+				
+				//Company Id exists in db
 				if(CompanyDAO.getInstance().companyExists(comp.company.id)){
 					company_id = comp.company.id;
 				}
+				
+				//Wrong company id
 				else{
 					throw new IllegalStateException("Inserting computer : companyId >= 0 but doesn't exists in database.");
 				}
 			}
+			
+			//Company Name is provided
 			else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
+				
+				//Company Name exists in db
 				company_id = CompanyDAO.getInstance().getCompanyIdIfNameExists(comp.company.name);
 				
 				if(company_id<0){
 					company_id = CompanyDAO.getInstance().insertCompany(comp.company.name);
 				}
-				//System.out.println(company_id);if(true)return;
 			}
 			else{
 				throw new IllegalStateException("Inserting computer : companyId < 0 and companyName not entered.");
 			}
 			
 			
+			if (CompanyDAO.getInstance().companyExists(company_id)) { }
+			else {
+				throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
+			}
+			
+			System.out.println(company_id);//if(true)return;
 			
 			pstmt = cn.prepareStatement("INSERT into computer(name,introduced, discontinued,company_id) VALUES(?,?,?,?)");
 			pstmt.setString(1,comp.name);

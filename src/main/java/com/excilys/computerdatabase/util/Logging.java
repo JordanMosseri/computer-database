@@ -9,7 +9,7 @@ public class Logging {
 	public final static Logger logger = LoggerFactory.getLogger("JMosseri_ComputerDatabase_Logger");
 	static{
 		//TODO faire en mode slf4j
-		DOMConfigurator.configure("log4j-config.xml");
+		DOMConfigurator.configure("/home/excilys/workspace_jee/computerdatabase_test_maven/log4j-config.xml");
 	}
 	
 	public static void log(Object o){

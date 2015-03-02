@@ -14,22 +14,23 @@
 <meta charset="utf-8">
 <!-- Bootstrap -->
 <%-- $request.getContextPath() --%>
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/static/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 
 
 
-	<mylib:initDashboard />
+	<%-- <mylib:initDashboard /> --%>
 
-    <jsp:include page="header.html"></jsp:include>
+    <jsp:include page="header.jsp"></jsp:include>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${pageScope["paginationObject"].pageSize} computers found 
+            	<%-- ${pageScope["paginationObject"].pageSize/actualList} --%>
+                ${pageScope.request["paginationObject"]} computers found 
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -41,7 +42,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.jsp">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="static/views/addComputer.jsp">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -87,13 +88,13 @@
                 <tbody id="results">
                 	
                 	<!-- c is-a Computer -->
-                	<c:forEach var="c" items="${pageScope['paginationObject'].actualList}">
+                	<c:forEach var="c" items="${pageScope.request['paginationObject'].actualList}">
 	                    <tr>
 	                        <td class="editMode">
 	                            <input type="checkbox" name="cb" class="cb" value="0">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.jsp?id=${c.id}" onclick="">${c.name}</a>
+	                            <a href="static/views/editComputer.jsp?id=${c.id}" onclick="">${c.name}</a>
 	                        </td>
 	                        <td>${c.dateAddedString}</td>
 	                        <td>${c.dateRemovedString}</td>
@@ -112,7 +113,7 @@
             <ul class="pagination">
             	
             	
-            	<mylib:pagination pagingObject="${pageScope['paginationObject']}" />
+            	<mylib:pagination pagingObject="${pageScope.request['paginationObject']}" />
             	
             		<%-- indexPage="<%= paging.indexPage %>" 
             		offset="<%= paging.offset %>" 
@@ -133,9 +134,9 @@
 	        </div>
 		</div>
     </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/dashboard.js"></script>
 
 </body>
 </html>

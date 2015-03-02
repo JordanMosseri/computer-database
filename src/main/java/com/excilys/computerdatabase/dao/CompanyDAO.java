@@ -111,8 +111,8 @@ public class CompanyDAO extends AbstractDAO {
 			pstmt = cn.prepareStatement("SELECT * FROM company WHERE name=?");
 			pstmt.setString(1, nomFab);
 			rs = pstmt.executeQuery();
-			if(rs.next()){
-				retour = rs.getInt("id");
+			while(rs.next()){
+				retour = rs.getInt("company.id");
 			}
 			
 		} catch (Exception e) {

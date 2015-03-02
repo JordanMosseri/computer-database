@@ -9,7 +9,15 @@ import java.sql.Statement;
 
 public class AbstractDAO {
 	
+	public static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
 	
+	public static final String URL_DOMAIN = "jdbc:mysql://localhost:3306/";
+	public static final String URL_OPTIONS = "?zeroDateTimeBehavior=convertToNull";
+	
+	public static final String URL = URL_DOMAIN + "computer-database-db" + URL_OPTIONS;
+	public static final String URL_TEST = URL_DOMAIN + "computer-database-db-tests" + URL_OPTIONS;
+	
+	public String url = URL;
 	
 	protected ResultSet rs = null ;
 	protected Statement stmt = null;
@@ -18,7 +26,7 @@ public class AbstractDAO {
 	
 	static{
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Class.forName(DRIVER_NAME).newInstance();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -33,7 +41,7 @@ public class AbstractDAO {
 		Connection cn = null;
 		try {
 			
-			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull","root","root");
+			cn = DriverManager.getConnection(this.url,"root","root");
 
 		} catch (Exception e) {
 			e.printStackTrace();

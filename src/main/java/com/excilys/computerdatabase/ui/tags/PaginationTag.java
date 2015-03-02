@@ -12,6 +12,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.Paging;
+import com.excilys.computerdatabase.util.Logging;
 
 public class PaginationTag extends TagSupport {
 	
@@ -29,6 +30,8 @@ public class PaginationTag extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
+		//pagingObject = (Paging<Computer>) pageContext.getRequest().getAttribute("pagingObject");
+		
 		JspWriter out = pageContext.getOut();
 		try {
 			
