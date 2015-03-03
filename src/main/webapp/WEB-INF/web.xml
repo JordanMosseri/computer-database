@@ -9,17 +9,6 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
-  <!-- <servlet>
-  	<display-name>DashboardServlet</display-name>
-  	<servlet-class>com.excilys.computerdatabase.ui.servlets.DashboardServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>DashboardServlet</servlet-name>
-  	<url-pattern>/Dashboard</url-pattern>
-  </servlet-mapping> -->
-  
   <jsp-config>
     <taglib>
       <taglib-uri>/WEB-INF/mylib.tld</taglib-uri>

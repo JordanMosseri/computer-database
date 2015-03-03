@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.Paging;
@@ -43,6 +44,10 @@ public class ComputerDAO extends AbstractDAO{
 	final String REQUETE_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";
 	//final String REQUETE_GET_ALL = "SELECT * FROM computer";
 	
+	final String QUERY_INSERT = "INSERT into computer(name,introduced, discontinued,company_id) VALUES(?,?,?,?)";
+	final String QUERY_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
+	final String QUERY_DELETE = "DELETE FROM computer WHERE id=?";
+	
 	public Computer getComputer(int idComputer){
 		return getOneOrManyComputers("WHERE computer.id='"+idComputer+"'").get(0);
 	}
@@ -74,7 +79,7 @@ public class ComputerDAO extends AbstractDAO{
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(REQUETE_GET_ALL+where);
 			while(rs.next()){
-				liste.add(Mapper.mapper(rs));
+				liste.add(DAOMapper.mapper(rs));
 			}
 			
 		} catch (SQLException e) {
@@ -87,10 +92,14 @@ public class ComputerDAO extends AbstractDAO{
 	}
 	
 	
-	public boolean insereComputer(Computer comp) {
+	/**
+	 * Insert a computer, all checking is already done and comp.company.id is good, comp.company.name doesn't matter here
+	 * @param comp
+	 * @return
+	 */
+	public boolean insertComputer(Computer computer) {
 		
 		mettreVariablesANull();
-		int company_id=-1;
 		
 		boolean ok=false;
 		
@@ -98,48 +107,10 @@ public class ComputerDAO extends AbstractDAO{
 			
 			cn = getConnexion();
 			
-			//Company Id is provided
-			if(comp.company.id >= 0){
-				
-				//Company Id exists in db
-				if(CompanyDAO.getInstance().companyExists(comp.company.id)){
-					company_id = comp.company.id;
-				}
-				
-				//Wrong company id
-				else{
-					throw new IllegalStateException("Inserting computer : companyId >= 0 but doesn't exists in database.");
-				}
-			}
+			System.out.println(computer.company.id);//if(true)return;
 			
-			//Company Name is provided
-			else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
-				
-				//Company Name exists in db
-				company_id = CompanyDAO.getInstance().getCompanyIdIfNameExists(comp.company.name);
-				
-				if(company_id<0){
-					company_id = CompanyDAO.getInstance().insertCompany(comp.company.name);
-				}
-			}
-			else{
-				throw new IllegalStateException("Inserting computer : companyId < 0 and companyName not entered.");
-			}
-			
-			
-			if (CompanyDAO.getInstance().companyExists(company_id)) { }
-			else {
-				throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
-			}
-			
-			System.out.println(company_id);//if(true)return;
-			
-			pstmt = cn.prepareStatement("INSERT into computer(name,introduced, discontinued,company_id) VALUES(?,?,?,?)");
-			pstmt.setString(1,comp.name);
-			
-			pstmt.setTimestamp(2, comp.getDateAddedLong()==0 ? null : new Timestamp(comp.getDateAddedLong()));//
-			pstmt.setTimestamp(3, comp.getDateRemovedLong()==0 ? null : new Timestamp(comp.getDateRemovedLong()));//
-			pstmt.setInt(4, company_id);
+			pstmt = cn.prepareStatement(QUERY_INSERT);
+			DAOMapper.f(pstmt, computer);
 			pstmt.executeUpdate();
 			
 			ok=true;
@@ -209,8 +180,26 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	public boolean updateComputer(Computer c){
-		throw new UnsupportedOperationException("updateComputer(Computer c) : Not implemented yet.");
+	public boolean updateComputer(Computer computer){
+		mettreVariablesANull();
+		
+		boolean ok=true;
+		
+		try{
+			cn = getConnexion();
+			
+			pstmt = cn.prepareStatement(QUERY_UPDATE);
+			DAOMapper.f(pstmt, computer);
+			pstmt.setInt(5, computer.id);
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			ok = false;
+		} finally {
+			tryCloseVariables();
+		}
+		return ok;
 	}
 	
 	/**
@@ -226,7 +215,7 @@ public class ComputerDAO extends AbstractDAO{
 		try{
 			cn = getConnexion();
 			
-			pstmt = cn.prepareStatement("DELETE FROM computer WHERE id=?");
+			pstmt = cn.prepareStatement(QUERY_DELETE);
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
 			

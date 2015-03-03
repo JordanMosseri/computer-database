@@ -34,12 +34,12 @@
       <info>Affiche le contenu du panier</info>
     </tag> -->
     
-    <tag>
+    <!-- <tag>
       <name>initEditComputer</name>
       <tagclass>com.excilys.computerdatabase.ui.tags.InitEditComputerTag</tagclass>
       <bodycontent>empty</bodycontent>
       <info>Affiche le contenu du panier</info>
-    </tag>
+    </tag> -->
     
     <tag>
       <name>listCompanies</name>

@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.ui.cli;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -111,24 +112,18 @@ public class View {
 	public  Computer getComputerFromConsole(){
 		String nom = getStringFromConsole("Veuillez entrer un nom d'ordi: ");
 		String fab = getStringFromConsole("Veuillez entrer un nom de fabriquant: ");
-		Date dateRecupered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
-		if(dateRecupered == null){
-			dateRecupered=new Date();
-		}
-		Date dateRemovedRecupered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
-		if(dateRemovedRecupered == null){
-			dateRemovedRecupered=new Date();
-		}
+		LocalDateTime dateAddedEntered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
+		LocalDateTime dateRemovedEntered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
 		//Date d = new Date(System.currentTimeMillis());
 		this.println();
 		
 		//this.println(nom+" "+fab);
-		return new Computer(-1, nom,dateRecupered, dateRemovedRecupered,new Company(fab));
+		return new Computer(-1, nom,dateAddedEntered, dateRemovedEntered,new Company(fab));
 	}
 	
 	
 	
-	public  Date getDateFromConsole(String message){
+	public  LocalDateTime getDateFromConsole(String message){
 		String strRecuperee="";
 		boolean ok=false;
 		while(!ok){
@@ -153,7 +148,7 @@ public class View {
 		}
 		
 		
-		return Service.stringToDate(strRecuperee);
+		return Service.parse(strRecuperee);
 	}
 	
 	

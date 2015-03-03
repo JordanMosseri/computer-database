@@ -12,21 +12,18 @@ import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
-import com.excilys.computerdatabase.modele.Paging;
 
 /**
- * Servlet implementation class DashboardServlet
+ * Servlet implementation class EditComputerServlet
  */
-@WebServlet(name="DashboardServlet", urlPatterns={"/Dashboard"})
-public class DashboardServlet extends HttpServlet {
+@WebServlet("/EditComputer")
+public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	public static final int DEFAULT_PAGE_SIZE = 15;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DashboardServlet() {
+    public EditComputerServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,25 +33,21 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int intOffset = 0, pageSize = DEFAULT_PAGE_SIZE;
-		Paging<ComputerDTO> paginationObject;
-
-	    if (request.getParameter("offset") == null) { }
-	    else {
-	    	intOffset = Service.stringToInt( request.getParameter("offset") );
-	    }
-	    
-	    if (request.getParameter("pageSize") == null) { }
-	    else {
-	    	pageSize = Service.stringToInt( request.getParameter("pageSize") );
-	    }
-	    
-	    paginationObject = (new Service()).getComputers(intOffset, pageSize); 
+		int intId;
+		ComputerDTO computer;
 		
-	    request.setAttribute("pageSize", pageSize);
-	    request.setAttribute("paginationObject", paginationObject);
+	    if (request.getParameter("id") == null) {
+	    	intId=-1;
+	    } else {
+	    	intId = Service.stringToInt( request.getParameter("id") );
+	    }
 	    
-	    getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
+	    computer = (new Service()).getComputer(intId) ;
+		
+	    request.setAttribute("intId", intId);
+	    request.setAttribute("computer", computer);
+	    
+	    getServletContext().getRequestDispatcher("/static/views"+"/editComputer.jsp").forward(request,response);
 		
 	}
 

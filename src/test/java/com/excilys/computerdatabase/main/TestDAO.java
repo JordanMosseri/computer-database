@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.main;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
@@ -37,22 +39,26 @@ public class TestDAO {
 	@Test
 	@Ignore
 	public void testInsertComputer(){
-		ComputerDAO.getInstance().insereComputer(new Computer(-1, "computerTestWithCompanyName", Service.stringToDate("2012-06-03"), Service.stringToDate("2012-07-04"), new Company("companyTest")));
+		LocalDateTime dateAdded = Service.parse("2012-06-03");
+		LocalDateTime dateRemoved = Service.parse("2012-07-04");
+		
+		(new Service()).addComputer(new Computer(-1, "computerTestWithCompanyName", dateAdded, dateRemoved, new Company("companyTest")));
 		
 		//check if well added
 		List<Computer> l = ComputerDAO.getInstance().getAll();
 		Computer lastComputer = l.get(l.size() - 1);
 		
 		Assert.assertEquals("computerTestWithCompanyName", lastComputer.name);
-		Assert.assertEquals("2012-06-03", lastComputer.getDateAddedString());
-		Assert.assertEquals("2012-07-04", lastComputer.getDateRemovedString());
-		//company
+		Assert.assertEquals(dateAdded, lastComputer.dateAdded);
+		Assert.assertEquals(dateRemoved, lastComputer.dateRemoved);
+		//TODO company
 	}
 	
 	@Test
 	@Ignore
 	public void testInsertComputer2(){
-		ComputerDAO.getInstance().insereComputer(new Computer(-1, "computerTestWithCompanyId", Service.stringToDate("2012-06-03"), Service.stringToDate("2012-07-04"), new Company(1)));
+		(new Service()).addComputer(new Computer(-1, "computerTestWithCompanyId", Service.parse("2012-06-03"), Service.parse("2012-07-04"), new Company(1)));
+		//TODO comme le 1
 	}
 	
 	@Test

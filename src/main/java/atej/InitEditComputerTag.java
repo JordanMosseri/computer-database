@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.ui.tags;
+package atej;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;

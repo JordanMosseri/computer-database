@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="${pageContext.request.contextPath}/addComputer" method="POST">
+                    <form action="${pageContext.request.contextPath}/addComputer" method="POST" id="addForm">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -56,5 +56,36 @@
             </div>
         </div>
     </section>
+    
+	<script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/jquery.validate.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    
+	
+		jQuery.validator.addMethod("regex", function(value,
+				element, regexp) {
+			if (regexp.constructor != RegExp)
+				regexp = new RegExp(regexp);
+			else if (regexp.global)
+				regexp.lastIndex = 0;
+			return this.optional(element) || regexp.test(value);
+		}, "erreur expression reguliere");
+		jQuery(document).ready(function() {
+			jQuery("#addForm").validate({
+				rules : {
+					"computerName" : {
+						"required" : true,
+						"maxlength" : 250,
+						"regex" : /^(\+33\.|0)[0-9]{9}$/
+					}
+				}
+			});
+		});
+		$(document).ready(function() {
+			$("#addForm").validate();
+		});
+		
+	</script>
+    
 </body>
 </html>

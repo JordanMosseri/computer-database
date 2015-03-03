@@ -11,6 +11,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.util.Logging;
 
@@ -19,7 +20,7 @@ public class PaginationTag extends TagSupport {
 	/**
 	 * Attribute specified in the custom jsp tag
 	 */
-	Paging<Computer> pagingObject;
+	Paging<ComputerDTO> pagingObject;
 	
 	
 	/*int indexPage;
@@ -45,7 +46,7 @@ public class PaginationTag extends TagSupport {
 			//Left arrow
 			if(pagingObject.indexPage>0) {
 				out.print("<li>");
-				out.print("	<a href=\"?offset=" + (pagingObject.offset-pagingObject.getLimit()) + "&pageSize=" + pageContext.getAttribute("pageSize") + "\" aria-label=\"Previous\">");
+				out.print("	<a href=\"?offset=" + (pagingObject.offset-pagingObject.getLimit()) + "&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\" aria-label=\"Previous\">");
 				out.print("		<span aria-hidden=\"true\">&laquo;</span>");
 				out.print("	</a>");
 				out.print("</li>");
@@ -60,7 +61,7 @@ public class PaginationTag extends TagSupport {
 					if(i == pagingObject.indexPage){
 						out.print(bold);
 					}
-					out.print(" href=\"?offset=" + (i*pagingObject.getLimit()) + "&pageSize=" + pageContext.getAttribute("pageSize") + "\">" + i + "</a></li>");
+					out.print(" href=\"?offset=" + (i*pagingObject.getLimit()) + "&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\">" + i + "</a></li>");
 				}
 			}
 			//<%-- <li><a href="#"><%= paging.indexPage %></a></li> --%>
@@ -68,7 +69,7 @@ public class PaginationTag extends TagSupport {
 			//Right arrow
 			if(pagingObject.indexPage<numberOfPages-1) {
 				out.print("<li>");
-				out.print("	<a href=\"?offset="+ (pagingObject.offset+pagingObject.getLimit()) +"&pageSize=" + pageContext.getAttribute("pageSize") + "\" aria-label=\"Next\">");
+				out.print("	<a href=\"?offset="+ (pagingObject.offset+pagingObject.getLimit()) +"&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\" aria-label=\"Next\">");
 				out.print("		<span aria-hidden=\"true\">&raquo;</span>");
 				out.print("	</a>");
 				out.print("</li>");
@@ -91,11 +92,11 @@ public class PaginationTag extends TagSupport {
 	
 	
 	
-	public Paging<Computer> getPagingObject() {
+	public Paging<ComputerDTO> getPagingObject() {
 		return pagingObject;
 	}
 
-	public void setPagingObject(Paging<Computer> pagingObject) {
+	public void setPagingObject(Paging<ComputerDTO> pagingObject) {
 		this.pagingObject = pagingObject;
 	}
 

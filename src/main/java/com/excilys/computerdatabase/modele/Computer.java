@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.modele;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 import com.excilys.computerdatabase.util.Constantes;
@@ -10,8 +11,8 @@ public class Computer implements Serializable {
 	
 	public int id;
 	public String name;
-	private Date dateAdded;//LocalDateTime
-	private Date dateRemoved;
+	public LocalDateTime dateAdded;//LocalDateTime
+	public LocalDateTime dateRemoved;
 	public Company company;
 	
 	public Computer() { }
@@ -21,7 +22,7 @@ public class Computer implements Serializable {
 			return 0;
 		}
 		else {
-			return dateAdded.getTime();
+			return dateAdded.toEpochSecond(ZoneOffset.UTC);//Timestamp.valueof(LocalDateTime)
 		}
 	}
 	public long getDateRemovedLong() {
@@ -29,43 +30,13 @@ public class Computer implements Serializable {
 			return 0;
 		}
 		else {
-			return dateRemoved.getTime();
+			return dateRemoved.toEpochSecond(ZoneOffset.UTC);
 		}
 	}
 	
-	public String getDateAddedString() {
-		if (dateAdded == null) {
-			return "";
-		}
-		else{
-			return Constantes.dateFormat.format(dateAdded);
-		}
-	}
-	
-	public String getDateRemovedString() {
-		if (dateRemoved == null) {
-			return "";
-		}
-		else{
-			return Constantes.dateFormat.format(dateRemoved);
-		}
-	}
-	
-	public Date getDateAdded() {
-		return dateAdded;
-	}
-	public void setDateAdded(Date dateAdded) {
-		this.dateAdded = dateAdded;
-	}
-	public Date getDateRemoved() {
-		return dateRemoved;
-	}
-	public void setDateRemoved(Date dateRemoved) {
-		this.dateRemoved = dateRemoved;
-	}
 
 
-	public Computer(int pid, String pname, Date pdateAdded, Date pdateRemoved, Company pcompany) {
+	public Computer(int pid, String pname, LocalDateTime pdateAdded, LocalDateTime pdateRemoved, Company pcompany) {
 		super();
 		this.id = pid;
 		this.name = pname;
@@ -115,14 +86,6 @@ public class Computer implements Serializable {
 	
 	
 	
-	public int getId() {
-		return id;
-	}
-	public String getName() {
-		return name;
-	}
-	public Company getCompany() {
-		return company;
-	}
+	
 	
 }

@@ -2,8 +2,8 @@ package com.excilys.computerdatabase.ui.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,20 +12,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.main.Service;
+import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.modele.ComputerDTO;
 
 /**
- * Servlet implementation class Servlet1
+ * Servlet implementation class ServletEditComputer
  */
-@WebServlet("/addComputer")
-public class Servlet1 extends HttpServlet {
+@WebServlet("/editComputer")
+public class EditComputerServletValidation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Servlet1() {
+    public EditComputerServletValidation() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,8 +36,7 @@ public class Servlet1 extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter p = response.getWriter();
-		p.println("Methode GET. Ce servlet n'est accessible que via une requete POST.");
+		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -43,26 +44,27 @@ public class Servlet1 extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter p = response.getWriter();
-		p.println("saluuuuuut !");
 		
+		String idString = request.getParameter("idHidden");
 		String computerName = request.getParameter("computerName");
 		String introduced = request.getParameter("introduced");
 		String discontinued = request.getParameter("discontinued");
 		String companyId = request.getParameter("companyId");
 		
-		Date dintroduced = Service.stringToDate(introduced);
-		Date ddiscontinued = Service.stringToDate(discontinued);
+		int computerId = Service.stringToInt(idString);
 		int intCompanyId = Service.stringToInt(companyId);
 		
-		p.println(computerName);
-		p.println(introduced);
-		p.println(discontinued);
-		p.println(companyId);
+		p.println("computerId="+computerId);
+		p.println("intCompanyId="+intCompanyId);
+		p.println("introduced="+introduced);
 		
-		Service s = new Service();
-		boolean ok = s.addComputer(new Computer(-1, computerName, dintroduced, ddiscontinued, new Company(intCompanyId)));
+		ComputerDTO cdto = new ComputerDTO(computerId, computerName, introduced, discontinued, new Company(intCompanyId));
+		Computer c = DTOMapper.convert(cdto);
 		
-		p.println(ok ? "Computer added !" : "Error while adding the computer.");
+		boolean ok = (new Service()).updateComputer(c);
+		
+		p.println(ok ? "Computer updated !" : "Error while updating the computer.");
+		
 	}
 
 }

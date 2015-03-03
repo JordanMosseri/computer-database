@@ -20,8 +20,6 @@
 </head>
 <body>
 
-
-
 	<%-- <mylib:initDashboard /> --%>
 
     <jsp:include page="header.jsp"></jsp:include>
@@ -30,7 +28,7 @@
         <div class="container">
             <h1 id="homeTitle">
             	<%-- ${pageScope["paginationObject"].pageSize/actualList} --%>
-                ${pageScope.request["paginationObject"]} computers found 
+                ${requestScope.paginationObject.pageSize} computers found 
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -88,13 +86,13 @@
                 <tbody id="results">
                 	
                 	<!-- c is-a Computer -->
-                	<c:forEach var="c" items="${pageScope.request['paginationObject'].actualList}">
+                	<c:forEach var="c" items="${requestScope.paginationObject.actualList}">
 	                    <tr>
 	                        <td class="editMode">
 	                            <input type="checkbox" name="cb" class="cb" value="0">
 	                        </td>
 	                        <td>
-	                            <a href="static/views/editComputer.jsp?id=${c.id}" onclick="">${c.name}</a>
+	                            <a href="${pageContext.request.contextPath}/EditComputer?id=${c.id}" onclick="">${c.name}</a>
 	                        </td>
 	                        <td>${c.dateAddedString}</td>
 	                        <td>${c.dateRemovedString}</td>
@@ -112,8 +110,8 @@
         <div class="container text-center">
             <ul class="pagination">
             	
-            	
-            	<mylib:pagination pagingObject="${pageScope.request['paginationObject']}" />
+            	<%-- ${pageScope.request['paginationObject']} --%>
+            	<mylib:pagination pagingObject="${requestScope.paginationObject}" />
             	
             		<%-- indexPage="<%= paging.indexPage %>" 
             		offset="<%= paging.offset %>" 

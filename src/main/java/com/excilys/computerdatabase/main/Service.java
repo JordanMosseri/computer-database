@@ -1,5 +1,9 @@
 package com.excilys.computerdatabase.main;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -7,8 +11,11 @@ import java.util.regex.Pattern;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ComputerDAO;
+import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.modele.ComputerDTO;
+import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.ui.cli.View;
 import com.excilys.computerdatabase.util.Constantes;
 
@@ -23,6 +30,15 @@ public class Service {
 		return ComputerDAO.getInstance().getAll();
 	}
 	
+	public Paging<ComputerDTO> getComputers(int offset, int limit){
+		Paging<Computer> pagingComputer = ComputerDAO.getInstance().getAll(offset, limit);
+		List<ComputerDTO> listComputerDTO = new ArrayList<ComputerDTO>();
+		for (Computer computer : pagingComputer.actualList) {
+			listComputerDTO.add(DTOMapper.convert(computer));
+		}
+		return new Paging<ComputerDTO>(pagingComputer.offset, listComputerDTO, pagingComputer.indexPage, pagingComputer.totalSize);
+	}
+	
 	public List<Company> getCompanies(){
 		return CompanyDAO.getInstance().getListCompanies();
 	}
@@ -31,8 +47,47 @@ public class Service {
 		return ComputerDAO.getInstance().getComputer(id);
 	}
 	
-	public boolean addComputer(Computer c){
-		return ComputerDAO.getInstance().insereComputer(c);
+	/**
+	 * Check all cases, then modify comp.company.id value to be good
+	 * @param comp
+	 * @return
+	 */
+	public boolean addComputer(Computer comp){
+		
+		//Company Id is provided
+		if(comp.company.id >= 0){
+			
+			//Company Id exists in db
+			if(CompanyDAO.getInstance().companyExists(comp.company.id)){
+				//OK
+			}
+			
+			//Wrong company id
+			else{
+				throw new IllegalStateException("Inserting computer : companyId >= 0 but doesn't exists in database.");
+			}
+		}
+		
+		//Company Name is provided
+		else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
+			
+			//Company Name exists in db
+			comp.company.id = CompanyDAO.getInstance().getCompanyIdIfNameExists(comp.company.name);
+			
+			if(comp.company.id<0){
+				comp.company.id = CompanyDAO.getInstance().insertCompany(comp.company.name);
+			}
+		}
+		else{
+			throw new IllegalStateException("Inserting computer : companyId < 0 and companyName not entered.");
+		}
+		
+		
+		if (!CompanyDAO.getInstance().companyExists(comp.company.id)) {
+			throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
+		}
+		
+		return ComputerDAO.getInstance().insertComputer(comp);
 	}
 	
 	public void updateComputer(){
@@ -41,9 +96,10 @@ public class Service {
 			String nomRecupered = view.getStringFromConsole("Veuillez entrer un nouveau nom d'ordi (vide pour passer): ");
 			if( ! nomRecupered.equals(""))
 				ComputerDAO.getInstance().updateComputer(id, nomRecupered);
-			Date dateRecupered = view.getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
+			LocalDateTime dateRecupered = view.getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
 			if(dateRecupered != null){
-				ComputerDAO.getInstance().updateComputer(id, dateRecupered);
+				//TODO LocalDateTime
+				//ComputerDAO.getInstance().updateComputer(id, dateRecupered);
 			}
 		}
 	}
@@ -54,6 +110,10 @@ public class Service {
 	
 	public boolean deleteComputer(int id2){
 		return ComputerDAO.getInstance().deleteComputer(id2);
+	}
+	
+	public ComputerDTO getComputer(int id){
+		return DTOMapper.convert(ComputerDAO.getInstance().getComputer(id));
 	}
 	
 	
@@ -82,6 +142,14 @@ public class Service {
 			return dateRetour;
 		}
 		return null;
+	}
+	
+	public static LocalDateTime parse(String strRecuperee){
+		if(strRecuperee==null || !checkString(Constantes.REGEX_DATE, strRecuperee)) {
+			return null;
+		}
+		//TODO faire avec time dans pattern direct?
+		return LocalDate.parse(strRecuperee, DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE)).atTime(0, 0);
 	}
 	
 	public static int stringToInt(String strRecuperee){
