@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.main.Service;
+import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 
@@ -39,10 +42,10 @@ public class EditComputerServlet extends HttpServlet {
 	    if (request.getParameter("id") == null) {
 	    	intId=-1;
 	    } else {
-	    	intId = Service.stringToInt( request.getParameter("id") );
+	    	intId = NumberUtils.toInt( request.getParameter("id") );
 	    }
 	    
-	    computer = (new Service()).getComputer(intId) ;
+	    computer = DTOMapper.convert((new Service()).getComputer(intId));
 		
 	    request.setAttribute("intId", intId);
 	    request.setAttribute("computer", computer);

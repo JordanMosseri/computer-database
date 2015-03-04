@@ -17,14 +17,6 @@ public interface Constantes {
 	
 	public static final String REGEX_INTEGER = "[+-]?[0-9]++";
 	
-	public static final String[] POSSIBILITES = {
-			"List computers", 
-			"List companies", 
-			"Show computer details (the detailed information of only one computer)", 
-			"Create a computer", 
-			"Update a computer", 
-			"Delete a computer",
-			"Quitter"
-			};
+	
 	
 }

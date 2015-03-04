@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="${pageContext.request.contextPath}/deleteComputer" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -89,7 +89,7 @@
                 	<c:forEach var="c" items="${requestScope.paginationObject.actualList}">
 	                    <tr>
 	                        <td class="editMode">
-	                            <input type="checkbox" name="cb" class="cb" value="0">
+	                            <input type="checkbox" name="cb" class="cb" value="${c.id}">
 	                        </td>
 	                        <td>
 	                            <a href="${pageContext.request.contextPath}/EditComputer?id=${c.id}" onclick="">${c.name}</a>

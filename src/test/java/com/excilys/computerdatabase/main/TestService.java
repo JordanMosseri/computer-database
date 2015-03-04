@@ -1,6 +1,9 @@
 package com.excilys.computerdatabase.main;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.*;
+
 import static org.junit.Assert.*;
+
 import com.excilys.computerdatabase.util.Constantes;
 
 public class TestService {
@@ -35,10 +38,10 @@ public class TestService {
 	
 	@Test
 	public void testStringToInt(){
-		assertEquals(1, Service.stringToInt("1"));
-		assertEquals(12, Service.stringToInt("12"));
-		assertEquals(-1, Service.stringToInt("a"));
-		assertEquals(-1, Service.stringToInt("5a"));
+		assertEquals(1, NumberUtils.toInt("1"));
+		assertEquals(12, NumberUtils.toInt("12"));
+		assertEquals(-1, NumberUtils.toInt("a"));
+		assertEquals(-1, NumberUtils.toInt("5a"));
 	}
 	
 	@Test

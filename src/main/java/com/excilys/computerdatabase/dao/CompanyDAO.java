@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.dao;
 
+import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,10 @@ public class CompanyDAO extends AbstractDAO {
 	
 	//////////////////////
 	
+	final String REQUETE_GET_ALL = "SELECT * FROM company";
+	final String QUERY_DELETE = "DELETE FROM company WHERE id=?";
 	
-	public List<Company> getListCompanies(){
-		
-		final String REQUETE_GET_ALL = "SELECT * FROM company";
+	public List<Company> getAll(){
 		
 		ArrayList<Company> liste  = new ArrayList<Company>();
 		mettreVariablesANull();
@@ -67,7 +68,7 @@ public class CompanyDAO extends AbstractDAO {
 	 * @param nomFab
 	 * @return Id de la company nouvellement cree
 	 */
-	public int insertCompany(String nomFab){
+	public int insert(String nomFab){
 		mettreVariablesANull();
 		
 		int retour = -1;
@@ -99,7 +100,7 @@ public class CompanyDAO extends AbstractDAO {
 	 * @param nomFab nom de la company/fabriquant dont l'existance est a verifier
 	 * @return Id de la company dans la bdd si celle-ci existe, -1 si celle-ci n'existe pas
 	 */
-	public int getCompanyIdIfNameExists(String nomFab){
+	public int getIdIfNameExists(String nomFab){
 		mettreVariablesANull();
 		
 		int retour = -1;
@@ -125,13 +126,12 @@ public class CompanyDAO extends AbstractDAO {
 		return retour;
 	}
 	
-	public boolean companyExists(int id){
+	public boolean exists(int id){
 		mettreVariablesANull();
 		
 		boolean retour = false;
 		
 		try{
-			
 			cn = getConnexion();
 			
 			pstmt = cn.prepareStatement("SELECT * FROM company WHERE id=?");
@@ -149,4 +149,31 @@ public class CompanyDAO extends AbstractDAO {
 		
 		return retour;
 	}
+	
+	public boolean delete(int id, Connection cn){
+		mettreVariablesANull();
+		
+		boolean retour = true;
+		
+		try{
+			//cn = getConnexion();
+			
+			pstmt = cn.prepareStatement(QUERY_DELETE);
+			pstmt.setInt(1, id);
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			retour = false;
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
+		}
+		
+		return retour;
+	}
+	
+	public List<Integer> search(String word){
+		
+	}
+	
 }

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Computer;
@@ -41,15 +43,15 @@ public class DashboardServlet extends HttpServlet {
 
 	    if (request.getParameter("offset") == null) { }
 	    else {
-	    	intOffset = Service.stringToInt( request.getParameter("offset") );
+	    	intOffset = NumberUtils.toInt( request.getParameter("offset") );
 	    }
 	    
 	    if (request.getParameter("pageSize") == null) { }
 	    else {
-	    	pageSize = Service.stringToInt( request.getParameter("pageSize") );
+	    	pageSize = NumberUtils.toInt( request.getParameter("pageSize") );
 	    }
 	    
-	    paginationObject = (new Service()).getComputers(intOffset, pageSize); 
+	    paginationObject = (new Service()).getPartOfComputers(intOffset, pageSize); 
 		
 	    request.setAttribute("pageSize", pageSize);
 	    request.setAttribute("paginationObject", paginationObject);

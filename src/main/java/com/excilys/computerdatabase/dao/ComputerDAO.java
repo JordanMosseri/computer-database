@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.dao;
 
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -8,11 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.excilys.computerdatabase.mappers.DAOMapper;
-import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
-import com.excilys.computerdatabase.modele.Paging;
-import com.excilys.computerdatabase.ui.cli.View;
-import com.excilys.computerdatabase.util.Logging;
 
 public class ComputerDAO extends AbstractDAO{
 	
@@ -41,45 +38,47 @@ public class ComputerDAO extends AbstractDAO{
 	//////////////////////
 	
 	
-	final String REQUETE_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";
+	final String QUERY_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";
 	//final String REQUETE_GET_ALL = "SELECT * FROM computer";
 	
 	final String QUERY_INSERT = "INSERT into computer(name,introduced, discontinued,company_id) VALUES(?,?,?,?)";
 	final String QUERY_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	final String QUERY_DELETE = "DELETE FROM computer WHERE id=?";
+	final String QUERY_DELETE_WITH_COMPANYID = "DELETE FROM computer WHERE company_id=?";
 	
-	public Computer getComputer(int idComputer){
-		return getOneOrManyComputers("WHERE computer.id='"+idComputer+"'").get(0);
-	}
-	
-	public List<Computer> getAll(){
-		return getOneOrManyComputers("");
-	}
-	
-	public Paging<Computer> getAll(int offset, int limit){
-		if(offset < 0){
-			throw new IllegalStateException("ComputerDAO getAll : Negative offset.");
+	public Computer get(int idComputer){
+		
+		Computer computer = null;
+		mettreVariablesANull();
+		
+		try {
+			cn = getConnexion();
+			stmt = cn.createStatement();
+			rs = stmt.executeQuery(QUERY_GET_ALL+"WHERE computer.id='"+idComputer+"'");
+			if(rs.next()){
+				computer = DAOMapper.map(rs);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
 		}
-		return new Paging<Computer>(
-				offset, 
-				getOneOrManyComputers("LIMIT " + offset + ", "+limit), 
-				(offset+1)/limit,
-				getSize()
-				);
+		
+		return computer;
 	}
 	
-	private List<Computer> getOneOrManyComputers(String where) {
+	public List<Computer> getAll(String endOfQuery){
 		
 		ArrayList<Computer> liste  = new ArrayList<Computer>();
 		mettreVariablesANull();
 		
 		try {
-			
 			cn = getConnexion();
 			stmt = cn.createStatement();
-			rs = stmt.executeQuery(REQUETE_GET_ALL+where);
+			rs = stmt.executeQuery(QUERY_GET_ALL+endOfQuery);
 			while(rs.next()){
-				liste.add(DAOMapper.mapper(rs));
+				liste.add(DAOMapper.map(rs));
 			}
 			
 		} catch (SQLException e) {
@@ -91,13 +90,20 @@ public class ComputerDAO extends AbstractDAO{
 		return liste;
 	}
 	
+	public List<Computer> getPart(int offset, int limit){
+		return getAll("LIMIT " + offset + ", "+limit);
+	}
+	
+	
+	
+	
 	
 	/**
 	 * Insert a computer, all checking is already done and comp.company.id is good, comp.company.name doesn't matter here
 	 * @param comp
 	 * @return
 	 */
-	public boolean insertComputer(Computer computer) {
+	public boolean insert(Computer computer) {
 		
 		mettreVariablesANull();
 		
@@ -110,7 +116,7 @@ public class ComputerDAO extends AbstractDAO{
 			System.out.println(computer.company.id);//if(true)return;
 			
 			pstmt = cn.prepareStatement(QUERY_INSERT);
-			DAOMapper.f(pstmt, computer);
+			DAOMapper.map(pstmt, computer);
 			pstmt.executeUpdate();
 			
 			ok=true;
@@ -180,7 +186,7 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	public boolean updateComputer(Computer computer){
+	public boolean update(Computer computer){
 		mettreVariablesANull();
 		
 		boolean ok=true;
@@ -189,7 +195,7 @@ public class ComputerDAO extends AbstractDAO{
 			cn = getConnexion();
 			
 			pstmt = cn.prepareStatement(QUERY_UPDATE);
-			DAOMapper.f(pstmt, computer);
+			DAOMapper.map(pstmt, computer);
 			pstmt.setInt(5, computer.id);
 			pstmt.executeUpdate();
 			
@@ -207,7 +213,7 @@ public class ComputerDAO extends AbstractDAO{
 	 * @param id
 	 * @return true si ok, false si pas ok
 	 */
-	public boolean deleteComputer(int id){
+	public boolean delete(int id){
 		mettreVariablesANull();
 		
 		boolean ok=true;
@@ -229,7 +235,7 @@ public class ComputerDAO extends AbstractDAO{
 	}
 	
 	
-	public boolean computerExists(int id){
+	public boolean exists(int id){
 		mettreVariablesANull();
 		
 		boolean ok=false;
@@ -253,7 +259,7 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	public int getSize(){
+	public int getTotalCount(){
 		mettreVariablesANull();
 		
 		int size = 0;
@@ -275,6 +281,30 @@ public class ComputerDAO extends AbstractDAO{
 		return size;
 	}
 	
+	
+	public boolean deleteThoseFromCompany(int companyId, Connection cn){
+		mettreVariablesANull();
+		boolean ok = true;
+		
+		try{
+			//cn = getConnexion();
+			
+			pstmt = cn.prepareStatement(QUERY_DELETE_WITH_COMPANYID);
+			pstmt.setInt(1, companyId);
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			ok = false;
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
+		}
+		return ok;
+	}
+	
+	public List<Computer> search(String word){
+		
+	}
 	
 	
 }

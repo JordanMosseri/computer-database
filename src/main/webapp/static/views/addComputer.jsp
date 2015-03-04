@@ -57,30 +57,45 @@
         </div>
     </section>
     
+    <style>
+    	label.error{
+    		font-weight: initial;
+    		color: rgb(180, 0, 0);
+    	}
+    </style>
+    
 	<script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/static/js/jquery.validate.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     
 	
-		jQuery.validator.addMethod("regex", function(value,
-				element, regexp) {
-			if (regexp.constructor != RegExp)
-				regexp = new RegExp(regexp);
-			else if (regexp.global)
-				regexp.lastIndex = 0;
-			return this.optional(element) || regexp.test(value);
-		}, "erreur expression reguliere");
+		jQuery.validator.addMethod("regex", 
+			function(value, element, regexp) {
+				if (regexp.constructor != RegExp)
+					regexp = new RegExp(regexp);
+				else if (regexp.global)
+					regexp.lastIndex = 0;
+				return this.optional(element) || regexp.test(value);
+			}, "Incorrect date, out of bounds.");
+		
 		jQuery(document).ready(function() {
 			jQuery("#addForm").validate({
 				rules : {
 					"computerName" : {
 						"required" : true,
-						"maxlength" : 250,
-						"regex" : /^(\+33\.|0)[0-9]{9}$/
+						"maxlength" : 250
+					},
+					"introduced" : {
+						//"regex" : /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/
+						"regex" : /^(19|20)[0-9]{2}-[0-9]{2}-[0-9]{2}$/
+					},
+					"discontinued" : {
+						"regex" : /^(19|20)[0-9]{2}-[0-9]{2}-[0-9]{2}$/
 					}
 				}
 			});
 		});
+		
 		$(document).ready(function() {
 			$("#addForm").validate();
 		});

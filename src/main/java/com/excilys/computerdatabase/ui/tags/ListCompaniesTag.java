@@ -20,7 +20,7 @@ public class ListCompaniesTag extends TagSupport {
 		JspWriter out = pageContext.getOut();
 		
 		try {
-	        List<Company> liste = CompanyDAO.getInstance().getListCompanies();
+	        List<Company> liste = CompanyDAO.getInstance().getAll();
 			for(Company c : liste){
 				out.print("<option value=\"" + c.id + "\"");
 				if(idSelected == c.id){//${pageScope["computer"].company.id}

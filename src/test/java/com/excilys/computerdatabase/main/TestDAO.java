@@ -45,7 +45,7 @@ public class TestDAO {
 		(new Service()).addComputer(new Computer(-1, "computerTestWithCompanyName", dateAdded, dateRemoved, new Company("companyTest")));
 		
 		//check if well added
-		List<Computer> l = ComputerDAO.getInstance().getAll();
+		List<Computer> l = ComputerDAO.getInstance().getAll("");
 		Computer lastComputer = l.get(l.size() - 1);
 		
 		Assert.assertEquals("computerTestWithCompanyName", lastComputer.name);
@@ -64,9 +64,9 @@ public class TestDAO {
 	@Test
 	@Ignore
 	public void testDeleteComputer(){
-		ComputerDAO.getInstance().deleteComputer(18);
+		ComputerDAO.getInstance().delete(18);
 		
-		Assert.assertFalse(ComputerDAO.getInstance().computerExists(18));
+		Assert.assertFalse(ComputerDAO.getInstance().exists(18));
 	}
 	
 }

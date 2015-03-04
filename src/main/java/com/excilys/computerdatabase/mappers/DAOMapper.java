@@ -5,9 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
@@ -15,7 +12,7 @@ import com.excilys.computerdatabase.modele.Computer;
 public class DAOMapper {
 	
 	
-	public static Computer mapper(ResultSet rs) throws SQLException {
+	public static Computer map(ResultSet rs) throws SQLException {
 		
 		//System.out.println(rs.getTimestamp("introduced"));if(true)return null;
 		long introduced=0, removed=0;
@@ -33,7 +30,7 @@ public class DAOMapper {
 	}
 	
 	
-	public static void f(PreparedStatement pstmt, Computer computer) throws SQLException{
+	public static void map(PreparedStatement pstmt, Computer computer) throws SQLException{
 		
 		Timestamp dateAddedTimestamp = null;
 		Timestamp dateRemovedTimestamp = null;

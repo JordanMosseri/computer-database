@@ -1,24 +1,30 @@
 package com.excilys.computerdatabase.ui.cli;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Scanner;
 
-import org.apache.log4j.xml.DOMConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import com.excilys.computerdatabase.main.Service;
+import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
-import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.util.Constantes;
 
 public class View {
 	
+	public static final String[] POSSIBILITES = {
+		"List computers", 
+		"List companies", 
+		"Show computer details (the detailed information of only one computer)", 
+		"Create a computer", 
+		"Update a computer", 
+		"Delete a computer",
+		"Delete a company",
+		"Quitter"
+		};
+	
 	Scanner in = new Scanner(System.in);
-	public Service controleur;
+	public Service service = new Service();
 	
 	public  void lancerProgramme() {
 		
@@ -31,26 +37,48 @@ public class View {
 			
 			switch (selection) {
 			case 1:
-				this.println( controleur.getComputers() );
+				this.println( service.getAllComputers() );
 				break;
 			case 2:
-				this.println( controleur.getCompanies() );
+				this.println( service.getCompanies() );
 				break;
 			case 3:
-				this.println( controleur.showComputerDetails( this.getIntFromConsole("Veuillez entrer un id d'ordi: ") ) );
+				this.println( service.getComputer( this.getIntFromConsole("Please enter a computer id: ") ) );
 				break;
 			case 4:
-				controleur.addComputer( this.getComputerFromConsole() );
+				println(service.addComputer( DTOMapper.convert(this.getComputerDTOFromConsole()) ));
 				break;
 			case 5:
-				controleur.updateComputer();
+				int id = this.getIntFromConsole("Please enter a computer id: ");
+				
+				ComputerDTO computerDTO = DTOMapper.convert(service.getComputer(id));
+				
+				String nomRecupered = this.getStringFromConsole("Veuillez entrer un nouveau nom d'ordi (vide pour passer): ");
+				if(!nomRecupered.equals("")){
+					computerDTO.name = nomRecupered;
+				}
+				
+				String dateRecupered = this.getDateFromConsole("Please enter an added date formatted "+Constantes.FORMAT_DATE+" (leave empty to skip): ");
+				if(dateRecupered != null){
+					computerDTO.dateAdded = dateRecupered;
+				}
+				
+				String dateRemovedRecupered = this.getDateFromConsole("Please enter a removed date formatted "+Constantes.FORMAT_DATE+" (leave empty to skip): ");
+				if(dateRemovedRecupered != null){
+					computerDTO.dateRemoved = dateRemovedRecupered;
+				}
+				
+				println(service.updateComputer(DTOMapper.convert(computerDTO)));
 				break;
 			case 6:
-				controleur.deleteComputer( this.getIntFromConsole("Veuillez entrer un id d'ordi: ") );
+				println(service.deleteComputer( this.getIntFromConsole("Please enter a computer id: ") ));
 				break;
 			case 7:
+				println(service.deleteCompany(getIntFromConsole("Please enter a computer id: ")));
+				break;
+			case 8:
 				continuer=false;
-				this.println("Au revoir...");
+				this.println("Goodbye...");
 				break;
 			default:
 				break;
@@ -63,19 +91,19 @@ public class View {
 		
 		int selection=-1;
 		
-		while(selection<=0 || selection>=Constantes.POSSIBILITES.length+1){
+		while(selection<=0 || selection>=POSSIBILITES.length+1){
 			
-			this.println("\n---BIENVENUE---");
+			this.println("\n---WELCOME---");
 			
-			for (int i = 0; i < Constantes.POSSIBILITES.length; i++) {
-				this.println((i+1)+"-"+Constantes.POSSIBILITES[i]);
+			for (int i = 0; i < POSSIBILITES.length; i++) {
+				this.println((i+1)+"-"+POSSIBILITES[i]);
 			}
 			
-			selection = getIntFromConsole("Veuillez selectionner une option: ");
+			selection = getIntFromConsole("Please type a number: ");
 		}
 		
-		if(selection>=1 && selection<=Constantes.POSSIBILITES.length)
-			this.println(Constantes.POSSIBILITES[selection-1].toUpperCase());
+		if(selection>=1 && selection<=POSSIBILITES.length)
+			this.println(POSSIBILITES[selection-1].toUpperCase());
 		
 		//this.println("Vous avez selectionne "+selection);
 		return selection;
@@ -89,7 +117,7 @@ public class View {
 			this.print(message);
 			
 			String strRecuperee = in.nextLine();
-			id = Service.stringToInt(strRecuperee);
+			id = NumberUtils.toInt(strRecuperee);
 			if (id >= 0){
 				ok=true;
 			}
@@ -109,21 +137,21 @@ public class View {
 		return nom;
 	}
 	
-	public  Computer getComputerFromConsole(){
-		String nom = getStringFromConsole("Veuillez entrer un nom d'ordi: ");
-		String fab = getStringFromConsole("Veuillez entrer un nom de fabriquant: ");
-		LocalDateTime dateAddedEntered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
-		LocalDateTime dateRemovedEntered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
+	public  ComputerDTO getComputerDTOFromConsole(){
+		String nom = getStringFromConsole("Please enter a computer name: ");
+		String fab = getStringFromConsole("Please enter a company name: ");
+		String dateAddedEntered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
+		String dateRemovedEntered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
 		//Date d = new Date(System.currentTimeMillis());
 		this.println();
 		
 		//this.println(nom+" "+fab);
-		return new Computer(-1, nom,dateAddedEntered, dateRemovedEntered,new Company(fab));
+		return new ComputerDTO(-1, nom,dateAddedEntered, dateRemovedEntered,new Company(fab));
 	}
 	
 	
 	
-	public  LocalDateTime getDateFromConsole(String message){
+	public  String getDateFromConsole(String message){
 		String strRecuperee="";
 		boolean ok=false;
 		while(!ok){
@@ -132,7 +160,7 @@ public class View {
 				return null;
 			}
 			
-			//VERIF
+			//Check if the string entered is formatted like a date
 			ok = Service.checkString(Constantes.REGEX_DATE, strRecuperee);
 			
 			/*if(strRecuperee.contains("-")){
@@ -148,7 +176,7 @@ public class View {
 		}
 		
 		
-		return Service.parse(strRecuperee);
+		return strRecuperee;
 	}
 	
 	

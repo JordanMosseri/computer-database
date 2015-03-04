@@ -8,12 +8,7 @@ public class MainClass {
 	
 	public static void main(String[] args) {
 		
-		
-		Service controleur = new Service();
 		View view = new View();
-		
-		controleur.view = view;
-		view.controleur = controleur;
 		
 		view.lancerProgramme();
 		
