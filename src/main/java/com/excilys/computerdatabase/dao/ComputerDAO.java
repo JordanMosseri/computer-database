@@ -302,8 +302,48 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	public List<Computer> search(String word){
+	public List<Computer> getThoseFromCompany(int companyId){
+		mettreVariablesANull();
+		List<Computer> computers = new ArrayList<Computer>();
 		
+		try{
+			cn = getConnexion();
+			
+			pstmt = cn.prepareStatement("SELECT * FROM computer WHERE company_id=?");
+			pstmt.setInt(1, companyId);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				computers.add(DAOMapper.map(rs));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
+		}
+		return computers;
+	}
+	
+	public List<Computer> search(String word){
+		mettreVariablesANull();
+		List<Computer> computers = new ArrayList<Computer>();
+		
+		try{
+			cn = getConnexion();
+			
+			pstmt = cn.prepareStatement("SELECT * FROM computer WHERE computer.name LIKE '%?%'");
+			pstmt.setString(1, word);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				computers.add(DAOMapper.map(rs));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
+		}
+		return computers;
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Company;
 
 public class CompanyDAO extends AbstractDAO {
@@ -62,6 +63,28 @@ public class CompanyDAO extends AbstractDAO {
 		
 		return liste;
 	}
+	
+	//NOT USED
+	/*public Company get(int id){
+		mettreVariablesANull();
+		Company company = null;
+		
+		try {
+			cn = getConnexion();
+			stmt = cn.createStatement();
+			rs = stmt.executeQuery(REQUETE_GET_ALL+"WHERE company.id='"+id+"'");
+			if(rs.next()){
+				company = DAOMapper.map(rs);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			tryCloseVariables();
+		}
+		
+		return company;
+	}*/
 	
 	/**
 	 * Insere une company dans la bdd
@@ -173,7 +196,8 @@ public class CompanyDAO extends AbstractDAO {
 	}
 	
 	public List<Integer> search(String word){
-		
+		//TODO
+		return new ArrayList<Integer>();
 	}
 	
 }

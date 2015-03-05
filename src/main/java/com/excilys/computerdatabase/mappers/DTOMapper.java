@@ -2,7 +2,9 @@ package com.excilys.computerdatabase.mappers;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.*;
@@ -31,6 +33,16 @@ public class DTOMapper {
 		}
 		
 		return new ComputerDTO(c.id, c.name, stringDateAdded, stringDateRemoved, c.company);
+	}
+	
+	public static List<ComputerDTO> convert(List<Computer> computers){
+		ArrayList<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
+		
+		for (Computer computer : computers) {
+			computersDTO.add(DTOMapper.convert(computer));
+		}
+		
+		return computersDTO;
 	}
 	
 }

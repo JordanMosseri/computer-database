@@ -51,7 +51,10 @@ public class DashboardServlet extends HttpServlet {
 	    	pageSize = NumberUtils.toInt( request.getParameter("pageSize") );
 	    }
 	    
-	    paginationObject = (new Service()).getPartOfComputers(intOffset, pageSize); 
+	    paginationObject = (new Service()).getPartOfComputers(intOffset, pageSize);
+	    
+	    //Added
+	    //paginationObject.actualList = (new Service()).search("Apple");
 		
 	    request.setAttribute("pageSize", pageSize);
 	    request.setAttribute("paginationObject", paginationObject);

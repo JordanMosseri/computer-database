@@ -30,15 +30,15 @@ public class Service {
 	}
 	
 	public Paging<ComputerDTO> getPartOfComputers(int offset, int limit){
-		
+		//Get part of computers
 		List<Computer> partOfComputers = ComputerDAO.getInstance().getPart(offset, limit);
 		
-		List<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
-		for (Computer computer : partOfComputers) {
-			computersDTO.add(DTOMapper.convert(computer));
-		}
-		
-		return new Paging<ComputerDTO>(offset, computersDTO, (offset+1)/limit, ComputerDAO.getInstance().getTotalCount());
+		//Returns Paging object
+		return new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.getInstance().getTotalCount());
+	}
+	
+	public Paging<ComputerDTO> getPartOfComputers(int offset, int limit, String word){
+		List<ComputerDTO> computersDTO = search(word);
 	}
 	
 	public List<Company> getCompanies(){
@@ -102,14 +102,19 @@ public class Service {
 	}
 	
 	public boolean deleteCompany(int id){
+		//Get a connection for the transaction
 		Connection cn = AbstractDAO.getConnexion();
 		
 		try {
 			cn.setAutoCommit(false);
 			
+			//Delete computers linked to the company first (avoid exception due to constraint key)
 			boolean ok1 = ComputerDAO.getInstance().deleteThoseFromCompany(id, cn);
+			
+			//Delete company
 			boolean ok2 = CompanyDAO.getInstance().delete(id, cn);
 			
+			//Commit the transaction
 			cn.commit();
 			
 			cn.setAutoCommit(true);
@@ -118,7 +123,9 @@ public class Service {
 		} catch (SQLException e) {
 			
 			try {
+				//Cancel the transaction because of an error
 				cn.rollback();
+				
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -128,11 +135,22 @@ public class Service {
 		return false;
 	}
 	
-	public List<Computer> search(String word){
-		ArrayList<Computer> list = new ArrayList<Computer>();
-		list.addAll(ComputerDAO.getInstance().search(word));
-		list.addAll(CompanyDAO.getInstance().search(word));
-		return list;
+	private List<ComputerDTO> search(String word){
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+		
+		//Search among computers
+		computers.addAll(ComputerDAO.getInstance().search(word));
+		
+		//Get ids from the search among companies
+		List<Integer> listInt = CompanyDAO.getInstance().search(word);
+		
+		//For each company
+		for (Integer integer : listInt) {
+			//Get computers linked to this company
+			computers.addAll(ComputerDAO.getInstance().getThoseFromCompany(integer));
+		}
+		
+		return DTOMapper.convert(computers);
 	}
 	
 	
