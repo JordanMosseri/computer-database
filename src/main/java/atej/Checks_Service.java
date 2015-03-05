@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.main;
+package atej;
 
 public class Checks_Service {
 	

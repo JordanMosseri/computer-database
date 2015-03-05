@@ -3,7 +3,6 @@ package com.excilys.computerdatabase.modele;
 import java.io.Serializable;
 import java.util.List;
 
-import com.excilys.computerdatabase.dao.ComputerDAO;
 
 public class Paging <T> implements Serializable {
 	

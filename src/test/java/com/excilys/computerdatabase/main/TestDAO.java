@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.main;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -10,8 +12,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.excilys.computerdatabase.dao.CompanyDAO;
-import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.util.Constantes;
@@ -22,8 +22,11 @@ public class TestDAO {
 	
 	@BeforeClass
 	public static void beforeClass(){
-		ComputerDAO.getInstance().url = ComputerDAO.URL_TEST;
-		CompanyDAO.getInstance().url = ComputerDAO.URL_TEST;
+		
+		
+		//TODO
+		//ComputerDAO.getInstance().URL = ComputerDAO.getInstance().URL.replaceAll("computer-database-db", "computer-database-db-tests");
+		//CompanyDAO.getInstance().URL = CompanyDAO.getInstance().URL.replaceAll("computer-database-db", "computer-database-db-tests");
 	}
 	
 	@Before
@@ -45,7 +48,7 @@ public class TestDAO {
 		(new Service()).addComputer(new Computer(-1, "computerTestWithCompanyName", dateAdded, dateRemoved, new Company("companyTest")));
 		
 		//check if well added
-		List<Computer> l = ComputerDAO.getInstance().getAll("");
+		List<Computer> l = (new Service()).getComputers();
 		Computer lastComputer = l.get(l.size() - 1);
 		
 		Assert.assertEquals("computerTestWithCompanyName", lastComputer.name);
@@ -64,9 +67,9 @@ public class TestDAO {
 	@Test
 	@Ignore
 	public void testDeleteComputer(){
-		ComputerDAO.getInstance().delete(18);
+		(new Service()).deleteComputer(18);
 		
-		Assert.assertFalse(ComputerDAO.getInstance().exists(18));
+		Assert.assertFalse((new Service()).computerExists(18));
 	}
 	
 }

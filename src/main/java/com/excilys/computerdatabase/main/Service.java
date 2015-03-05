@@ -25,28 +25,24 @@ import com.excilys.computerdatabase.util.Constantes;
 public class Service {
 	
 	
-	public List<Computer> getAllComputers(){
-		return ComputerDAO.getInstance().getAll("");
+	public List<Computer> getComputers(){
+		return ComputerDAO.getInstance().getAll("", AbstractDAO.getConnexion());
 	}
 	
-	public Paging<ComputerDTO> getPartOfComputers(int offset, int limit){
+	public Paging<ComputerDTO> getComputers(int offset, int limit, String word){
 		//Get part of computers
-		List<Computer> partOfComputers = ComputerDAO.getInstance().getPart(offset, limit);
+		List<Computer> partOfComputers = ComputerDAO.getInstance().getPart(offset, limit, word, AbstractDAO.getConnexion());
 		
 		//Returns Paging object
-		return new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.getInstance().getTotalCount());
-	}
-	
-	public Paging<ComputerDTO> getPartOfComputers(int offset, int limit, String word){
-		List<ComputerDTO> computersDTO = search(word);
+		return new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.getInstance().getTotalCount(AbstractDAO.getConnexion()));
 	}
 	
 	public List<Company> getCompanies(){
-		return CompanyDAO.getInstance().getAll();
+		return CompanyDAO.getInstance().getAll(AbstractDAO.getConnexion());
 	}
 	
 	public Computer getComputer(int id){
-		return ComputerDAO.getInstance().get(id);
+		return ComputerDAO.getInstance().get(id, AbstractDAO.getConnexion());
 	}
 	
 	/**
@@ -60,7 +56,7 @@ public class Service {
 		if(comp.company.id >= 0){
 			
 			//Company Id exists in db
-			if(CompanyDAO.getInstance().exists(comp.company.id)){
+			if(CompanyDAO.getInstance().exists(comp.company.id, AbstractDAO.getConnexion())){
 				//OK
 			}
 			
@@ -74,10 +70,10 @@ public class Service {
 		else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
 			
 			//Company Name exists in db
-			comp.company.id = CompanyDAO.getInstance().getIdIfNameExists(comp.company.name);
+			comp.company.id = CompanyDAO.getInstance().getIdIfNameExists(comp.company.name, AbstractDAO.getConnexion());
 			
 			if(comp.company.id<0){
-				comp.company.id = CompanyDAO.getInstance().insert(comp.company.name);
+				comp.company.id = CompanyDAO.getInstance().insert(comp.company.name, AbstractDAO.getConnexion());
 			}
 		}
 		else{
@@ -85,20 +81,20 @@ public class Service {
 		}
 		
 		
-		if (!CompanyDAO.getInstance().exists(comp.company.id)) {
+		if (!CompanyDAO.getInstance().exists(comp.company.id, AbstractDAO.getConnexion())) {
 			throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
 		}
 		
-		return ComputerDAO.getInstance().insert(comp);
+		return ComputerDAO.getInstance().insert(comp, AbstractDAO.getConnexion());
 	}
 	
 	
 	public boolean updateComputer(Computer c){
-		return ComputerDAO.getInstance().update(c);
+		return ComputerDAO.getInstance().update(c, AbstractDAO.getConnexion());
 	}
 	
 	public boolean deleteComputer(int id){
-		return ComputerDAO.getInstance().delete(id);
+		return ComputerDAO.getInstance().delete(id, AbstractDAO.getConnexion());
 	}
 	
 	public boolean deleteCompany(int id){
@@ -135,7 +131,11 @@ public class Service {
 		return false;
 	}
 	
-	private List<ComputerDTO> search(String word){
+	public boolean computerExists(int id){
+		return ComputerDAO.getInstance().exists(id, AbstractDAO.getConnexion());
+	}
+	
+	/*private List<ComputerDTO> search(String word){
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		
 		//Search among computers
@@ -151,7 +151,7 @@ public class Service {
 		}
 		
 		return DTOMapper.convert(computers);
-	}
+	}*/
 	
 	
 	

@@ -54,7 +54,10 @@ public class PaginationTag extends TagSupport {
 			
 			//Numbers
 			String bold = "style=\"font-weight:bold;\"";
-			int numberOfPages = pagingObject.totalSize/pagingObject.getLimit();
+			int numberOfPages = 1;
+			if(pagingObject.getLimit() != 0){
+				numberOfPages = pagingObject.totalSize/pagingObject.getLimit();
+			}
 			for(int i=pagingObject.indexPage-2; i<pagingObject.indexPage+2+1; i++){
 				if(i>=0 && i<numberOfPages) {
 					out.print("<li><a ");

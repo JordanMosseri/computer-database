@@ -5,7 +5,6 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
@@ -33,7 +32,7 @@ public class InitDashboardTag extends TagSupport {
 	    	pageSize = NumberUtils.toInt( pageContext.getRequest().getParameter("pageSize") );
 	    }
 
-	    paginationObject = (new Service()).getPartOfComputers(intOffset, pageSize); 
+	    paginationObject = (new Service()).getComputers(intOffset, pageSize, ""); 
 		
 		pageContext.setAttribute("pageSize", pageSize);
 		pageContext.setAttribute("paginationObject", paginationObject);

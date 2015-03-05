@@ -37,16 +37,12 @@ public class CompanyDAO extends AbstractDAO {
 	final String REQUETE_GET_ALL = "SELECT * FROM company";
 	final String QUERY_DELETE = "DELETE FROM company WHERE id=?";
 	
-	public List<Company> getAll(){
+	public List<Company> getAll(Connection cn){
 		
 		ArrayList<Company> liste  = new ArrayList<Company>();
 		mettreVariablesANull();
 		
 		try {
-			
-			
-			cn = getConnexion();
-			
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(REQUETE_GET_ALL);
 			while (rs.next()) {
@@ -91,15 +87,12 @@ public class CompanyDAO extends AbstractDAO {
 	 * @param nomFab
 	 * @return Id de la company nouvellement cree
 	 */
-	public int insert(String nomFab){
+	public int insert(String nomFab, Connection cn){
 		mettreVariablesANull();
 		
 		int retour = -1;
 		
 		try{
-			
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement("INSERT into company(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, nomFab);
 			pstmt.executeUpdate();
@@ -123,15 +116,12 @@ public class CompanyDAO extends AbstractDAO {
 	 * @param nomFab nom de la company/fabriquant dont l'existance est a verifier
 	 * @return Id de la company dans la bdd si celle-ci existe, -1 si celle-ci n'existe pas
 	 */
-	public int getIdIfNameExists(String nomFab){
+	public int getIdIfNameExists(String nomFab, Connection cn){
 		mettreVariablesANull();
 		
 		int retour = -1;
 		
 		try{
-			
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement("SELECT * FROM company WHERE name=?");
 			pstmt.setString(1, nomFab);
 			rs = pstmt.executeQuery();
@@ -149,14 +139,12 @@ public class CompanyDAO extends AbstractDAO {
 		return retour;
 	}
 	
-	public boolean exists(int id){
+	public boolean exists(int id, Connection cn){
 		mettreVariablesANull();
 		
 		boolean retour = false;
 		
 		try{
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement("SELECT * FROM company WHERE id=?");
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
@@ -179,8 +167,6 @@ public class CompanyDAO extends AbstractDAO {
 		boolean retour = true;
 		
 		try{
-			//cn = getConnexion();
-			
 			pstmt = cn.prepareStatement(QUERY_DELETE);
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
@@ -195,9 +181,5 @@ public class CompanyDAO extends AbstractDAO {
 		return retour;
 	}
 	
-	public List<Integer> search(String word){
-		//TODO
-		return new ArrayList<Integer>();
-	}
 	
 }

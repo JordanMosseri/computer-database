@@ -7,7 +7,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.excilys.computerdatabase.dao.CompanyDAO;
+import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Company;
 
 public class ListCompaniesTag extends TagSupport {
@@ -20,7 +20,7 @@ public class ListCompaniesTag extends TagSupport {
 		JspWriter out = pageContext.getOut();
 		
 		try {
-	        List<Company> liste = CompanyDAO.getInstance().getAll();
+	        List<Company> liste = (new Service()).getCompanies();
 			for(Company c : liste){
 				out.print("<option value=\"" + c.id + "\"");
 				if(idSelected == c.id){//${pageScope["computer"].company.id}

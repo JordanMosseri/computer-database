@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
@@ -40,21 +39,21 @@ public class DashboardServlet extends HttpServlet {
 		
 		int intOffset = 0, pageSize = DEFAULT_PAGE_SIZE;
 		Paging<ComputerDTO> paginationObject;
+		String search = "";
 
-	    if (request.getParameter("offset") == null) { }
-	    else {
+	    if (request.getParameter("offset") != null) {
 	    	intOffset = NumberUtils.toInt( request.getParameter("offset") );
 	    }
 	    
-	    if (request.getParameter("pageSize") == null) { }
-	    else {
+	    if (request.getParameter("pageSize") != null) {
 	    	pageSize = NumberUtils.toInt( request.getParameter("pageSize") );
 	    }
 	    
-	    paginationObject = (new Service()).getPartOfComputers(intOffset, pageSize);
+	    if (request.getParameter("search") != null) {
+	    	search = request.getParameter("search");
+	    }
 	    
-	    //Added
-	    //paginationObject.actualList = (new Service()).search("Apple");
+	    paginationObject = (new Service()).getComputers(intOffset, pageSize, search);
 		
 	    request.setAttribute("pageSize", pageSize);
 	    request.setAttribute("paginationObject", paginationObject);

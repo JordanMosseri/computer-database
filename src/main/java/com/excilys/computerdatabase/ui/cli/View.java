@@ -37,7 +37,7 @@ public class View {
 			
 			switch (selection) {
 			case 1:
-				this.println( service.getAllComputers() );
+				this.println( service.getComputers() );
 				break;
 			case 2:
 				this.println( service.getCompanies() );

@@ -46,13 +46,12 @@ public class ComputerDAO extends AbstractDAO{
 	final String QUERY_DELETE = "DELETE FROM computer WHERE id=?";
 	final String QUERY_DELETE_WITH_COMPANYID = "DELETE FROM computer WHERE company_id=?";
 	
-	public Computer get(int idComputer){
+	public Computer get(int idComputer, Connection cn){
 		
 		Computer computer = null;
 		mettreVariablesANull();
 		
 		try {
-			cn = getConnexion();
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(QUERY_GET_ALL+"WHERE computer.id='"+idComputer+"'");
 			if(rs.next()){
@@ -68,13 +67,12 @@ public class ComputerDAO extends AbstractDAO{
 		return computer;
 	}
 	
-	public List<Computer> getAll(String endOfQuery){
+	public List<Computer> getAll(String endOfQuery, Connection cn){
 		
 		ArrayList<Computer> liste  = new ArrayList<Computer>();
 		mettreVariablesANull();
 		
 		try {
-			cn = getConnexion();
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(QUERY_GET_ALL+endOfQuery);
 			while(rs.next()){
@@ -90,8 +88,12 @@ public class ComputerDAO extends AbstractDAO{
 		return liste;
 	}
 	
-	public List<Computer> getPart(int offset, int limit){
-		return getAll("LIMIT " + offset + ", "+limit);
+	public List<Computer> getPart(int offset, int limit, String word, Connection cn){
+		String whereLike = " ";
+		if(word != null && !word.isEmpty()){
+			whereLike = " WHERE computer.name LIKE '%" + word + "%' || company.name LIKE '%" + word + "%'";
+		}
+		return getAll(whereLike + "LIMIT " + offset + ", "+limit, cn);
 	}
 	
 	
@@ -103,16 +105,13 @@ public class ComputerDAO extends AbstractDAO{
 	 * @param comp
 	 * @return
 	 */
-	public boolean insert(Computer computer) {
+	public boolean insert(Computer computer, Connection cn) {
 		
 		mettreVariablesANull();
 		
 		boolean ok=false;
 		
 		try {
-			
-			cn = getConnexion();
-			
 			System.out.println(computer.company.id);//if(true)return;
 			
 			pstmt = cn.prepareStatement(QUERY_INSERT);
@@ -130,13 +129,7 @@ public class ComputerDAO extends AbstractDAO{
 		
 	}
 	
-	/**
-	 * Modifie le nom d'un ordinateur
-	 * @param id
-	 * @param nouveauNom
-	 * @return true si ok, false si pas ok
-	 */
-	public boolean updateComputer(int id, String nouveauNom){
+	/*public boolean updateComputer(int id, String nouveauNom){
 		mettreVariablesANull();
 		
 		boolean ok=true;
@@ -158,12 +151,6 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	/**
-	 * Modifie la date d'ajout d'un ordinateur
-	 * @param id
-	 * @param nouvelleDate
-	 * @return true si ok, false si pas ok
-	 */
 	public boolean updateComputer(int id, Date nouvelleDate){
 		mettreVariablesANull();
 		
@@ -184,16 +171,14 @@ public class ComputerDAO extends AbstractDAO{
 			tryCloseVariables();
 		}
 		return ok;
-	}
+	}*/
 	
-	public boolean update(Computer computer){
+	public boolean update(Computer computer, Connection cn){
 		mettreVariablesANull();
 		
 		boolean ok=true;
 		
 		try{
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement(QUERY_UPDATE);
 			DAOMapper.map(pstmt, computer);
 			pstmt.setInt(5, computer.id);
@@ -213,14 +198,12 @@ public class ComputerDAO extends AbstractDAO{
 	 * @param id
 	 * @return true si ok, false si pas ok
 	 */
-	public boolean delete(int id){
+	public boolean delete(int id, Connection cn){
 		mettreVariablesANull();
 		
 		boolean ok=true;
 		
 		try{
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement(QUERY_DELETE);
 			pstmt.setInt(1, id);
 			pstmt.executeUpdate();
@@ -235,14 +218,12 @@ public class ComputerDAO extends AbstractDAO{
 	}
 	
 	
-	public boolean exists(int id){
+	public boolean exists(int id, Connection cn){
 		mettreVariablesANull();
 		
 		boolean ok=false;
 		
 		try{
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement("SELECT * FROM computer WHERE id=?");
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
@@ -259,14 +240,12 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	public int getTotalCount(){
+	public int getTotalCount(Connection cn){
 		mettreVariablesANull();
 		
 		int size = 0;
 		
 		try{
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement("SELECT count(*) FROM computer");
 			rs = pstmt.executeQuery();
 			if(rs.next()){
@@ -302,13 +281,11 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	public List<Computer> getThoseFromCompany(int companyId){
+	public List<Computer> getThoseFromCompany(int companyId, Connection cn){
 		mettreVariablesANull();
 		List<Computer> computers = new ArrayList<Computer>();
 		
 		try{
-			cn = getConnexion();
-			
 			pstmt = cn.prepareStatement("SELECT * FROM computer WHERE company_id=?");
 			pstmt.setInt(1, companyId);
 			rs = pstmt.executeQuery();
