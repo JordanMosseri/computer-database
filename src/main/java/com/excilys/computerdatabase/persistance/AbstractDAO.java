@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.dao;
+package com.excilys.computerdatabase.persistance;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,10 +14,12 @@ import java.util.Properties;
 
 import javax.servlet.ServletContext;
 
+import com.excilys.computerdatabase.util.Logging;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
 public class AbstractDAO {
+	public static boolean UNIT_TEST = false;
 	
 	private static final String FICHIER_PROPERTIES       = "dao.properties";
     private static final String PROPERTY_URL             = "url";
@@ -80,13 +82,7 @@ public class AbstractDAO {
 		}
 	}
 	
-	
-	
-	static{
-		loadProperties();
-		
-		loadDriver();
-		
+	public static void createConnectionPool(){
 		try {
             //Creates the config
             BoneCPConfig config = new BoneCPConfig();
@@ -108,18 +104,44 @@ public class AbstractDAO {
         }
 	}
 	
+	static{
+		loadProperties();
+		
+		loadDriver();
+		
+		createConnectionPool();
+	}
+	
 	public static Connection getConnexion() {
+        if(UNIT_TEST){
+        	return getDriverManagerConnexion(true);
+        }
 
+		
 		Connection cn = null;
+		
 		try {
-			
-			//cn = DriverManager.getConnection(this.url,USER,PASS)
 			cn = connectionPool.getConnection();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return cn;
+	}
+	
+	public static Connection getDriverManagerConnexion(boolean test) {
+		Connection cn = null;
+		
+		try {
+			if(test){
+				cn = DriverManager.getConnection(URL_TEST,USER,PASS);
+			}
+			else{
+				cn = DriverManager.getConnection(URL,USER,PASS);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return cn;
 	}
 	

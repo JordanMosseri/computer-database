@@ -6,10 +6,9 @@ import org.slf4j.LoggerFactory;
 
 public class Logging {
 	
-	public final static Logger logger = LoggerFactory.getLogger("JMosseri_ComputerDatabase_Logger");
+	public final static Logger logger = LoggerFactory.getLogger("ComputerDatabaseLogger");
 	static{
-		//TODO faire en mode slf4j
-		DOMConfigurator.configure("/home/excilys/workspace_jee/computerdatabase_test_maven/log4j-config.xml");
+		//DOMConfigurator.configure("/home/excilys/workspace_jee/computerdatabase_test_maven/.../log4j-config.xml");
 	}
 	
 	public static void log(Object o){

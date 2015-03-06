@@ -1,0 +1,41 @@
+
+SPRINT PRECEDENT:
+->test unitaires : fake DAO (Mockito)
+
+SPRINT ACTUEL:
+order by features
+singleton en enum & interfacer DAO
+[template]
+[nouvelle taglib]
+POUVOIR AJOUTER AVEC IDCOMPANY NULL
+
+TODO:
+ameliorer encapsulation objets du modele (notemment pour JSP EL dashboard)
+pagination : attention aux dernieres pages
+Datasource?
+
+github: finir README
+https://raw.githubusercontent.com/loicortola/spec-cdb/master/README.md
+
+
+
+
+
+
+[verifier que les liens sont bons + pages edit/add : bouton cancel renvoie vers la page precedente (param offset...)]
+[verifier les chaines d'appel, completer tous les TODO, revoir noms variables/fonctions]
+[changer commentaires Javadoc]
+[avant ThreadLocal/Spring, faire un commit "d'etape"]
+
+comment tester que les donnees soient bien transmises d'un formulaire?
+
+
+
+
+
+
+commit : 
+
+
+
+

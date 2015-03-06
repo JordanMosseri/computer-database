@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
+import com.excilys.computerdatabase.service.Service;
 
 import org.apache.commons.lang3.*;
 import org.apache.commons.lang3.math.NumberUtils;

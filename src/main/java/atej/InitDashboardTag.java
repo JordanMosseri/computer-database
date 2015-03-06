@@ -5,10 +5,10 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
+import com.excilys.computerdatabase.service.Service;
 
 public class InitDashboardTag extends TagSupport {
 	

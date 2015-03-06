@@ -4,10 +4,10 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.ComputerDTO;
+import com.excilys.computerdatabase.service.Service;
 import com.excilys.computerdatabase.util.Constantes;
 
 public class View {

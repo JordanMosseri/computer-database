@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.main;
+package com.excilys.computerdatabase.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.excilys.computerdatabase.dao.AbstractDAO;
-import com.excilys.computerdatabase.dao.CompanyDAO;
-import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
+import com.excilys.computerdatabase.persistance.AbstractDAO;
+import com.excilys.computerdatabase.persistance.CompanyDAO;
+import com.excilys.computerdatabase.persistance.ComputerDAO;
 import com.excilys.computerdatabase.ui.cli.View;
 import com.excilys.computerdatabase.util.Constantes;
 
@@ -26,23 +26,47 @@ public class Service {
 	
 	
 	public List<Computer> getComputers(){
-		return ComputerDAO.getInstance().getAll("", AbstractDAO.getConnexion());
+		Connection cn = AbstractDAO.getConnexion();
+		
+		List<Computer> computers = ComputerDAO.getInstance().getAll("", cn);
+		
+		tryClose(cn);
+		
+		return computers;
 	}
 	
 	public Paging<ComputerDTO> getComputers(int offset, int limit, String word){
+		Connection cn = AbstractDAO.getConnexion();
+		
 		//Get part of computers
-		List<Computer> partOfComputers = ComputerDAO.getInstance().getPart(offset, limit, word, AbstractDAO.getConnexion());
+		List<Computer> partOfComputers = ComputerDAO.getInstance().getPart(offset, limit, word, cn);
 		
 		//Returns Paging object
-		return new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.getInstance().getTotalCount(AbstractDAO.getConnexion()));
+		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.getInstance().getTotalCount(cn));
+		
+		tryClose(cn);
+		
+		return page;
 	}
 	
 	public List<Company> getCompanies(){
-		return CompanyDAO.getInstance().getAll(AbstractDAO.getConnexion());
+		Connection cn = AbstractDAO.getConnexion();
+		
+		List<Company> companies = CompanyDAO.getInstance().getAll(cn);
+		
+		tryClose(cn);
+		
+		return companies;
 	}
 	
 	public Computer getComputer(int id){
-		return ComputerDAO.getInstance().get(id, AbstractDAO.getConnexion());
+		Connection cn = AbstractDAO.getConnexion();
+		
+		Computer computer = ComputerDAO.getInstance().get(id, cn);
+		
+		tryClose(cn);
+		
+		return computer;
 	}
 	
 	/**
@@ -51,12 +75,13 @@ public class Service {
 	 * @return
 	 */
 	public boolean addComputer(Computer comp){
+		Connection cn = AbstractDAO.getConnexion();
 		
 		//Company Id is provided
 		if(comp.company.id >= 0){
 			
 			//Company Id exists in db
-			if(CompanyDAO.getInstance().exists(comp.company.id, AbstractDAO.getConnexion())){
+			if(CompanyDAO.getInstance().exists(comp.company.id, cn)){
 				//OK
 			}
 			
@@ -70,10 +95,10 @@ public class Service {
 		else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
 			
 			//Company Name exists in db
-			comp.company.id = CompanyDAO.getInstance().getIdIfNameExists(comp.company.name, AbstractDAO.getConnexion());
+			comp.company.id = CompanyDAO.getInstance().getIdIfNameExists(comp.company.name, cn);
 			
 			if(comp.company.id<0){
-				comp.company.id = CompanyDAO.getInstance().insert(comp.company.name, AbstractDAO.getConnexion());
+				comp.company.id = CompanyDAO.getInstance().insert(comp.company.name, cn);
 			}
 		}
 		else{
@@ -81,20 +106,36 @@ public class Service {
 		}
 		
 		
-		if (!CompanyDAO.getInstance().exists(comp.company.id, AbstractDAO.getConnexion())) {
+		if (!CompanyDAO.getInstance().exists(comp.company.id, cn)) {
 			throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
 		}
 		
-		return ComputerDAO.getInstance().insert(comp, AbstractDAO.getConnexion());
+		boolean result =  ComputerDAO.getInstance().insert(comp, cn);
+		
+		tryClose(cn);
+		
+		return result;
 	}
 	
 	
 	public boolean updateComputer(Computer c){
-		return ComputerDAO.getInstance().update(c, AbstractDAO.getConnexion());
+		Connection cn = AbstractDAO.getConnexion();
+		
+		boolean res = ComputerDAO.getInstance().update(c, cn);
+		
+		tryClose(cn);
+		
+		return res;
 	}
 	
 	public boolean deleteComputer(int id){
-		return ComputerDAO.getInstance().delete(id, AbstractDAO.getConnexion());
+		Connection cn = AbstractDAO.getConnexion();
+		
+		boolean res = ComputerDAO.getInstance().delete(id, cn);
+		
+		tryClose(cn);
+		
+		return res;
 	}
 	
 	public boolean deleteCompany(int id){
@@ -113,8 +154,6 @@ public class Service {
 			//Commit the transaction
 			cn.commit();
 			
-			cn.setAutoCommit(true);
-			
 			return ok1 && ok2;
 		} catch (SQLException e) {
 			
@@ -128,11 +167,39 @@ public class Service {
 			
 			e.printStackTrace();
 		}
+		finally{
+			try {
+				cn.setAutoCommit(true);
+				
+				//Release connection to the pool (do not close it)
+				if (cn != null)
+					cn.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return false;
 	}
 	
 	public boolean computerExists(int id){
-		return ComputerDAO.getInstance().exists(id, AbstractDAO.getConnexion());
+		Connection cn = AbstractDAO.getConnexion();
+		
+		boolean res = ComputerDAO.getInstance().exists(id, cn);
+		
+		tryClose(cn);
+		
+		return res;
+	}
+	
+	public void tryClose(Connection cn){
+		try {
+			if (cn != null)
+				cn.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*private List<ComputerDTO> search(String word){

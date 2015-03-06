@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.*;
+import com.excilys.computerdatabase.service.Service;
 import com.excilys.computerdatabase.util.Constantes;
 
 public class DTOMapper {

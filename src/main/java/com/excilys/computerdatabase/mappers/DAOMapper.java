@@ -14,15 +14,14 @@ public class DAOMapper {
 	
 	public static Computer map(ResultSet rs) throws SQLException {
 		
-		//System.out.println(rs.getTimestamp("introduced"));if(true)return null;
-		long introduced=0, removed=0;
+		//rs.getTimestamp("introduced").getTime()
+		
 		LocalDateTime dateIntroduced=null, dateRemoved=null;
+		
 		if(rs.getTimestamp("introduced") != null){
-			introduced=rs.getTimestamp("introduced").getTime();
 			dateIntroduced = rs.getTimestamp("introduced").toLocalDateTime();//new Date(introduced);
 		}
 		if(rs.getTimestamp("discontinued") != null){
-			removed=rs.getTimestamp("discontinued").getTime();
 			dateRemoved = rs.getTimestamp("discontinued").toLocalDateTime();
 		}
 		Computer c =  new Computer(rs.getInt("id"), rs.getString("name"), dateIntroduced, dateRemoved, new Company(rs.getString("company.name"), rs.getInt("company.id")));//company.name company_id

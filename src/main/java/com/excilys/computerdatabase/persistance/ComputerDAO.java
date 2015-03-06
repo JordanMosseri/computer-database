@@ -1,11 +1,9 @@
-package com.excilys.computerdatabase.dao;
+package com.excilys.computerdatabase.persistance;
 
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.excilys.computerdatabase.mappers.DAOMapper;
@@ -112,15 +110,14 @@ public class ComputerDAO extends AbstractDAO{
 		boolean ok=false;
 		
 		try {
-			System.out.println(computer.company.id);//if(true)return;
-			
 			pstmt = cn.prepareStatement(QUERY_INSERT);
 			DAOMapper.map(pstmt, computer);
 			pstmt.executeUpdate();
 			
 			ok=true;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
+			//throw new RuntimeException("exxxcc");
 		} finally {
 			tryCloseVariables();
 		}
@@ -184,7 +181,7 @@ public class ComputerDAO extends AbstractDAO{
 			pstmt.setInt(5, computer.id);
 			pstmt.executeUpdate();
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			ok = false;
 		} finally {
@@ -206,9 +203,15 @@ public class ComputerDAO extends AbstractDAO{
 		try{
 			pstmt = cn.prepareStatement(QUERY_DELETE);
 			pstmt.setInt(1, id);
-			pstmt.executeUpdate();
+			int res = pstmt.executeUpdate();
+			if(res == 0) {
+				ok = false;
+			}
+			else if (res == 1) {
+				ok = true;
+			}
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			ok = false;
 		} finally {
@@ -231,7 +234,7 @@ public class ComputerDAO extends AbstractDAO{
 				ok=true;
 			}
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			ok = false;
 		} finally {
@@ -252,7 +255,7 @@ public class ComputerDAO extends AbstractDAO{
 				size = rs.getInt("count(*)");
 			}
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			tryCloseVariables();
@@ -272,7 +275,7 @@ public class ComputerDAO extends AbstractDAO{
 			pstmt.setInt(1, companyId);
 			pstmt.executeUpdate();
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			ok = false;
 			e.printStackTrace();
 		} finally {
@@ -293,7 +296,7 @@ public class ComputerDAO extends AbstractDAO{
 				computers.add(DAOMapper.map(rs));
 			}
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			tryCloseVariables();
@@ -301,7 +304,7 @@ public class ComputerDAO extends AbstractDAO{
 		return computers;
 	}
 	
-	public List<Computer> search(String word){
+	/*public List<Computer> search(String word){
 		mettreVariablesANull();
 		List<Computer> computers = new ArrayList<Computer>();
 		
@@ -315,13 +318,13 @@ public class ComputerDAO extends AbstractDAO{
 				computers.add(DAOMapper.map(rs));
 			}
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			tryCloseVariables();
 		}
 		return computers;
-	}
+	}*/
 	
 	
 }

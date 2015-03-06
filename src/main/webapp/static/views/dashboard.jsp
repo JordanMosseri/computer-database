@@ -1,9 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.*"%>
-<%@ page import="com.excilys.computerdatabase.dao.*"%>
+<%@ page import="com.excilys.computerdatabase.persistance.*"%>
 <%@ page import="com.excilys.computerdatabase.modele.*"%>
 <%@ page import="com.excilys.computerdatabase.util.*"%>
-<%@ page import="com.excilys.computerdatabase.main.*"%>
+<%@ page import="com.excilys.computerdatabase.service.*"%>
 <%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
 
 <!DOCTYPE html>

@@ -7,8 +7,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.excilys.computerdatabase.main.Service;
 import com.excilys.computerdatabase.modele.Company;
+import com.excilys.computerdatabase.service.Service;
 
 public class ListCompaniesTag extends TagSupport {
 	
