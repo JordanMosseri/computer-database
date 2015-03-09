@@ -1,42 +1,25 @@
 package com.excilys.computerdatabase.persistance;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Company;
 
-public class CompanyDAO extends AbstractDAO {
+public enum CompanyDAO implements ICompanyDAO {
 	
-	/**
-	 * Constructeur prive
-	 */
-	private CompanyDAO() {
-	}
-	
-	/**
-	 * Instance unique pré-initialisée
-	 */
-	private static CompanyDAO INSTANCE = null;
-	 
-	/**
-	 * Point d'accès pour l'instance unique du singleton
-	 * @return
-	 */
-	public static CompanyDAO getInstance(){
-		if (INSTANCE == null) {
-			INSTANCE = new CompanyDAO();	
-		}
-		return INSTANCE;
-	}
-	
-	//////////////////////
+	INSTANCE;
 	
 	final String REQUETE_GET_ALL = "SELECT * FROM company";
+	final String QUERY_INSERT = "INSERT into company(name) VALUES(?)";
+	final String QUERY_EXISTS = "SELECT * FROM company WHERE id=?";
 	final String QUERY_DELETE = "DELETE FROM company WHERE id=?";
 	
+	@Override
 	public List<Company> getAll(Connection cn){
 		
 		ArrayList<Company> liste  = new ArrayList<Company>();
@@ -82,18 +65,14 @@ public class CompanyDAO extends AbstractDAO {
 		return company;
 	}*/
 	
-	/**
-	 * Insere une company dans la bdd
-	 * @param nomFab
-	 * @return Id de la company nouvellement cree
-	 */
+	@Override
 	public int insert(String nomFab, Connection cn){
 		mettreVariablesANull();
 		
 		int retour = -1;
 		
 		try{
-			pstmt = cn.prepareStatement("INSERT into company(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+			pstmt = cn.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, nomFab);
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
@@ -111,11 +90,7 @@ public class CompanyDAO extends AbstractDAO {
 		return retour;
 	}
 	
-	/**
-	 * Verifie si une company existe.
-	 * @param nomFab nom de la company/fabriquant dont l'existance est a verifier
-	 * @return Id de la company dans la bdd si celle-ci existe, -1 si celle-ci n'existe pas
-	 */
+	@Override
 	public int getIdIfNameExists(String nomFab, Connection cn){
 		mettreVariablesANull();
 		
@@ -139,13 +114,14 @@ public class CompanyDAO extends AbstractDAO {
 		return retour;
 	}
 	
+	@Override
 	public boolean exists(int id, Connection cn){
 		mettreVariablesANull();
 		
 		boolean retour = false;
 		
 		try{
-			pstmt = cn.prepareStatement("SELECT * FROM company WHERE id=?");
+			pstmt = cn.prepareStatement(QUERY_EXISTS);
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
@@ -161,6 +137,7 @@ public class CompanyDAO extends AbstractDAO {
 		return retour;
 	}
 	
+	@Override
 	public boolean delete(int id, Connection cn){
 		mettreVariablesANull();
 		
@@ -181,5 +158,31 @@ public class CompanyDAO extends AbstractDAO {
 		return retour;
 	}
 	
+	public ResultSet rs = null ;
+	public Statement stmt = null;
+	public PreparedStatement pstmt = null;
+	public Connection cn = null;
 	
+	protected void mettreVariablesANull(){
+		rs = null ;
+		stmt = null;
+		pstmt = null;
+		cn = null;
+	}
+	
+	protected void tryCloseVariables(){
+		try {
+			if (rs != null)
+				rs.close();
+			
+			if (stmt != null)
+				stmt.close();
+			
+			if (pstmt != null)
+				pstmt.close();
+			
+			if (cn != null) 
+				cn.close();
+		} catch (SQLException e) {}
+	}
 }

@@ -3,22 +3,15 @@ package com.excilys.computerdatabase.persistance;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
-import javax.servlet.ServletContext;
-
-import com.excilys.computerdatabase.util.Logging;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
-public class AbstractDAO {
+public class DAOUtils {
 	public static boolean UNIT_TEST = false;
 	
 	private static final String FICHIER_PROPERTIES       = "dao.properties";
@@ -38,10 +31,7 @@ public class AbstractDAO {
 	public static String PASS = "qwerty1234";//root
 	//
 	
-	protected ResultSet rs = null ;
-	protected Statement stmt = null;
-	protected PreparedStatement pstmt = null;
-	public Connection cn = null;
+	
 	static BoneCP connectionPool = null;
 	
 	
@@ -145,26 +135,5 @@ public class AbstractDAO {
 		return cn;
 	}
 	
-	protected void mettreVariablesANull(){
-		rs = null ;
-		stmt = null;
-		pstmt = null;
-		cn = null;
-	}
 	
-	protected void tryCloseVariables(){
-		try {
-			if (rs != null)
-				rs.close();
-			
-			if (stmt != null)
-				stmt.close();
-			
-			if (pstmt != null)
-				pstmt.close();
-			
-			if (cn != null) 
-				cn.close();
-		} catch (SQLException e) {}
-	}
 }

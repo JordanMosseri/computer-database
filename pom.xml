@@ -1,13 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
+	<!-- computerdatabase_test_maven -->
+	
 	<groupId>com.excilys.computerdatabase</groupId>
-	<artifactId>computerdatabase_test_maven</artifactId>
+	<artifactId>ComputerdatabaseMaven</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>computerdatabase_test_maven</name>
+	<name>ComputerdatabaseMaven</name>
 	<url>http://127.0.0.1/</url>
 	
 	<properties>
@@ -23,10 +25,10 @@
 		<apache-commons-lang3.version>3.3.2</apache-commons-lang3.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 	</properties>
-	<!-- <build> <finalName>computerdatabase_test_maven</finalName> </build> -->
+	<!-- <build> <finalName>ComputerdatabaseMaven</finalName> </build> -->
 
 	<build>
-		<finalName>computerdatabase_test_maven</finalName>
+		<finalName>ComputerdatabaseMaven</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -34,10 +36,12 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.2</version>
 					<configuration>
+						<!-- <compilerVersion>1.5</compilerVersion> -->
 						<source>1.8</source>
 						<target>1.8</target>
 					</configuration>
 				</plugin>
+				
 				<!-- <plugin>
 					<artifactId>maven-war-plugin</artifactId>
 					<version>2.4</version>

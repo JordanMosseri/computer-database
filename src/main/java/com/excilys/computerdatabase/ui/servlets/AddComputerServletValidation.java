@@ -2,9 +2,6 @@ package com.excilys.computerdatabase.ui.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Enumeration;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +14,6 @@ import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.service.Service;
 
-import org.apache.commons.lang3.*;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**

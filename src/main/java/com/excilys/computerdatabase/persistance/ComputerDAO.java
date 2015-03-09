@@ -2,38 +2,19 @@ package com.excilys.computerdatabase.persistance;
 
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Computer;
 
-public class ComputerDAO extends AbstractDAO{
+public enum ComputerDAO implements IComputerDAO{
 	
-	/**
-	 * Constructeur prive
-	 */
-	private ComputerDAO() {
-	}
-	
-	/**
-	 * Instance unique pré-initialisée
-	 */
-	private static ComputerDAO INSTANCE = null;
-	 
-	/**
-	 * Point d'accès pour l'instance unique du singleton
-	 * @return
-	 */
-	public static ComputerDAO getInstance(){
-		if (INSTANCE == null) {
-			INSTANCE = new ComputerDAO();	
-		}
-		return INSTANCE;
-	}
-	
-	//////////////////////
+	INSTANCE;
 	
 	
 	final String QUERY_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";
@@ -42,8 +23,11 @@ public class ComputerDAO extends AbstractDAO{
 	final String QUERY_INSERT = "INSERT into computer(name,introduced, discontinued,company_id) VALUES(?,?,?,?)";
 	final String QUERY_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	final String QUERY_DELETE = "DELETE FROM computer WHERE id=?";
+	final String QUERY_EXISTS = "SELECT * FROM computer WHERE id=?";
+	final String QUERY_TOTAL = "SELECT count(*) FROM computer";
 	final String QUERY_DELETE_WITH_COMPANYID = "DELETE FROM computer WHERE company_id=?";
 	
+	@Override
 	public Computer get(int idComputer, Connection cn){
 		
 		Computer computer = null;
@@ -65,6 +49,7 @@ public class ComputerDAO extends AbstractDAO{
 		return computer;
 	}
 	
+	@Override
 	public List<Computer> getAll(String endOfQuery, Connection cn){
 		
 		ArrayList<Computer> liste  = new ArrayList<Computer>();
@@ -86,6 +71,7 @@ public class ComputerDAO extends AbstractDAO{
 		return liste;
 	}
 	
+	@Override
 	public List<Computer> getPart(int offset, int limit, String word, Connection cn){
 		String whereLike = " ";
 		if(word != null && !word.isEmpty()){
@@ -98,11 +84,7 @@ public class ComputerDAO extends AbstractDAO{
 	
 	
 	
-	/**
-	 * Insert a computer, all checking is already done and comp.company.id is good, comp.company.name doesn't matter here
-	 * @param comp
-	 * @return
-	 */
+	@Override
 	public boolean insert(Computer computer, Connection cn) {
 		
 		mettreVariablesANull();
@@ -170,6 +152,7 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}*/
 	
+	@Override
 	public boolean update(Computer computer, Connection cn){
 		mettreVariablesANull();
 		
@@ -190,11 +173,7 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
-	/**
-	 * Supprime un ordinateur de la bdd
-	 * @param id
-	 * @return true si ok, false si pas ok
-	 */
+	@Override
 	public boolean delete(int id, Connection cn){
 		mettreVariablesANull();
 		
@@ -221,13 +200,14 @@ public class ComputerDAO extends AbstractDAO{
 	}
 	
 	
+	@Override
 	public boolean exists(int id, Connection cn){
 		mettreVariablesANull();
 		
 		boolean ok=false;
 		
 		try{
-			pstmt = cn.prepareStatement("SELECT * FROM computer WHERE id=?");
+			pstmt = cn.prepareStatement(QUERY_EXISTS);
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 			while(rs.next()){
@@ -243,13 +223,14 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
+	@Override
 	public int getTotalCount(Connection cn){
 		mettreVariablesANull();
 		
 		int size = 0;
 		
 		try{
-			pstmt = cn.prepareStatement("SELECT count(*) FROM computer");
+			pstmt = cn.prepareStatement(QUERY_TOTAL);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				size = rs.getInt("count(*)");
@@ -264,6 +245,7 @@ public class ComputerDAO extends AbstractDAO{
 	}
 	
 	
+	@Override
 	public boolean deleteThoseFromCompany(int companyId, Connection cn){
 		mettreVariablesANull();
 		boolean ok = true;
@@ -284,6 +266,7 @@ public class ComputerDAO extends AbstractDAO{
 		return ok;
 	}
 	
+	@Override
 	public List<Computer> getThoseFromCompany(int companyId, Connection cn){
 		mettreVariablesANull();
 		List<Computer> computers = new ArrayList<Computer>();
@@ -326,7 +309,33 @@ public class ComputerDAO extends AbstractDAO{
 		return computers;
 	}*/
 	
+	public ResultSet rs = null ;
+	public Statement stmt = null;
+	public PreparedStatement pstmt = null;
+	public Connection cn = null;
 	
+	protected void mettreVariablesANull(){
+		rs = null ;
+		stmt = null;
+		pstmt = null;
+		cn = null;
+	}
+	
+	protected void tryCloseVariables(){
+		try {
+			if (rs != null)
+				rs.close();
+			
+			if (stmt != null)
+				stmt.close();
+			
+			if (pstmt != null)
+				pstmt.close();
+			
+			if (cn != null) 
+				cn.close();
+		} catch (SQLException e) {}
+	}
 }
 
 

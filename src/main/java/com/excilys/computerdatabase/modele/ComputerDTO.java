@@ -1,7 +1,5 @@
 package com.excilys.computerdatabase.modele;
 
-import java.util.Date;
-
 public class ComputerDTO {
 	
 	public int id;

@@ -8,12 +8,11 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
-import com.excilys.computerdatabase.persistance.AbstractDAO;
+import com.excilys.computerdatabase.persistance.DAOUtils;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
 import com.excilys.computerdatabase.service.Service;
 
@@ -27,7 +26,7 @@ public class TestComputerDAO {
 		try {
 			String line;
 			Process p = Runtime.getRuntime().exec(
-					"/home/excilys/workspace_jee/computerdatabase_test_maven/src/main/resources/script.sh"
+					"/home/excilys/workspace_jee/ComputerdatabaseMaven/src/main/resources/script.sh"
 					);
 			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			while ((line = input.readLine()) != null) {
@@ -42,14 +41,14 @@ public class TestComputerDAO {
 	
 	/*@BeforeClass
 	public static void beforeClass(){
-		//ComputerDAO.getInstance().URL = ComputerDAO.getInstance().URL.replaceAll("computer-database-db", "computer-database-db-tests");
-		//CompanyDAO.getInstance().URL = CompanyDAO.getInstance().URL.replaceAll("computer-database-db", "computer-database-db-tests");
+		//ComputerDAO.INSTANCE.URL = ComputerDAO.INSTANCE.URL.replaceAll("computer-database-db", "computer-database-db-tests");
+		//CompanyDAO.INSTANCE.URL = CompanyDAO.INSTANCE.URL.replaceAll("computer-database-db", "computer-database-db-tests");
 	}*/
 	
 	@Before
 	public void before(){
 		regenerateDB();
-		AbstractDAO.UNIT_TEST = true;
+		DAOUtils.UNIT_TEST = true;
 	}
 	
 	@After
@@ -59,7 +58,7 @@ public class TestComputerDAO {
 	
 	@Test
 	public void testGet(){
-		Computer c = ComputerDAO.getInstance().get(3, AbstractDAO.getConnexion());
+		Computer c = ComputerDAO.INSTANCE.get(3, DAOUtils.getConnexion());
 		
 		Assert.assertEquals("computer3", c.name);
 		Assert.assertNull(c.dateAdded);
@@ -85,7 +84,7 @@ public class TestComputerDAO {
 	
 	@Test
 	public void testGetAll(){
-		List<Computer> computers = ComputerDAO.getInstance().getAll("", AbstractDAO.getConnexion());
+		List<Computer> computers = ComputerDAO.INSTANCE.getAll("", DAOUtils.getConnexion());
 		
 		Assert.assertEquals(COMPUTERS_COUNT, computers.size());
 		
@@ -113,11 +112,11 @@ public class TestComputerDAO {
 		
 		//insertion
 		Computer c = new Computer(-1, computerName, dateAdded, dateRemoved, new Company(companyId));
-		boolean result = ComputerDAO.getInstance().insert(c, AbstractDAO.getConnexion());
+		boolean result = ComputerDAO.INSTANCE.insert(c, DAOUtils.getConnexion());
 		Assert.assertTrue(result);
 		
 		//check if well added
-		List<Computer> l = ComputerDAO.getInstance().getAll("", AbstractDAO.getConnexion());
+		List<Computer> l = ComputerDAO.INSTANCE.getAll("", DAOUtils.getConnexion());
 		Computer lastComputer = l.get(l.size() - 1);
 		
 		Assert.assertEquals(computerName, lastComputer.name);
@@ -126,7 +125,7 @@ public class TestComputerDAO {
 		Assert.assertEquals(companyId, lastComputer.company.id);
 		
 		//check total count
-		int count = ComputerDAO.getInstance().getTotalCount(AbstractDAO.getConnexion());
+		int count = ComputerDAO.INSTANCE.getTotalCount(DAOUtils.getConnexion());
 		Assert.assertEquals(COMPUTERS_COUNT+1, count);
 	}
 	
@@ -140,6 +139,7 @@ public class TestComputerDAO {
 	//java.sql.SQLException
 	
 	@Test//(expected = java.sql.SQLException.class)
+	//@Ignore
 	public void testInsertWithWrongCompanyId(){
 		String computerName = "computerTestNotHere";
 		LocalDateTime dateAdded = Service.parse("2012-06-03");
@@ -148,11 +148,11 @@ public class TestComputerDAO {
 		
 		//insertion
 		Computer c = new Computer(-1, computerName, dateAdded, dateRemoved, new Company(companyId));
-		boolean result = ComputerDAO.getInstance().insert(c, AbstractDAO.getConnexion());
+		boolean result = ComputerDAO.INSTANCE.insert(c, DAOUtils.getConnexion());
 		Assert.assertFalse(result);
 		
 		//check if well added
-		List<Computer> l = ComputerDAO.getInstance().getAll("", AbstractDAO.getConnexion());
+		List<Computer> l = ComputerDAO.INSTANCE.getAll("", DAOUtils.getConnexion());
 		Computer lastComputer = l.get(l.size() - 1);
 		
 		Assert.assertNotEquals(computerName, lastComputer.name);
@@ -161,7 +161,7 @@ public class TestComputerDAO {
 		Assert.assertNotEquals(companyId, lastComputer.company.id);
 		
 		//check total count
-		int count = ComputerDAO.getInstance().getTotalCount(AbstractDAO.getConnexion());
+		int count = ComputerDAO.INSTANCE.getTotalCount(DAOUtils.getConnexion());
 		Assert.assertEquals(COMPUTERS_COUNT, count);
 	}
 	
@@ -169,7 +169,7 @@ public class TestComputerDAO {
 	public void testDeleteWrong(){
 		int id = LAST_COMPUTER_ID+100;
 		
-		boolean result = ComputerDAO.getInstance().delete(id, AbstractDAO.getConnexion());
+		boolean result = ComputerDAO.INSTANCE.delete(id, DAOUtils.getConnexion());
 		
 		Assert.assertFalse(result);
 	}
@@ -178,24 +178,25 @@ public class TestComputerDAO {
 	public void testDelete(){
 		int id = 4;
 		
-		ComputerDAO.getInstance().delete(id, AbstractDAO.getConnexion());
+		ComputerDAO.INSTANCE.delete(id, DAOUtils.getConnexion());
 		
-		Assert.assertFalse(ComputerDAO.getInstance().exists(id, AbstractDAO.getConnexion()));
+		Assert.assertFalse(ComputerDAO.INSTANCE.exists(id, DAOUtils.getConnexion()));
 	}
 	
 	@Test
 	public void testExists(){
-		Assert.assertTrue(ComputerDAO.getInstance().exists(3, AbstractDAO.getConnexion()));
+		Assert.assertTrue(ComputerDAO.INSTANCE.exists(3, DAOUtils.getConnexion()));
 	}
 	
 	@Test
 	public void testNotExists(){
-		Assert.assertFalse(ComputerDAO.getInstance().exists(LAST_COMPUTER_ID+100, AbstractDAO.getConnexion()));
+		Assert.assertFalse(ComputerDAO.INSTANCE.exists(LAST_COMPUTER_ID+100, DAOUtils.getConnexion()));
 	}
 	
 	@Test
+	//@Ignore
 	public void testTotal(){
-		Assert.assertEquals(COMPUTERS_COUNT, ComputerDAO.getInstance().getTotalCount(AbstractDAO.getConnexion()));
+		Assert.assertEquals(COMPUTERS_COUNT, ComputerDAO.INSTANCE.getTotalCount(DAOUtils.getConnexion()));
 	}
 	
 }

@@ -3,7 +3,6 @@ package com.excilys.computerdatabase.mappers;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.excilys.computerdatabase.modele.*;

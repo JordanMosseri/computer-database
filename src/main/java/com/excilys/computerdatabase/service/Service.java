@@ -1,12 +1,9 @@
 package com.excilys.computerdatabase.service;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,19 +13,18 @@ import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
-import com.excilys.computerdatabase.persistance.AbstractDAO;
+import com.excilys.computerdatabase.persistance.DAOUtils;
 import com.excilys.computerdatabase.persistance.CompanyDAO;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
-import com.excilys.computerdatabase.ui.cli.View;
 import com.excilys.computerdatabase.util.Constantes;
 
 public class Service {
 	
 	
 	public List<Computer> getComputers(){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
-		List<Computer> computers = ComputerDAO.getInstance().getAll("", cn);
+		List<Computer> computers = ComputerDAO.INSTANCE.getAll("", cn);
 		
 		tryClose(cn);
 		
@@ -36,13 +32,13 @@ public class Service {
 	}
 	
 	public Paging<ComputerDTO> getComputers(int offset, int limit, String word){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
 		//Get part of computers
-		List<Computer> partOfComputers = ComputerDAO.getInstance().getPart(offset, limit, word, cn);
+		List<Computer> partOfComputers = ComputerDAO.INSTANCE.getPart(offset, limit, word, cn);
 		
 		//Returns Paging object
-		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.getInstance().getTotalCount(cn));
+		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.INSTANCE.getTotalCount(cn));
 		
 		tryClose(cn);
 		
@@ -50,9 +46,9 @@ public class Service {
 	}
 	
 	public List<Company> getCompanies(){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
-		List<Company> companies = CompanyDAO.getInstance().getAll(cn);
+		List<Company> companies = CompanyDAO.INSTANCE.getAll(cn);
 		
 		tryClose(cn);
 		
@@ -60,9 +56,9 @@ public class Service {
 	}
 	
 	public Computer getComputer(int id){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
-		Computer computer = ComputerDAO.getInstance().get(id, cn);
+		Computer computer = ComputerDAO.INSTANCE.get(id, cn);
 		
 		tryClose(cn);
 		
@@ -75,13 +71,13 @@ public class Service {
 	 * @return
 	 */
 	public boolean addComputer(Computer comp){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
 		//Company Id is provided
 		if(comp.company.id >= 0){
 			
 			//Company Id exists in db
-			if(CompanyDAO.getInstance().exists(comp.company.id, cn)){
+			if(CompanyDAO.INSTANCE.exists(comp.company.id, cn)){
 				//OK
 			}
 			
@@ -95,10 +91,10 @@ public class Service {
 		else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
 			
 			//Company Name exists in db
-			comp.company.id = CompanyDAO.getInstance().getIdIfNameExists(comp.company.name, cn);
+			comp.company.id = CompanyDAO.INSTANCE.getIdIfNameExists(comp.company.name, cn);
 			
 			if(comp.company.id<0){
-				comp.company.id = CompanyDAO.getInstance().insert(comp.company.name, cn);
+				comp.company.id = CompanyDAO.INSTANCE.insert(comp.company.name, cn);
 			}
 		}
 		else{
@@ -106,11 +102,11 @@ public class Service {
 		}
 		
 		
-		if (!CompanyDAO.getInstance().exists(comp.company.id, cn)) {
+		if (!CompanyDAO.INSTANCE.exists(comp.company.id, cn)) {
 			throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
 		}
 		
-		boolean result =  ComputerDAO.getInstance().insert(comp, cn);
+		boolean result =  ComputerDAO.INSTANCE.insert(comp, cn);
 		
 		tryClose(cn);
 		
@@ -119,9 +115,9 @@ public class Service {
 	
 	
 	public boolean updateComputer(Computer c){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
-		boolean res = ComputerDAO.getInstance().update(c, cn);
+		boolean res = ComputerDAO.INSTANCE.update(c, cn);
 		
 		tryClose(cn);
 		
@@ -129,9 +125,9 @@ public class Service {
 	}
 	
 	public boolean deleteComputer(int id){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
-		boolean res = ComputerDAO.getInstance().delete(id, cn);
+		boolean res = ComputerDAO.INSTANCE.delete(id, cn);
 		
 		tryClose(cn);
 		
@@ -140,16 +136,16 @@ public class Service {
 	
 	public boolean deleteCompany(int id){
 		//Get a connection for the transaction
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
 		try {
 			cn.setAutoCommit(false);
 			
 			//Delete computers linked to the company first (avoid exception due to constraint key)
-			boolean ok1 = ComputerDAO.getInstance().deleteThoseFromCompany(id, cn);
+			boolean ok1 = ComputerDAO.INSTANCE.deleteThoseFromCompany(id, cn);
 			
 			//Delete company
-			boolean ok2 = CompanyDAO.getInstance().delete(id, cn);
+			boolean ok2 = CompanyDAO.INSTANCE.delete(id, cn);
 			
 			//Commit the transaction
 			cn.commit();
@@ -183,9 +179,9 @@ public class Service {
 	}
 	
 	public boolean computerExists(int id){
-		Connection cn = AbstractDAO.getConnexion();
+		Connection cn = DAOUtils.getConnexion();
 		
-		boolean res = ComputerDAO.getInstance().exists(id, cn);
+		boolean res = ComputerDAO.INSTANCE.exists(id, cn);
 		
 		tryClose(cn);
 		
@@ -206,15 +202,15 @@ public class Service {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		
 		//Search among computers
-		computers.addAll(ComputerDAO.getInstance().search(word));
+		computers.addAll(ComputerDAO.INSTANCE.search(word));
 		
 		//Get ids from the search among companies
-		List<Integer> listInt = CompanyDAO.getInstance().search(word);
+		List<Integer> listInt = CompanyDAO.INSTANCE.search(word);
 		
 		//For each company
 		for (Integer integer : listInt) {
 			//Get computers linked to this company
-			computers.addAll(ComputerDAO.getInstance().getThoseFromCompany(integer));
+			computers.addAll(ComputerDAO.INSTANCE.getThoseFromCompany(integer));
 		}
 		
 		return DTOMapper.convert(computers);

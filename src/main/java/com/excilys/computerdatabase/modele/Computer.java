@@ -3,9 +3,6 @@ package com.excilys.computerdatabase.modele;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
-
-import com.excilys.computerdatabase.util.Constantes;
 
 public class Computer implements Serializable {
 	
