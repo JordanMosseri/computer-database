@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
@@ -16,49 +19,63 @@ import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.persistance.DAOUtils;
 import com.excilys.computerdatabase.persistance.CompanyDAO;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
+import com.excilys.computerdatabase.persistance.ICompanyDAO;
+import com.excilys.computerdatabase.persistance.IComputerDAO;
 import com.excilys.computerdatabase.util.Constantes;
 
-public class Service {
+@org.springframework.stereotype.Service
+public class Service implements IService {
 	
+	@Autowired
+	//@Qualifier(value = "ComputerDAO")
+	IComputerDAO computerDAO;
 	
+	@Autowired
+	//@Qualifier(value = "CompanyDAO")
+	ICompanyDAO companyDAO;
+	
+	@Override
 	public List<Computer> getComputers(){
 		Connection cn = DAOUtils.getConnexion();
 		
-		List<Computer> computers = ComputerDAO.INSTANCE.getAll("", cn);
+		List<Computer> computers = computerDAO.getAll("", cn);
 		
 		tryClose(cn);
 		
 		return computers;
 	}
 	
+	@Override
 	public Paging<ComputerDTO> getComputers(int offset, int limit, String word){
 		Connection cn = DAOUtils.getConnexion();
 		
 		//Get part of computers
-		List<Computer> partOfComputers = ComputerDAO.INSTANCE.getPart(offset, limit, word, cn);
+		List<Computer> partOfComputers = computerDAO.getPart(offset, limit, word, cn);
 		
 		//Returns Paging object
-		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, ComputerDAO.INSTANCE.getTotalCount(cn));
+		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, computerDAO.getTotalCount(cn));
 		
 		tryClose(cn);
 		
 		return page;
 	}
 	
+	@Override
 	public List<Company> getCompanies(){
 		Connection cn = DAOUtils.getConnexion();
 		
-		List<Company> companies = CompanyDAO.INSTANCE.getAll(cn);
+		List<Company> companies = companyDAO.getAll(cn);
 		
 		tryClose(cn);
 		
 		return companies;
 	}
 	
+	@Override
 	public Computer getComputer(int id){
 		Connection cn = DAOUtils.getConnexion();
 		
-		Computer computer = ComputerDAO.INSTANCE.get(id, cn);
+		Computer computer = computerDAO.get(id, cn);
 		
 		tryClose(cn);
 		
@@ -70,6 +87,7 @@ public class Service {
 	 * @param comp
 	 * @return
 	 */
+	@Override
 	public boolean addComputer(Computer comp){
 		Connection cn = DAOUtils.getConnexion();
 		
@@ -77,7 +95,7 @@ public class Service {
 		if(comp.company.id >= 0){
 			
 			//Company Id exists in db
-			if(CompanyDAO.INSTANCE.exists(comp.company.id, cn)){
+			if(companyDAO.exists(comp.company.id, cn)){
 				//OK
 			}
 			
@@ -91,10 +109,10 @@ public class Service {
 		else if( comp.company.name != null && !comp.company.name.trim().isEmpty() ){
 			
 			//Company Name exists in db
-			comp.company.id = CompanyDAO.INSTANCE.getIdIfNameExists(comp.company.name, cn);
+			comp.company.id = companyDAO.getIdIfNameExists(comp.company.name, cn);
 			
 			if(comp.company.id<0){
-				comp.company.id = CompanyDAO.INSTANCE.insert(comp.company.name, cn);
+				comp.company.id = companyDAO.insert(comp.company.name, cn);
 			}
 		}
 		else{
@@ -102,11 +120,11 @@ public class Service {
 		}
 		
 		
-		if (!CompanyDAO.INSTANCE.exists(comp.company.id, cn)) {
+		if (!companyDAO.exists(comp.company.id, cn)) {
 			throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
 		}
 		
-		boolean result =  ComputerDAO.INSTANCE.insert(comp, cn);
+		boolean result =  computerDAO.insert(comp, cn);
 		
 		tryClose(cn);
 		
@@ -114,26 +132,29 @@ public class Service {
 	}
 	
 	
+	@Override
 	public boolean updateComputer(Computer c){
 		Connection cn = DAOUtils.getConnexion();
 		
-		boolean res = ComputerDAO.INSTANCE.update(c, cn);
+		boolean res = computerDAO.update(c, cn);
 		
 		tryClose(cn);
 		
 		return res;
 	}
 	
+	@Override
 	public boolean deleteComputer(int id){
 		Connection cn = DAOUtils.getConnexion();
 		
-		boolean res = ComputerDAO.INSTANCE.delete(id, cn);
+		boolean res = computerDAO.delete(id, cn);
 		
 		tryClose(cn);
 		
 		return res;
 	}
 	
+	@Override
 	public boolean deleteCompany(int id){
 		//Get a connection for the transaction
 		Connection cn = DAOUtils.getConnexion();
@@ -142,10 +163,10 @@ public class Service {
 			cn.setAutoCommit(false);
 			
 			//Delete computers linked to the company first (avoid exception due to constraint key)
-			boolean ok1 = ComputerDAO.INSTANCE.deleteThoseFromCompany(id, cn);
+			boolean ok1 = computerDAO.deleteThoseFromCompany(id, cn);
 			
 			//Delete company
-			boolean ok2 = CompanyDAO.INSTANCE.delete(id, cn);
+			boolean ok2 = companyDAO.delete(id, cn);
 			
 			//Commit the transaction
 			cn.commit();
@@ -178,17 +199,18 @@ public class Service {
 		return false;
 	}
 	
+	@Override
 	public boolean computerExists(int id){
 		Connection cn = DAOUtils.getConnexion();
 		
-		boolean res = ComputerDAO.INSTANCE.exists(id, cn);
+		boolean res = computerDAO.exists(id, cn);
 		
 		tryClose(cn);
 		
 		return res;
 	}
 	
-	public void tryClose(Connection cn){
+	private void tryClose(Connection cn){
 		try {
 			if (cn != null)
 				cn.close();

@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.ui.cli;
 
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 public class MainClass {
 
 	

@@ -9,12 +9,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Computer;
 
-public enum ComputerDAO implements IComputerDAO{
-	
-	INSTANCE;
+@Repository
+public class ComputerDAO implements IComputerDAO{
 	
 	
 	final String QUERY_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";

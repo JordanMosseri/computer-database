@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.ui.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,9 +13,11 @@ import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
-import com.excilys.computerdatabase.service.Service;
+import com.excilys.computerdatabase.service.IService;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Servlet implementation class Servlet1
@@ -59,7 +62,10 @@ public class AddComputerServletValidation extends HttpServlet {
 		ComputerDTO cdto = new ComputerDTO(-1, computerName, introduced, discontinued, new Company(intCompanyId));
 		Computer c = DTOMapper.convert(cdto);
 		
-		boolean ok = (new Service()).addComputer(c);
+		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+		IService service = (IService) context.getBean("service");
+		
+		boolean ok = service.addComputer(c);
 		
 		p.println(ok ? "Computer added !" : "Error while adding the computer.");
 		

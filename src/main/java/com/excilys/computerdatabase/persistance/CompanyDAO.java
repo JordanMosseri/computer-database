@@ -8,11 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.computerdatabase.modele.Company;
 
-public enum CompanyDAO implements ICompanyDAO {
+@Repository
+public class CompanyDAO implements ICompanyDAO {
 	
-	INSTANCE;
 	
 	final String REQUETE_GET_ALL = "SELECT * FROM company";
 	final String QUERY_INSERT = "INSERT into company(name) VALUES(?)";

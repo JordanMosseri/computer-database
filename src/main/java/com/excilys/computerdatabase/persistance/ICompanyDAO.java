@@ -3,6 +3,8 @@ package com.excilys.computerdatabase.persistance;
 import java.sql.Connection;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.computerdatabase.modele.Company;
 
 public interface ICompanyDAO {

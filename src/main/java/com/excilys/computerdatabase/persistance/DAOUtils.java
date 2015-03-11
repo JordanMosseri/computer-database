@@ -8,6 +8,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
@@ -106,7 +113,33 @@ public class DAOUtils {
         if(UNIT_TEST){
         	return getDriverManagerConnexion(true);
         }
-
+        
+		//return getDataSourceConnexion();
+		return getPoolConnexion();
+	}
+	
+	/*@Autowired
+	@Qualifier(value="dataSource")
+	DataSource dataSource;*/
+	
+	public static Connection getDataSourceConnexion() {
+		
+		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+		DataSource dataSource = (DataSource) context.getBean("dataSource");
+		
+		Connection cn = null;
+		
+		try {
+			cn = dataSource.getConnection();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return cn;
+	}
+	
+	public static Connection getPoolConnexion() {
 		
 		Connection cn = null;
 		

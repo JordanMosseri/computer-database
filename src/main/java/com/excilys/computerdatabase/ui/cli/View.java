@@ -7,6 +7,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.ComputerDTO;
+import com.excilys.computerdatabase.service.IService;
 import com.excilys.computerdatabase.service.Service;
 import com.excilys.computerdatabase.util.Constantes;
 
@@ -24,7 +25,7 @@ public class View {
 		};
 	
 	Scanner in = new Scanner(System.in);
-	public Service service = new Service();
+	public IService service = new Service();
 	
 	public  void lancerProgramme() {
 		

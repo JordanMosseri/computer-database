@@ -52,7 +52,7 @@ public class TestService {
 		
 		List<Computer> computers = new ArrayList<Computer>();
 		computers.add(new Computer(-1, "computerMocked", null, null, new Company(1)));
-		Mockito.when(dao.INSTANCE.getAll("", DAOUtils.getConnexion())).thenReturn(computers);
+		//Mockito.when(dao.INSTANCE.getAll("", DAOUtils.getConnexion())).thenReturn(computers);
 		
 		List<Computer> computersFromService = (new Service()).getComputers();
 		for (Computer computer : computersFromService) {
