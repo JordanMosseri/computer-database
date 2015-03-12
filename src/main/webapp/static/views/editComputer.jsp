@@ -5,17 +5,8 @@
 <%@ page import="com.excilys.computerdatabase.service.*"%>
 <%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Computer Database - Edit Computer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" media="screen">
-</head>
-<body>
+
+
 
 	<%-- <mylib:initEditComputer/> --%>
 

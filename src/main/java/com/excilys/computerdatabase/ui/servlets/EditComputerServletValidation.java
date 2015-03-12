@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.ui.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
+import com.excilys.computerdatabase.service.IService;
 import com.excilys.computerdatabase.service.Service;
 
 /**
@@ -22,6 +25,9 @@ import com.excilys.computerdatabase.service.Service;
 @WebServlet("/editComputer")
 public class EditComputerServletValidation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	IService service;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -57,7 +63,7 @@ public class EditComputerServletValidation extends HttpServlet {
 		ComputerDTO cdto = new ComputerDTO(NumberUtils.toInt(idString), computerName, introduced, discontinued, new Company(NumberUtils.toInt(companyId)));
 		Computer c = DTOMapper.convert(cdto);
 		
-		boolean ok = (new Service()).updateComputer(c);
+		boolean ok = service.updateComputer(c);
 		
 		p.println(ok ? "Computer updated !" : "Error while updating the computer.");
 		

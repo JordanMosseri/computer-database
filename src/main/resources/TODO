@@ -11,7 +11,8 @@ POUVOIR AJOUTER AVEC IDCOMPANY NULL
 TODO:
 ameliorer encapsulation objets du modele (notemment pour JSP EL dashboard)
 pagination : attention aux dernieres pages
-Datasource?
+ne garder quun fichier config Spring
+voir ce que fait c:url
 
 github: finir README
 https://raw.githubusercontent.com/loicortola/spec-cdb/master/README.md

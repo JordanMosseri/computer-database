@@ -5,43 +5,36 @@
 <%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ page import="com.excilys.computerdatabase.service.*"%>
 <%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Computer Database - Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
-<!-- Bootstrap -->
-<%-- $request.getContextPath() --%>
-<link href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" media="screen">
-</head>
-<body>
+
+
 
 	<%-- <mylib:initDashboard /> --%>
 
     <jsp:include page="header.jsp"></jsp:include>
-
+    
+    <%-- Current Locale : ${pageContext.response.locale}<br/> --%>
+	
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
             	<%-- ${pageScope["paginationObject"].pageSize/actualList} --%>
-                ${requestScope.paginationObject.pageSize} computers found 
+                ${requestScope.paginationObject.pageSize} <spring:message code="computers.found" text="computers.found" /> 
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="?offset=${requestScope.offset}&pageSize=${requestScope.pageSize}" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
-                        <input type="submit" id="searchsubmit" value="Filter by name"
+						
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="<spring:message code="search.name" text="search.name" />" />
+                        <input type="submit" id="searchsubmit" value="<spring:message code="filter.name" text="filter.name" />"
                         class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="static/views/addComputer.jsp">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="static/views/addComputer.jsp"><spring:message code="add.computer" text="add.computer" /></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="edit" text="edit" /></a>
                 </div>
             </div>
         </div>
@@ -66,18 +59,18 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                            <spring:message code="computers.name.th" text="computers.name.th" />
                         </th>
                         <th>
-                            Introduced date
+                            <spring:message code="introduced.date.th" text="introduced.date.th" />
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            <spring:message code="discontinued.date.th" text="discontinued.date.th" />
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            <spring:message code="company.th" text="company.th" />
                         </th>
 
                     </tr>

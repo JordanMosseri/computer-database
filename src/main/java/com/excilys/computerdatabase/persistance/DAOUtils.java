@@ -114,15 +114,15 @@ public class DAOUtils {
         	return getDriverManagerConnexion(true);
         }
         
-		//return getDataSourceConnexion();
-		return getPoolConnexion();
+		return getDataSourceConnexion();
+		//return getPoolConnexion();
 	}
 	
 	/*@Autowired
 	@Qualifier(value="dataSource")
 	DataSource dataSource;*/
 	
-	public static Connection getDataSourceConnexion() {
+	private static Connection getDataSourceConnexion() {
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 		DataSource dataSource = (DataSource) context.getBean("dataSource");
@@ -139,7 +139,7 @@ public class DAOUtils {
 		return cn;
 	}
 	
-	public static Connection getPoolConnexion() {
+	private static Connection getPoolConnexion() {
 		
 		Connection cn = null;
 		
@@ -152,7 +152,7 @@ public class DAOUtils {
 		return cn;
 	}
 	
-	public static Connection getDriverManagerConnexion(boolean test) {
+	private static Connection getDriverManagerConnexion(boolean test) {
 		Connection cn = null;
 		
 		try {

@@ -3,6 +3,11 @@ package com.excilys.computerdatabase.ui.cli;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
@@ -11,6 +16,7 @@ import com.excilys.computerdatabase.service.IService;
 import com.excilys.computerdatabase.service.Service;
 import com.excilys.computerdatabase.util.Constantes;
 
+//@Controller
 public class View {
 	
 	public static final String[] POSSIBILITES = {
@@ -25,7 +31,10 @@ public class View {
 		};
 	
 	Scanner in = new Scanner(System.in);
-	public IService service = new Service();
+	
+	ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+	
+	IService service = (IService) context.getBean("service");
 	
 	public  void lancerProgramme() {
 		

@@ -16,6 +16,7 @@ import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.service.IService;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -25,6 +26,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @WebServlet("/addComputer")
 public class AddComputerServletValidation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	IService service;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -61,9 +65,6 @@ public class AddComputerServletValidation extends HttpServlet {
 		int intCompanyId = NumberUtils.toInt(companyId);
 		ComputerDTO cdto = new ComputerDTO(-1, computerName, introduced, discontinued, new Company(intCompanyId));
 		Computer c = DTOMapper.convert(cdto);
-		
-		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
-		IService service = (IService) context.getBean("service");
 		
 		boolean ok = service.addComputer(c);
 		

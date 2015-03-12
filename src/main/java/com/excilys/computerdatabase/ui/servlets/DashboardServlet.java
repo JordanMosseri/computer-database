@@ -18,14 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.service.IService;
 
-/**
- * Servlet implementation class DashboardServlet
- */
 //@WebServlet(name="DashboardServlet", urlPatterns={"/Dashboard"})
 @Controller
 @RequestMapping("/Dashboard")
@@ -39,17 +37,17 @@ public class DashboardServlet /*extends HttpServlet*/ {
 	public static final int DEFAULT_PAGE_SIZE = 15;
     
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	//protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	@RequestMapping(method = RequestMethod.GET)
-	public String printHello(ModelMap model,
+	public ModelAndView printHello(//ModelMap model,
 			@RequestParam(value="offset", defaultValue="", required=false) final String offset,
 			@RequestParam(value="pageSize", defaultValue="", required=false) final String pageSizeParam,
-			@RequestParam(value="search", defaultValue="", required=false) final String searchParam
+			@RequestParam(value="search", defaultValue="", required=false) final String searchParam,
+			@RequestParam(value="lang", defaultValue="", required=false) final String lang
 			) {
+		
+		ModelAndView model = new ModelAndView("dashboard");
 		
 		int intOffset = 0, pageSize = DEFAULT_PAGE_SIZE;
 		Paging<ComputerDTO> paginationObject;
@@ -59,7 +57,7 @@ public class DashboardServlet /*extends HttpServlet*/ {
 	    	intOffset = NumberUtils.toInt( offset );
 	    }
 	    
-	    if (pageSizeParam != null) {
+	    if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
 	    	pageSize = NumberUtils.toInt( pageSizeParam );
 	    }
 	    
@@ -69,18 +67,17 @@ public class DashboardServlet /*extends HttpServlet*/ {
 	    
 	    paginationObject = service.getComputers(intOffset, pageSize, search);
 		
-	    model.addAttribute("pageSize", pageSize);
-	    model.addAttribute("paginationObject", paginationObject);
+	    model.addObject("pageSize", pageSize);
+	    model.addObject("paginationObject", paginationObject);
+	    
+	    //model.put("lang", lang);
 	    
 	    //getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
 		
-		return "dashboard";
-		
+		//return "dashboard";
+		return model;
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}

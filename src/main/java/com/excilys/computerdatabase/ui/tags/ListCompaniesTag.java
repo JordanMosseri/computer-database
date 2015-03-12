@@ -7,10 +7,18 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.computerdatabase.modele.Company;
+import com.excilys.computerdatabase.service.IService;
 import com.excilys.computerdatabase.service.Service;
 
+@Component
 public class ListCompaniesTag extends TagSupport {
+	
+	@Autowired
+	IService service;
 	
 	int idSelected;
 
@@ -20,7 +28,7 @@ public class ListCompaniesTag extends TagSupport {
 		JspWriter out = pageContext.getOut();
 		
 		try {
-	        List<Company> liste = (new Service()).getCompanies();
+	        List<Company> liste = service.getCompanies();
 			for(Company c : liste){
 				out.print("<option value=\"" + c.id + "\"");
 				if(idSelected == c.id){//${pageScope["computer"].company.id}

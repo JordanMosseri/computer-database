@@ -4,17 +4,9 @@
 <%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Computer Database - Add Computer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" media="screen">
-</head>
-<body>
+
+
+
     <jsp:include page="header.jsp"></jsp:include>
 
     <section id="main">

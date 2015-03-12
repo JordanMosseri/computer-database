@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.excilys.computerdatabase.service.IService;
 import com.excilys.computerdatabase.service.Service;
 
 /**
@@ -19,6 +21,9 @@ import com.excilys.computerdatabase.service.Service;
 @WebServlet("/deleteComputer")
 public class DeleteComputerServletValidation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	IService service;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -46,7 +51,7 @@ public class DeleteComputerServletValidation extends HttpServlet {
 		for (String string : str) {
 			//p.print(string+"<br/>");
 			
-			boolean ok = (new Service()).deleteComputer(NumberUtils.toInt(string));
+			boolean ok = service.deleteComputer(NumberUtils.toInt(string));
 			
 			p.println(ok ? "Computer #" + NumberUtils.toInt(string) + " deleted !" : "Error while deleting the computer.");
 		}

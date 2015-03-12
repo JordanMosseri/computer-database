@@ -38,6 +38,8 @@ public class Service implements IService {
 	public List<Computer> getComputers(){
 		Connection cn = DAOUtils.getConnexion();
 		
+		//System.out.println(""+(computerDAO==null)+" "+(cn==null));
+		
 		List<Computer> computers = computerDAO.getAll("", cn);
 		
 		tryClose(cn);

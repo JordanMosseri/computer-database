@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.ComputerDTO;
+import com.excilys.computerdatabase.service.IService;
 import com.excilys.computerdatabase.service.Service;
 
 /**
@@ -20,6 +22,9 @@ import com.excilys.computerdatabase.service.Service;
 @WebServlet("/EditComputer")
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	IService service;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,7 +48,7 @@ public class EditComputerServlet extends HttpServlet {
 	    	intId = NumberUtils.toInt( request.getParameter("id") );
 	    }
 	    
-	    computer = DTOMapper.convert((new Service()).getComputer(intId));
+	    computer = DTOMapper.convert(service.getComputer(intId));
 		
 	    request.setAttribute("intId", intId);
 	    request.setAttribute("computer", computer);
