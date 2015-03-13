@@ -3,7 +3,7 @@
 <%@ page import="com.excilys.computerdatabase.modele.*"%>
 <%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
 
@@ -13,35 +13,35 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1><spring:message code="add.computer" text="add.computer" /></h1>
                     <form action="${pageContext.request.contextPath}/addComputer" method="POST" id="addForm">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
+                                <label for="computerName"><spring:message code="computers.name.th" text="computers.name.th" /></label>
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="<spring:message code="computers.name.th" text="computers.name.th" />">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date (formatted <% out.print(Constantes.FORMAT_DATE); %>)">
+                                <label for="introduced"><spring:message code="introduced.date.th" text="introduced.date.th" /></label>
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="<spring:message code="introduced.date.placeholder" text="introduced.date.placeholder" arguments="${requestScope.formatString}" />">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date (formatted <% out.print(Constantes.FORMAT_DATE); %>)">
+                                <label for="discontinued"><spring:message code="discontinued.date.th" text="discontinued.date.th" /></label>
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder='<spring:message code="discontinued.date.placeholder" text="discontinued.date.placeholder" arguments="${requestScope.formatString}" />'>
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><spring:message code="company.th" text="company.th" /></label>
                                 <select class="form-control" id="companyId" name="companyId" >
-                                	<option value="0">Please select a company</option>
+                                	<option value="0"><spring:message code="please.select.company" text="please.select.company" /></option>
                                 
-	                                <mylib:listCompanies />
+	                                <mylib:listCompanies companyList="${requestScope.companyList}" />
                                     
                                 </select>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="add" text="add" />" class="btn btn-primary">
                             or
-                            <a href="dashboard.jsp" class="btn btn-default">Cancel</a>
+                            <a href="dashboard.jsp" class="btn btn-default"><spring:message code="cancel" text="cancel" /></a>
                         </div>
                     </form>
                 </div>

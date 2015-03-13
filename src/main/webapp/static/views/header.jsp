@@ -21,10 +21,53 @@
 </head>
 <body>
 	
+	<!-- Get params from url, to put them in the link -->
+	
+	<c:set var="paramsFromUrl" value="?" />
+	<c:set var="i" value="${0*0}" />
+	
+	<!-- ou pageContext.request.parameterMap -->
+	<c:forEach var="par" items="${paramValues}">
+		
+		<c:if test="${par.key != 'lang'}">
+		
+			<c:if test="${i >= 1}">
+				<c:set var="paramsFromUrl" value="${paramsFromUrl}&" />
+			</c:if>
+			
+			<c:set var="paramsFromUrl" value="${paramsFromUrl}${par.key}=${par.value[0]}" />
+			
+			<c:set var="i" value="${i+1}" />
+		</c:if>
+	</c:forEach>
+	
+			
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
+			
 			<a class="navbar-brand" href="${pageContext.request.contextPath}/Dashboard">
+				<i class="fa fa-book fa-lg"></i>&nbsp;
 				<spring:message code="application.name" text="application.name" />
 			</a>
 		</div>
 	</header>
+	
+	<div class="container">
+		<div style="float:right;">
+			<a href="${paramsFromUrl}&lang=fr"><img style="" alt="" src="${chemin}/icons/France.png"></a>
+			<a href="${paramsFromUrl}&lang=en"><img style="" alt="" src="${chemin}/icons/United-kingdom.png"></a>
+			<a href="${paramsFromUrl}&lang=es"><img style="" alt="" src="${chemin}/icons/Spain.png"></a>
+		</div>
+	</div>
+		
+	<style>
+		.navbar-inverse {
+			background: #383838;//#888
+		}
+		.navbar-inverse .navbar-brand, .fa-book{
+			color: #ccc;//#F2F2F2 
+		}
+		.navbar-brand{
+			font-variant: small-caps;
+		}
+	</style>

@@ -70,7 +70,6 @@ public class DashboardServlet /*extends HttpServlet*/ {
 	    model.addObject("pageSize", pageSize);
 	    model.addObject("paginationObject", paginationObject);
 	    
-	    //model.put("lang", lang);
 	    
 	    //getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
 		

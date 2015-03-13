@@ -14,11 +14,9 @@ import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.service.IService;
 import com.excilys.computerdatabase.service.Service;
 
-@Component
 public class ListCompaniesTag extends TagSupport {
 	
-	@Autowired
-	IService service;
+	List<Company> companyList;
 	
 	int idSelected;
 
@@ -28,8 +26,8 @@ public class ListCompaniesTag extends TagSupport {
 		JspWriter out = pageContext.getOut();
 		
 		try {
-	        List<Company> liste = service.getCompanies();
-			for(Company c : liste){
+	        
+			for(Company c : companyList){
 				out.print("<option value=\"" + c.id + "\"");
 				if(idSelected == c.id){//${pageScope["computer"].company.id}
 					out.print(" selected=\"selected\"");
@@ -55,6 +53,14 @@ public class ListCompaniesTag extends TagSupport {
 
 	public void setIdSelected(int idSelected) {
 		this.idSelected = idSelected;
+	}
+
+	public List<Company> getCompanyList() {
+		return companyList;
+	}
+
+	public void setCompanyList(List<Company> companyList) {
+		this.companyList = companyList;
 	}
 
 	

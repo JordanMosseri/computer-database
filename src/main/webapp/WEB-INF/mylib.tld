@@ -47,6 +47,7 @@
       <bodycontent>empty</bodycontent>
       <info>Affiche le contenu du panier</info>
       <attribute><name>idSelected</name><required>false</required><rtexprvalue>true</rtexprvalue></attribute>
+      <attribute><name>companyList</name><required>true</required><rtexprvalue>true</rtexprvalue></attribute>
     </tag>
     
 </taglib>

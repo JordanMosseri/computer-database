@@ -33,7 +33,8 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="static/views/addComputer.jsp"><spring:message code="add.computer" text="add.computer" /></a> 
+	                <!-- static/views/addComputer.jsp -->
+                    <a class="btn btn-success" id="addComputer" href="${pageContext.request.contextPath}/Add"><spring:message code="add.computer" text="add.computer" /></a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="edit" text="edit" /></a>
                 </div>
             </div>

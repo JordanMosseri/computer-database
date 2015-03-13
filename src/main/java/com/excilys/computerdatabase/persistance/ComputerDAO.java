@@ -6,17 +6,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Computer;
 
+import org.springframework.jdbc.core.support.*;
+
 @Repository
-public class ComputerDAO implements IComputerDAO{
+public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	
 	
 	final String QUERY_GET_ALL = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id=company.id ";
@@ -35,18 +41,25 @@ public class ComputerDAO implements IComputerDAO{
 		Computer computer = null;
 		mettreVariablesANull();
 		
-		try {
+		computer = (Computer) getJdbcTemplate().queryForObject(
+				QUERY_GET_ALL+"WHERE computer.id='"+idComputer+"'", new Object[] { idComputer }, 
+				//new BeanPropertyRowMapper(Computer.class)
+				new CustomerRowMapper()
+				);
+		
+		/*try {
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(QUERY_GET_ALL+"WHERE computer.id='"+idComputer+"'");
 			if(rs.next()){
 				computer = DAOMapper.map(rs);
+				
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			tryCloseVariables();
-		}
+		}*/
 		
 		return computer;
 	}
@@ -57,7 +70,18 @@ public class ComputerDAO implements IComputerDAO{
 		ArrayList<Computer> liste  = new ArrayList<Computer>();
 		mettreVariablesANull();
 		
-		try {
+		 
+		List<Map<String, Object>> rows = getJdbcTemplate().queryForList(QUERY_GET_ALL+endOfQuery);
+		for (Map<String, Object> row : rows) {
+			Computer customer = new Computer();
+			customer.id = (int) (row.get("id"));
+			customer.name = (String) (row.get("name"));
+			customer.dateAdded = (((Timestamp) row.get("introduced")).toLocalDateTime());
+			customer.dateRemoved = (((Timestamp) row.get("discontinued")).toLocalDateTime());
+			liste.add(customer);
+		}
+		
+		/*try {
 			stmt = cn.createStatement();
 			rs = stmt.executeQuery(QUERY_GET_ALL+endOfQuery);
 			while(rs.next()){
@@ -68,7 +92,7 @@ public class ComputerDAO implements IComputerDAO{
 			e.printStackTrace();
 		} finally {
 			tryCloseVariables();
-		}
+		}*/
 		
 		return liste;
 	}
@@ -338,6 +362,19 @@ public class ComputerDAO implements IComputerDAO{
 				cn.close();
 		} catch (SQLException e) {}
 	}
+	
+	class CustomerRowMapper implements RowMapper {
+		public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Computer customer = new Computer();
+			customer.id = (rs.getInt("id"));
+			customer.name = (rs.getString("name"));
+			customer.dateAdded = (rs.getTimestamp("introduced").toLocalDateTime());
+			customer.dateRemoved = (rs.getTimestamp("discontinued").toLocalDateTime());
+			return customer;
+		}
+	 
+	}
+	
 }
 
 
