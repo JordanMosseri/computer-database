@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +24,12 @@ public class CompanyDAO implements ICompanyDAO {
 	final String QUERY_INSERT = "INSERT into company(name) VALUES(?)";
 	final String QUERY_EXISTS = "SELECT * FROM company WHERE id=?";
 	final String QUERY_DELETE = "DELETE FROM company WHERE id=?";
+	
+	/*@Autowired 
+	public CompanyDAO(DataSource dataSource) {
+	    super();
+	    setDataSource(dataSource);
+	}*/
 	
 	@Override
 	public List<Company> getAll(Connection cn){

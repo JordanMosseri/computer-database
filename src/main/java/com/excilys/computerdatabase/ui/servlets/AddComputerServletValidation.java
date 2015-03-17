@@ -69,6 +69,7 @@ public class AddComputerServletValidation /*extends HttpServlet*/ {
 		//getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
 		
 		
+		//TODO forward:
 		List<Company> companyList = service.getCompanies();
 		model.addAttribute("companyList", companyList);
 		model.addAttribute("formatString", Constantes.FORMAT_DATE);

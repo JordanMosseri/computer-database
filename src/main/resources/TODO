@@ -35,7 +35,7 @@ comment tester que les donnees soient bien transmises d'un formulaire?
 
 
 
-commit : 
+commit : mise en place JdbcTemplate
 
 
 

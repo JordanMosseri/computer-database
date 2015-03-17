@@ -76,6 +76,11 @@ public class DashboardServlet /*extends HttpServlet*/ {
 		//return "dashboard";
 		return model;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView doPost(ModelMap model) {
+		return printHello("","","","");
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
