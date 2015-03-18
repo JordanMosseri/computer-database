@@ -6,30 +6,17 @@ import java.time.ZoneOffset;
 
 public class Computer implements Serializable {
 	
-	public int id;
-	public String name;
-	public LocalDateTime dateAdded;//LocalDateTime
-	public LocalDateTime dateRemoved;
-	public Company company;
+	private int id;
+	private String name;
+	private LocalDateTime dateAdded;
+	private LocalDateTime dateRemoved;
+	private Company company;
 	
 	public Computer() { }
 	
-	public long getDateAddedLong() {
-		if (dateAdded==null) {
-			return 0;
-		}
-		else {
-			return dateAdded.toEpochSecond(ZoneOffset.UTC);//Timestamp.valueof(LocalDateTime)
-		}
-	}
-	public long getDateRemovedLong() {
-		if (dateRemoved == null) {
-			return 0;
-		}
-		else {
-			return dateRemoved.toEpochSecond(ZoneOffset.UTC);
-		}
-	}
+	//getDateAddedLong() : return dateAdded.toEpochSecond(ZoneOffset.UTC);//Timestamp.valueof(LocalDateTime)
+	
+	
 	
 
 
@@ -77,11 +64,49 @@ public class Computer implements Serializable {
  
         return false;
 	}
+
 	
 	
 	
-	
-	
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public LocalDateTime getDateAdded() {
+		return dateAdded;
+	}
+
+	public LocalDateTime getDateRemoved() {
+		return dateRemoved;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setDateAdded(LocalDateTime dateAdded) {
+		this.dateAdded = dateAdded;
+	}
+
+	public void setDateRemoved(LocalDateTime dateRemoved) {
+		this.dateRemoved = dateRemoved;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 	
 	
 	

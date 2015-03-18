@@ -6,32 +6,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdatabase.modele.*;
-import com.excilys.computerdatabase.service.Service;
+import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.util.Constantes;
 
 public class DTOMapper {
 	
 	public static Computer convert(ComputerDTO c){
-		LocalDateTime dintroduced = Service.parse(c.dateAdded);
-		LocalDateTime ddiscontinued = Service.parse(c.dateRemoved);
+		LocalDateTime dintroduced = ComputerService.parse(c.getDateAddedString());
+		LocalDateTime ddiscontinued = ComputerService.parse(c.getDateRemovedString());
 		
-		return new Computer(c.id, c.name, dintroduced, ddiscontinued, c.company);
+		return new Computer(c.getId(), c.getName(), dintroduced, ddiscontinued, new Company(c.getCompanyName(), c.getCompanyId()));
 	}
 	
 	public static ComputerDTO convert(Computer c){
 		String stringDateAdded = "";
 		String stringDateRemoved = "";
 		
-		if (c.dateAdded != null) {
+		if (c.getDateAdded() != null) {
 			//stringDateAdded = Constantes.dateFormat.format(c.dateAdded);
-			stringDateAdded = c.dateAdded.format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE));
+			stringDateAdded = c.getDateAdded().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE));
 		}
-		if (c.dateRemoved != null) {
+		if (c.getDateRemoved() != null) {
 			//stringDateRemoved = Constantes.dateFormat.format(c.dateRemoved);
-			stringDateRemoved = c.dateRemoved.format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE));
+			stringDateRemoved = c.getDateRemoved().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE));
 		}
 		
-		return new ComputerDTO(c.id, c.name, stringDateAdded, stringDateRemoved, c.company);
+		return new ComputerDTO(c.getId(), c.getName(), stringDateAdded, stringDateRemoved, c.getCompany());
 	}
 	
 	public static List<ComputerDTO> convert(List<Computer> computers){

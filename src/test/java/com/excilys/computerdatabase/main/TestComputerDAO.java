@@ -9,20 +9,26 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.persistance.DAOUtils;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
 import com.excilys.computerdatabase.persistance.IComputerDAO;
-import com.excilys.computerdatabase.service.Service;
+import com.excilys.computerdatabase.service.ComputerService;
 
+import org.springframework.test.context.junit4.*;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"/applicationContext.xml"})
 public class TestComputerDAO {
 	
 	@Autowired
-	@Qualifier(value = "ComputerDAO")
+	//@Qualifier(value = "ComputerDAO")
 	IComputerDAO computerDAO;
 	
 	public static final int COMPUTERS_COUNT = 5;
@@ -65,13 +71,18 @@ public class TestComputerDAO {
 	
 	@Test
 	public void testGet(){
-		Computer c = computerDAO.get(3, DAOUtils.getConnexion());
+		Computer c = computerDAO.get(3);
 		
-		Assert.assertEquals("computer3", c.name);
-		Assert.assertNull(c.dateAdded);
-		Assert.assertNull(c.dateRemoved);
-		Assert.assertEquals(1, c.company.id);
-		Assert.assertEquals("company1", c.company.name);
+		Assert.assertEquals("computer3", c.getName());
+		Assert.assertNull(c.getDateAdded());
+		Assert.assertNull(c.getDateRemoved());
+		Assert.assertEquals(1, c.getCompany().getId());
+		Assert.assertEquals("company1", c.getCompany().getName());
+	}
+	
+	@Test
+	public void testGetUnexistant() {
+		
 	}
 	
 	@Test
@@ -91,48 +102,48 @@ public class TestComputerDAO {
 	
 	@Test
 	public void testGetAll(){
-		List<Computer> computers = computerDAO.getAll("", DAOUtils.getConnexion());
+		List<Computer> computers = computerDAO.getAll("");
 		
 		Assert.assertEquals(COMPUTERS_COUNT, computers.size());
 		
 		Computer firstComputer = computers.get(0);
-		Assert.assertEquals("computer1", firstComputer.name);
-		Assert.assertNull(firstComputer.dateAdded);
-		Assert.assertNull(firstComputer.dateRemoved);
-		Assert.assertEquals(1, firstComputer.company.id);
-		Assert.assertEquals("company1", firstComputer.company.name);
+		Assert.assertEquals("computer1", firstComputer.getName());
+		Assert.assertNull(firstComputer.getDateAdded());
+		Assert.assertNull(firstComputer.getDateRemoved());
+		Assert.assertEquals(1, firstComputer.getCompany().getId());
+		Assert.assertEquals("company1", firstComputer.getCompany().getName());
 		
 		Computer lastComputer = computers.get(computers.size()-1);
-		Assert.assertEquals("computer5", lastComputer.name);
-		Assert.assertNull(lastComputer.dateAdded);
-		Assert.assertNull(lastComputer.dateRemoved);
-		Assert.assertEquals(3, lastComputer.company.id);
-		Assert.assertEquals("company3", lastComputer.company.name);
+		Assert.assertEquals("computer5", lastComputer.getName());
+		Assert.assertNull(lastComputer.getDateAdded());
+		Assert.assertNull(lastComputer.getDateRemoved());
+		Assert.assertEquals(3, lastComputer.getCompany().getId());
+		Assert.assertEquals("company3", lastComputer.getCompany().getName());
 	}
 	
 	@Test
 	public void testInsert(){
 		String computerName = "computerTestWithCompanyName";
-		LocalDateTime dateAdded = Service.parse("2012-06-03");
-		LocalDateTime dateRemoved = Service.parse("2012-07-04");
+		LocalDateTime dateAdded = ComputerService.parse("2012-06-03");
+		LocalDateTime dateRemoved = ComputerService.parse("2012-07-04");
 		int companyId = 2;
 		
 		//insertion
 		Computer c = new Computer(-1, computerName, dateAdded, dateRemoved, new Company(companyId));
-		boolean result = computerDAO.insert(c, DAOUtils.getConnexion());
+		boolean result = computerDAO.insert(c);
 		Assert.assertTrue(result);
 		
 		//check if well added
-		List<Computer> l = computerDAO.getAll("", DAOUtils.getConnexion());
+		List<Computer> l = computerDAO.getAll("");
 		Computer lastComputer = l.get(l.size() - 1);
 		
-		Assert.assertEquals(computerName, lastComputer.name);
-		Assert.assertEquals(dateAdded, lastComputer.dateAdded);
-		Assert.assertEquals(dateRemoved, lastComputer.dateRemoved);
-		Assert.assertEquals(companyId, lastComputer.company.id);
+		Assert.assertEquals(computerName, lastComputer.getName());
+		Assert.assertEquals(dateAdded, lastComputer.getDateAdded());
+		Assert.assertEquals(dateRemoved, lastComputer.getDateRemoved());
+		Assert.assertEquals(companyId, lastComputer.getCompany().getId());
 		
 		//check total count
-		int count = computerDAO.getTotalCount(DAOUtils.getConnexion());
+		int count = computerDAO.getTotalCount();
 		Assert.assertEquals(COMPUTERS_COUNT+1, count);
 	}
 	
@@ -149,26 +160,26 @@ public class TestComputerDAO {
 	//@Ignore
 	public void testInsertWithWrongCompanyId(){
 		String computerName = "computerTestNotHere";
-		LocalDateTime dateAdded = Service.parse("2012-06-03");
-		LocalDateTime dateRemoved = Service.parse("2012-07-04");
+		LocalDateTime dateAdded = ComputerService.parse("2012-06-03");
+		LocalDateTime dateRemoved = ComputerService.parse("2012-07-04");
 		int companyId = 200;
 		
 		//insertion
 		Computer c = new Computer(-1, computerName, dateAdded, dateRemoved, new Company(companyId));
-		boolean result = computerDAO.insert(c, DAOUtils.getConnexion());
+		boolean result = computerDAO.insert(c);
 		Assert.assertFalse(result);
 		
 		//check if well added
-		List<Computer> l = computerDAO.getAll("", DAOUtils.getConnexion());
+		List<Computer> l = computerDAO.getAll("");
 		Computer lastComputer = l.get(l.size() - 1);
 		
-		Assert.assertNotEquals(computerName, lastComputer.name);
-		Assert.assertNotEquals(dateAdded, lastComputer.dateAdded);
-		Assert.assertNotEquals(dateRemoved, lastComputer.dateRemoved);
-		Assert.assertNotEquals(companyId, lastComputer.company.id);
+		Assert.assertNotEquals(computerName, lastComputer.getName());
+		Assert.assertNotEquals(dateAdded, lastComputer.getDateAdded());
+		Assert.assertNotEquals(dateRemoved, lastComputer.getDateRemoved());
+		Assert.assertNotEquals(companyId, lastComputer.getCompany().getId());
 		
 		//check total count
-		int count = computerDAO.getTotalCount(DAOUtils.getConnexion());
+		int count = computerDAO.getTotalCount();
 		Assert.assertEquals(COMPUTERS_COUNT, count);
 	}
 	
@@ -176,7 +187,7 @@ public class TestComputerDAO {
 	public void testDeleteWrong(){
 		int id = LAST_COMPUTER_ID+100;
 		
-		boolean result = computerDAO.delete(id, DAOUtils.getConnexion());
+		boolean result = computerDAO.delete(id);
 		
 		Assert.assertFalse(result);
 	}
@@ -185,25 +196,25 @@ public class TestComputerDAO {
 	public void testDelete(){
 		int id = 4;
 		
-		computerDAO.delete(id, DAOUtils.getConnexion());
+		computerDAO.delete(id);
 		
-		Assert.assertFalse(computerDAO.exists(id, DAOUtils.getConnexion()));
+		Assert.assertFalse(computerDAO.exists(id));
 	}
 	
 	@Test
 	public void testExists(){
-		Assert.assertTrue(computerDAO.exists(3, DAOUtils.getConnexion()));
+		Assert.assertTrue(computerDAO.exists(3));
 	}
 	
 	@Test
 	public void testNotExists(){
-		Assert.assertFalse(computerDAO.exists(LAST_COMPUTER_ID+100, DAOUtils.getConnexion()));
+		Assert.assertFalse(computerDAO.exists(LAST_COMPUTER_ID+100));
 	}
 	
 	@Test
 	//@Ignore
 	public void testTotal(){
-		Assert.assertEquals(COMPUTERS_COUNT, computerDAO.getTotalCount(DAOUtils.getConnexion()));
+		Assert.assertEquals(COMPUTERS_COUNT, computerDAO.getTotalCount());
 	}
 	
 }

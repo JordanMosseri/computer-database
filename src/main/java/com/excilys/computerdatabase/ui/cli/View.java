@@ -12,12 +12,19 @@ import org.springframework.stereotype.Controller;
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.ComputerDTO;
-import com.excilys.computerdatabase.service.IService;
-import com.excilys.computerdatabase.service.Service;
+import com.excilys.computerdatabase.service.ICompanyService;
+import com.excilys.computerdatabase.service.IComputerService;
+import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.util.Constantes;
 
-//@Controller
-public class View {
+@Component
+public class View implements IView {
+	
+	@Autowired
+	IComputerService computerService;
+	
+	@Autowired
+	ICompanyService companyService;
 	
 	public static final String[] POSSIBILITES = {
 		"List computers", 
@@ -32,10 +39,10 @@ public class View {
 	
 	Scanner in = new Scanner(System.in);
 	
-	ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+	//ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+	//IService service = (IService) context.getBean("service");
 	
-	IService service = (IService) context.getBean("service");
-	
+	@Override
 	public  void lancerProgramme() {
 		
 		boolean continuer = true;
@@ -47,44 +54,44 @@ public class View {
 			
 			switch (selection) {
 			case 1:
-				this.println( service.getComputers() );
+				this.println( computerService.getComputers() );
 				break;
 			case 2:
-				this.println( service.getCompanies() );
+				this.println( companyService.getCompanies() );
 				break;
 			case 3:
-				this.println( service.getComputer( this.getIntFromConsole("Please enter a computer id: ") ) );
+				this.println( computerService.getComputer( this.getIntFromConsole("Please enter a computer id: ") ) );
 				break;
 			case 4:
-				println(service.addComputer( DTOMapper.convert(this.getComputerDTOFromConsole()) ));
+				println(computerService.addComputer( DTOMapper.convert(this.getComputerDTOFromConsole()) ));
 				break;
 			case 5:
 				int id = this.getIntFromConsole("Please enter a computer id: ");
 				
-				ComputerDTO computerDTO = DTOMapper.convert(service.getComputer(id));
+				ComputerDTO computerDTO = DTOMapper.convert(computerService.getComputer(id));
 				
 				String nomRecupered = this.getStringFromConsole("Veuillez entrer un nouveau nom d'ordi (vide pour passer): ");
 				if(!nomRecupered.equals("")){
-					computerDTO.name = nomRecupered;
+					computerDTO.setName(nomRecupered);
 				}
 				
 				String dateRecupered = this.getDateFromConsole("Please enter an added date formatted "+Constantes.FORMAT_DATE+" (leave empty to skip): ");
 				if(dateRecupered != null){
-					computerDTO.dateAdded = dateRecupered;
+					computerDTO.setDateAdded(dateRecupered);
 				}
 				
 				String dateRemovedRecupered = this.getDateFromConsole("Please enter a removed date formatted "+Constantes.FORMAT_DATE+" (leave empty to skip): ");
 				if(dateRemovedRecupered != null){
-					computerDTO.dateRemoved = dateRemovedRecupered;
+					computerDTO.setDateRemoved(dateRemovedRecupered);
 				}
 				
-				println(service.updateComputer(DTOMapper.convert(computerDTO)));
+				println(computerService.updateComputer(DTOMapper.convert(computerDTO)));
 				break;
 			case 6:
-				println(service.deleteComputer( this.getIntFromConsole("Please enter a computer id: ") ));
+				println(computerService.deleteComputer( this.getIntFromConsole("Please enter a computer id: ") ));
 				break;
 			case 7:
-				println(service.deleteCompany(getIntFromConsole("Please enter a computer id: ")));
+				println(companyService.deleteCompany(getIntFromConsole("Please enter a computer id: ")));
 				break;
 			case 8:
 				continuer=false;
@@ -97,6 +104,7 @@ public class View {
 		
 	}
 	
+	@Override
 	public  int showMenuAndGetChoice(){
 		
 		int selection=-1;
@@ -119,6 +127,7 @@ public class View {
 		return selection;
 	}
 	
+	@Override
 	public  int getIntFromConsole(String message){
 		int id=-1;
 		boolean ok=false;
@@ -139,6 +148,7 @@ public class View {
 		return id;
 	}
 	
+	@Override
 	public  String getStringFromConsole(String message){
 		//in.nextLine();
 		String nom;
@@ -147,6 +157,7 @@ public class View {
 		return nom;
 	}
 	
+	@Override
 	public  ComputerDTO getComputerDTOFromConsole(){
 		String nom = getStringFromConsole("Please enter a computer name: ");
 		String fab = getStringFromConsole("Please enter a company name: ");
@@ -161,6 +172,7 @@ public class View {
 	
 	
 	
+	@Override
 	public  String getDateFromConsole(String message){
 		String strRecuperee="";
 		boolean ok=false;
@@ -171,7 +183,7 @@ public class View {
 			}
 			
 			//Check if the string entered is formatted like a date
-			ok = Service.checkString(Constantes.REGEX_DATE, strRecuperee);
+			ok = ComputerService.checkString(Constantes.REGEX_DATE, strRecuperee);
 			
 			/*if(strRecuperee.contains("-")){
 				String[] temp = strRecuperee.split("-");
@@ -190,16 +202,19 @@ public class View {
 	}
 	
 	
+	@Override
 	public void print(Object o){
 		System.out.print(o.toString());
         //log(o);
 	}
 	
+	@Override
 	public void println(Object o){
 		this.print(o.toString());
 		this.println();
 	}
 	
+	@Override
 	public void println(){
 		System.out.println();
 	}

@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computerdatabase.modele.Company;
-import com.excilys.computerdatabase.service.IService;
-import com.excilys.computerdatabase.service.Service;
+import com.excilys.computerdatabase.service.IComputerService;
+import com.excilys.computerdatabase.service.ComputerService;
 
 public class ListCompaniesTag extends TagSupport {
 	
@@ -28,11 +28,11 @@ public class ListCompaniesTag extends TagSupport {
 		try {
 	        
 			for(Company c : companyList){
-				out.print("<option value=\"" + c.id + "\"");
-				if(idSelected == c.id){//${pageScope["computer"].company.id}
+				out.print("<option value=\"" + c.getId() + "\"");
+				if(idSelected == c.getId()){//${pageScope["computer"].company.id}
 					out.print(" selected=\"selected\"");
 				}
-				out.print(">" + c.name + "</option>");
+				out.print(">" + c.getName() + "</option>");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

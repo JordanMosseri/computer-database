@@ -14,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
+@Component
 public class DAOUtils {
 	public static boolean UNIT_TEST = false;
 	
@@ -124,7 +126,7 @@ public class DAOUtils {
 	
 	private static Connection getDataSourceConnexion() {
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("/applicationContext.xml");
 		DataSource dataSource = (DataSource) context.getBean("dataSource");
 		
 		Connection cn = null;

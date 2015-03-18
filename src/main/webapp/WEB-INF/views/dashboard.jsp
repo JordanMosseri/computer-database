@@ -90,7 +90,7 @@
 	                        </td>
 	                        <td>${c.dateAddedString}</td>
 	                        <td>${c.dateRemovedString}</td>
-	                        <td>${c.company.name}</td>
+	                        <td>${c.companyName}</td>
 	
 	                    </tr>
                     </c:forEach>

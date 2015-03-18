@@ -44,7 +44,7 @@
                                 <select class="form-control" id="companyId" name="companyId" >
                                     <option value="0">Please select a company</option>
                                     
-                                    <mylib:listCompanies companyList="${requestScope.companyList}" idSelected="${requestScope.computer.company.id}"/>
+                                    <mylib:listCompanies companyList="${requestScope.companyList}" idSelected="${requestScope.computer.companyId}"/>
                                    
                                 </select>
                             </div>            

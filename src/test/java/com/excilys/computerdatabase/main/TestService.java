@@ -12,7 +12,7 @@ import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.persistance.DAOUtils;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
-import com.excilys.computerdatabase.service.Service;
+import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.util.Constantes;
 
 public class TestService {
@@ -31,18 +31,18 @@ public class TestService {
 	
 	@Test
 	public void testCheckString(){
-		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "02"));
-		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "0"));
-		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "1"));
-		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, " "));
-		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, ""));
-		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "12"));
-		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "123"));
-		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, "12.3"));
-		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, "12a3"));
-		assertTrue(Service.checkString(Constantes.REGEX_INTEGER, "-1"));
-		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, "-1.2"));
-		assertFalse(Service.checkString(Constantes.REGEX_INTEGER, null));
+		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "02"));
+		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "0"));
+		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "1"));
+		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, " "));
+		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, ""));
+		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "12"));
+		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "123"));
+		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, "12.3"));
+		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, "12a3"));
+		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "-1"));
+		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, "-1.2"));
+		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, null));
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class TestService {
 		computers.add(new Computer(-1, "computerMocked", null, null, new Company(1)));
 		//Mockito.when(dao.INSTANCE.getAll("", DAOUtils.getConnexion())).thenReturn(computers);
 		
-		List<Computer> computersFromService = (new Service()).getComputers();
+		List<Computer> computersFromService = (new ComputerService()).getComputers();
 		for (Computer computer : computersFromService) {
 			Assert.assertEquals("computerMocked", computer);
 		}

@@ -57,28 +57,28 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	}
 	
 	@Override
-	public Computer get(int idComputer, Connection cn){
+	public Computer get(int idComputer){
 		
 		return (Computer) getJdbcTemplate().queryForObject(
 			QUERY_GET_ALL+"WHERE computer.id=?", new Object[] { idComputer }, 
 			//new BeanPropertyRowMapper(Computer.class)
-			new CustomerRowMapper()
+			new DAOMapper()
 		);
 	}
 	
 	@Override
-	public List<Computer> getAll(String endOfQuery, Connection cn){
+	public List<Computer> getAll(String endOfQuery){
 		
-		return getJdbcTemplate().query(QUERY_GET_ALL+endOfQuery, new CustomerRowMapper());
+		return getJdbcTemplate().query(QUERY_GET_ALL+endOfQuery, new DAOMapper());
 	}
 	
 	@Override
-	public List<Computer> getPart(int offset, int limit, String word, Connection cn){
+	public List<Computer> getPart(int offset, int limit, String word){
 		String whereLike = " ";
 		if(word != null && !word.isEmpty()){
 			whereLike = " WHERE computer.name LIKE '%" + word + "%' || company.name LIKE '%" + word + "%'";
 		}
-		return getAll(whereLike + "LIMIT " + offset + ", "+limit, cn);
+		return getAll(whereLike + "LIMIT " + offset + ", "+limit);
 	}
 	
 	
@@ -93,9 +93,9 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	}
 	
 	@Override
-	public boolean insert(Computer computer, Connection cn) {
-				
-		int res = getJdbcTemplate().update(QUERY_INSERT, new Object[] { computer.name, getTimestamp(computer.dateAdded), getTimestamp(computer.dateRemoved), computer.company.id});
+	public boolean insert(Computer computer) {
+		
+		int res = getJdbcTemplate().update(QUERY_INSERT, new Object[] { computer.getName(), getTimestamp(computer.getDateAdded()), getTimestamp(computer.getDateRemoved()), computer.getCompany().getId()});
 		
 		if (res != 1){
 			return false;
@@ -108,9 +108,9 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	
 	
 	@Override
-	public boolean update(Computer computer, Connection cn){
+	public boolean update(Computer computer){
 		
-		int res = getJdbcTemplate().update(QUERY_UPDATE, new Object[] { computer.name, getTimestamp(computer.dateAdded), getTimestamp(computer.dateRemoved), computer.company.id, computer.id});
+		int res = getJdbcTemplate().update(QUERY_UPDATE, new Object[] { computer.getName(), getTimestamp(computer.getDateAdded()), getTimestamp(computer.getDateRemoved()), computer.getCompany().getId(), computer.getId()});
 		
 		if (res != 1){
 			return false;
@@ -121,117 +121,48 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	}
 	
 	@Override
-	public boolean delete(int id, Connection cn){
-		mettreVariablesANull();
+	public boolean delete(int id){
 		
-		boolean ok=true;
+		int res = getJdbcTemplate().update(QUERY_DELETE, new Object[] { id });
 		
-		try{
-			pstmt = cn.prepareStatement(QUERY_DELETE);
-			pstmt.setInt(1, id);
-			int res = pstmt.executeUpdate();
-			if(res == 0) {
-				ok = false;
-			}
-			else if (res == 1) {
-				ok = true;
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ok = false;
-		} finally {
-			tryCloseVariables();
+		if(res == 0) {
+			return false;
 		}
-		return ok;
+		else if (res == 1) {
+			return true;
+		}
+		return false;
 	}
 	
 	
 	@Override
-	public boolean exists(int id, Connection cn){
-		mettreVariablesANull();
+	public boolean exists(int id){
 		
-		boolean ok=false;
+		List<Computer> c = getJdbcTemplate().query(QUERY_EXISTS, new Object[] {id}, new DAOMapper());
 		
-		try{
-			pstmt = cn.prepareStatement(QUERY_EXISTS);
-			pstmt.setInt(1, id);
-			rs = pstmt.executeQuery();
-			while(rs.next()){
-				ok=true;
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ok = false;
-		} finally {
-			tryCloseVariables();
-		}
-		return ok;
+		return c.size() >= 1;
 	}
 	
 	@Override
-	public int getTotalCount(Connection cn){
-		mettreVariablesANull();
+	public int getTotalCount(){
 		
-		int size = 0;
-		
-		try{
-			pstmt = cn.prepareStatement(QUERY_TOTAL);
-			rs = pstmt.executeQuery();
-			if(rs.next()){
-				size = rs.getInt("count(*)");
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
-		}
-		return size;
+		return getJdbcTemplate().queryForObject(QUERY_TOTAL, Integer.class);
 	}
 	
 	
 	@Override
-	public boolean deleteThoseFromCompany(int companyId, Connection cn){
-		mettreVariablesANull();
-		boolean ok = true;
+	public boolean deleteThoseFromCompany(int companyId){
 		
-		try{
-			//cn = getConnexion();
-			
-			pstmt = cn.prepareStatement(QUERY_DELETE_WITH_COMPANYID);
-			pstmt.setInt(1, companyId);
-			pstmt.executeUpdate();
-			
-		} catch (SQLException e) {
-			ok = false;
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
-		}
-		return ok;
+		getJdbcTemplate().update(QUERY_DELETE_WITH_COMPANYID, new Object[] { companyId });
+		
+		//TODO suppr type retour
+		return true;
 	}
 	
 	@Override
-	public List<Computer> getThoseFromCompany(int companyId, Connection cn){
-		mettreVariablesANull();
-		List<Computer> computers = new ArrayList<Computer>();
+	public List<Computer> getThoseFromCompany(int companyId){
 		
-		try{
-			pstmt = cn.prepareStatement("SELECT * FROM computer WHERE company_id=?");
-			pstmt.setInt(1, companyId);
-			rs = pstmt.executeQuery();
-			while(rs.next()){
-				computers.add(DAOMapper.map(rs));
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
-		}
-		return computers;
+		return getJdbcTemplate().query("SELECT * FROM computer WHERE company_id=?", new Object[] {companyId}, new DAOMapper());
 	}
 	
 	/*public List<Computer> search(String word){
@@ -256,91 +187,8 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 		return computers;
 	}*/
 	
-	public ResultSet rs = null ;
-	public Statement stmt = null;
-	public PreparedStatement pstmt = null;
-	public Connection cn = null;
 	
-	protected void mettreVariablesANull(){
-		rs = null ;
-		stmt = null;
-		pstmt = null;
-		cn = null;
-	}
 	
-	protected void tryCloseVariables(){
-		try {
-			if (rs != null)
-				rs.close();
-			
-			if (stmt != null)
-				stmt.close();
-			
-			if (pstmt != null)
-				pstmt.close();
-			
-			if (cn != null) 
-				cn.close();
-		} catch (SQLException e) {}
-	}
-	
-	class CustomerRowMapper implements RowMapper<Computer> {
-		
-		public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
-			
-			Computer computer = new Computer();
-			
-			computer.id = (rs.getInt("id"));
-			
-			computer.name = (rs.getString("name"));
-			
-			if(rs.getTimestamp("introduced") != null)
-				computer.dateAdded = (rs.getTimestamp("introduced").toLocalDateTime());
-			
-			if(rs.getTimestamp("discontinued")!=null)
-				computer.dateRemoved = (rs.getTimestamp("discontinued").toLocalDateTime());
-			
-			computer.company = new Company(rs.getString("company.name"), rs.getInt("company.id"));
-			
-			return computer;
-		}
-		
-		/*List<Map<String, Object>> rows = jdbcTemplate.queryForList(QUERY_GET_ALL+endOfQuery);
-		for (Map<String, Object> row : rows) {
-			
-			int cid = NumberUtils.toInt("" + (Long) row.get("id"));
-			
-			String cname = (String) (row.get("computer_name"));
-			
-			LocalDateTime dadded = null;
-			
-			LocalDateTime dremoved = null;
-			
-			if (row.get("introduced") != null){
-				dadded = (((Timestamp) row.get("introduced")).toLocalDateTime());
-			}
-			if (row.get("discontinued") != null){
-				dremoved = (((Timestamp) row.get("discontinued")).toLocalDateTime());
-			}
-			
-			String companyName = "";
-			int companyId = -1;
-			
-			if (row.get("company_name") != null) {
-				companyName = (String) row.get("company_name");
-			}
-			
-			if (row.get("company_id") != null) {
-				companyId = Integer.parseInt(String.valueOf(row.get("company_id")));
-			}
-			
-			Computer computer = new Computer(cid, cname, dadded, dremoved, new Company(companyName, companyId));
-			//System.out.println(computer.toString());
-			
-			liste.add(computer);
-		}*/
-	 
-	}
 	
 }
 

@@ -6,5 +6,7 @@
 </head>
 <body>
 
+<jsp:forward page="/Dashboard"></jsp:forward>
+
 </body>
 </html>

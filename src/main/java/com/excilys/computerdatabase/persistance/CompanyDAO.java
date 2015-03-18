@@ -11,48 +11,41 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.computerdatabase.mappers.CompanyRowMapper;
+import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Company;
+import com.excilys.computerdatabase.modele.Computer;
 
 @Repository
-public class CompanyDAO implements ICompanyDAO {
+public class CompanyDAO extends JdbcDaoSupport implements ICompanyDAO {
 	
 	
-	final String REQUETE_GET_ALL = "SELECT * FROM company";
+	final String QUERY_GET_ALL = "SELECT * FROM company";
 	final String QUERY_INSERT = "INSERT into company(name) VALUES(?)";
 	final String QUERY_EXISTS = "SELECT * FROM company WHERE id=?";
 	final String QUERY_DELETE = "DELETE FROM company WHERE id=?";
 	
-	/*@Autowired 
+	@Autowired 
 	public CompanyDAO(DataSource dataSource) {
 	    super();
 	    setDataSource(dataSource);
-	}*/
+	}
+	
+	
 	
 	@Override
-	public List<Company> getAll(Connection cn){
+	public List<Company> getAll(){
 		
-		ArrayList<Company> liste  = new ArrayList<Company>();
-		mettreVariablesANull();
+		return getJdbcTemplate().query(QUERY_GET_ALL, new CompanyRowMapper());
 		
-		try {
-			stmt = cn.createStatement();
-			rs = stmt.executeQuery(REQUETE_GET_ALL);
-			while (rs.next()) {
-				Company fab = new Company(rs.getString("name"), rs.getInt("id"));
-				liste.add(fab);
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
-		}
-		
-		return liste;
+		/*while (rs.next()) {
+			Company fab = new Company(rs.getString("name"), rs.getInt("id"));
+			liste.add(fab);
+		}*/
 	}
 	
 	//NOT USED
@@ -78,123 +71,44 @@ public class CompanyDAO implements ICompanyDAO {
 	}*/
 	
 	@Override
-	public int insert(String nomFab, Connection cn){
-		mettreVariablesANull();
+	public int insert(String nomFab){
 		
-		int retour = -1;
+		getJdbcTemplate().update(QUERY_INSERT, new Object[] {nomFab});
 		
-		try{
-			pstmt = cn.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, nomFab);
-			pstmt.executeUpdate();
-			rs = pstmt.getGeneratedKeys();
-			while (rs.next()){
-				retour=rs.getInt(1);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
-		}
-		
-		//System.out.println("retour insererCompany="+retour);
-		return retour;
+		return getJdbcTemplate().queryForObject( "SELECT LAST_INSERT_ID()", Integer.class);
 	}
 	
 	@Override
-	public int getIdIfNameExists(String nomFab, Connection cn){
-		mettreVariablesANull();
+	public int getIdIfNameExists(String nomFab){
 		
-		int retour = -1;
+		Integer res = getJdbcTemplate().queryForObject("SELECT company.id FROM company WHERE name=?", new Object[] {nomFab}, Integer.class);
 		
-		try{
-			pstmt = cn.prepareStatement("SELECT * FROM company WHERE name=?");
-			pstmt.setString(1, nomFab);
-			rs = pstmt.executeQuery();
-			while(rs.next()){
-				retour = rs.getInt("company.id");
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
+		if (res != null) {
+			return res;
 		}
-		
-		//System.out.println("retour recupCompanyIdIfExists="+retour);
-		return retour;
+		else {
+			return -1;
+		}
 	}
 	
 	@Override
-	public boolean exists(int id, Connection cn){
-		mettreVariablesANull();
+	public boolean exists(int id){
 		
-		boolean retour = false;
+		List<Company> c = getJdbcTemplate().query(QUERY_EXISTS, new Object[] {id}, new CompanyRowMapper());
 		
-		try{
-			pstmt = cn.prepareStatement(QUERY_EXISTS);
-			pstmt.setInt(1, id);
-			rs = pstmt.executeQuery();
-			if(rs.next()){
-				retour = true;
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
-		}
-		
-		return retour;
+		return c.size() >= 1;
 	}
 	
 	@Override
-	public boolean delete(int id, Connection cn){
-		mettreVariablesANull();
+	public boolean delete(int id){
 		
-		boolean retour = true;
+		int res = getJdbcTemplate().update(QUERY_DELETE, new Object[] { id });
 		
-		try{
-			pstmt = cn.prepareStatement(QUERY_DELETE);
-			pstmt.setInt(1, id);
-			pstmt.executeUpdate();
-			
-		} catch (Exception e) {
-			retour = false;
-			e.printStackTrace();
-		} finally {
-			tryCloseVariables();
+		if (res == 1) {
+			return true;
 		}
-		
-		return retour;
+		return false;
 	}
 	
-	public ResultSet rs = null ;
-	public Statement stmt = null;
-	public PreparedStatement pstmt = null;
-	public Connection cn = null;
 	
-	protected void mettreVariablesANull(){
-		rs = null ;
-		stmt = null;
-		pstmt = null;
-		cn = null;
-	}
-	
-	protected void tryCloseVariables(){
-		try {
-			if (rs != null)
-				rs.close();
-			
-			if (stmt != null)
-				stmt.close();
-			
-			if (pstmt != null)
-				pstmt.close();
-			
-			if (cn != null) 
-				cn.close();
-		} catch (SQLException e) {}
-	}
 }

@@ -2,11 +2,12 @@ package com.excilys.computerdatabase.modele;
 
 public class ComputerDTO {
 	
-	public int id;
-	public String name;
-	public String dateAdded;
-	public String dateRemoved;
-	public Company company;
+	private int id;
+	private String name;
+	private String dateAdded;
+	private String dateRemoved;
+	private String companyName;
+	private int companyId;
 	
 	public ComputerDTO(int id, String name, String dateAdded,
 			String dateRemoved, Company company) {
@@ -15,7 +16,8 @@ public class ComputerDTO {
 		this.name = name;
 		this.dateAdded = dateAdded;
 		this.dateRemoved = dateRemoved;
-		this.company = company;
+		this.companyName = company.getName();
+		this.companyId = company.getId();
 	}
 	
 	
@@ -26,13 +28,52 @@ public class ComputerDTO {
 	public String getName() {
 		return name;
 	}
-	public Company getCompany() {
-		return company;
+	public String getCompanyName() {
+		return companyName;
+	}
+	public int getCompanyId() {
+		return companyId;
 	}
 	public String getDateAddedString() {
 		return dateAdded;
 	}
 	public String getDateRemovedString() {
 		return dateRemoved;
+	}
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+	public void setDateAdded(String dateAdded) {
+		this.dateAdded = dateAdded;
+	}
+
+
+
+	public void setDateRemoved(String dateRemoved) {
+		this.dateRemoved = dateRemoved;
+	}
+
+
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
 }

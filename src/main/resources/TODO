@@ -1,32 +1,28 @@
 
-SPRINT PRECEDENT:
-->test unitaires : fake DAO (Mockito)
-
-SPRINT ACTUEL:
+pouvoir ajouter avec idCompany null
+validation Spring
+i18n js / i18n dates / regarder sur hangout Locale
+Spring data JPA
+[test unitaires : fake DAO (Mockito)]
+nouvelle taglib
+externaliser properties : spring properties @value
 order by features
-[template]
-[nouvelle taglib]
-POUVOIR AJOUTER AVEC IDCOMPANY NULL
 
-TODO:
-ameliorer encapsulation objets du modele (notemment pour JSP EL dashboard)
+
+
+tester differentes fonctionnalites
 pagination : attention aux dernieres pages
-ne garder quun fichier config Spring
 voir ce que fait c:url
-
-
-github: finir README
-https://raw.githubusercontent.com/loicortola/spec-cdb/master/README.md
-
-
-
+github: finir README https://raw.githubusercontent.com/loicortola/spec-cdb/master/README.md
+ThreadLocal?
+Javadoc
+[template]
 
 
 
 [verifier que les liens sont bons + pages edit/add : bouton cancel renvoie vers la page precedente (param offset...)]
 [verifier les chaines d'appel, completer tous les TODO, revoir noms variables/fonctions]
-[changer commentaires Javadoc]
-[avant ThreadLocal/Spring, faire un commit "d'etape"]
+
 
 comment tester que les donnees soient bien transmises d'un formulaire?
 
@@ -34,8 +30,15 @@ comment tester que les donnees soient bien transmises d'un formulaire?
 
 
 
+--------------------------------
+commit : 
 
-commit : mise en place JdbcTemplate
+
+
+--------------------------------
+problemes resolus : 
+nommer colonnes lors des requetes
+web.xml : avoir un context-param pour root et un pour un servlet
 
 
 

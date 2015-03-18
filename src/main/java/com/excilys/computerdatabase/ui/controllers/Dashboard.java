@@ -1,6 +1,7 @@
-package com.excilys.computerdatabase.ui.servlets;
+package com.excilys.computerdatabase.ui.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,24 +23,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
-import com.excilys.computerdatabase.service.IService;
+import com.excilys.computerdatabase.service.IComputerService;
 
 //@WebServlet(name="DashboardServlet", urlPatterns={"/Dashboard"})
 @Controller
-@RequestMapping("/Dashboard")
-public class DashboardServlet /*extends HttpServlet*/ {
-	//private static final long serialVersionUID = 1L;
+//@RequestMapping("/Dashboard")
+public class Dashboard {
 	
 	@Autowired
-	IService service;
+	IComputerService service;
 	
 	
 	public static final int DEFAULT_PAGE_SIZE = 15;
     
 
-	//protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/Dashboard", method = RequestMethod.GET)
 	public ModelAndView printHello(//ModelMap model,
 			@RequestParam(value="offset", defaultValue="", required=false) final String offset,
 			@RequestParam(value="pageSize", defaultValue="", required=false) final String pageSizeParam,
@@ -77,13 +75,31 @@ public class DashboardServlet /*extends HttpServlet*/ {
 		return model;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "/Dashboard", method = RequestMethod.POST)
 	public ModelAndView doPost(ModelMap model) {
 		return printHello("","","","");
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	
+	
+	@RequestMapping(value = "/deleteComputer", method = RequestMethod.POST)
+	public String action (ModelMap model, 
+			@RequestParam(value="selection", defaultValue="", required=false) final String selection
+			) {
+		//PrintWriter p = response.getWriter();
+		
+		String[] str = selection.split(",");
+		
+		for (String string : str) {
+			//p.print(string+"<br/>");
+			
+			boolean ok = service.deleteComputer(NumberUtils.toInt(string));
+			
+			//p.println(ok ? "Computer #" + NumberUtils.toInt(string) + " deleted !" : "Error while deleting the computer.");
+		}
+		
+		//getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
+		
+		return "dashboard";
 	}
 
 }
