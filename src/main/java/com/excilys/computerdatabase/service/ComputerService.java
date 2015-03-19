@@ -59,11 +59,11 @@ public class ComputerService implements IComputerService {
 	 * @return
 	 */
 	@Override
-	public boolean addComputer(Computer comp){
+	public boolean addComputer(Computer comp) {
 		
 		
 		//Company Id is provided
-		if(comp.getCompany().getId() >= 0){
+		if(comp.getCompany().getId() >= 0) {
 			
 			//Company Id exists in db
 			if(companyDAO.exists(comp.getCompany().getId())){
@@ -77,7 +77,7 @@ public class ComputerService implements IComputerService {
 		}
 		
 		//Company Name is provided
-		else if( comp.getCompany().getName() != null && !comp.getCompany().getName().trim().isEmpty() ){
+		else if( comp.getCompany().getName() != null && !comp.getCompany().getName().trim().isEmpty() ) {
 			
 			//Company Name exists in db
 			comp.getCompany().setId(companyDAO.getIdIfNameExists(comp.getCompany().getName()));
@@ -86,14 +86,14 @@ public class ComputerService implements IComputerService {
 				comp.getCompany().setId(companyDAO.insert(comp.getCompany().getName()));
 			}
 		}
-		else{
-			throw new IllegalStateException("Inserting computer : companyId < 0 and companyName not entered.");
+		
+		else {
+			//throw new IllegalStateException("Inserting computer : companyId < 0 and companyName not entered.");
 		}
 		
-		
-		if (!companyDAO.exists(comp.getCompany().getId())) {
+		/*if (!companyDAO.exists(comp.getCompany().getId())) {
 			throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
-		}
+		}*/
 		
 		return computerDAO.insert(comp);
 	}

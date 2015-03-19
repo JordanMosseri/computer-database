@@ -42,7 +42,7 @@
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="company.th" text="company.th" /></label>
                                 <select class="form-control" id="companyId" name="companyId" >
-                                    <option value="0">Please select a company</option>
+                                    <option value="-1"><spring:message code="please.select.company" text="please.select.company" /></option>
                                     
                                     <mylib:listCompanies companyList="${requestScope.companyList}" idSelected="${requestScope.computer.companyId}"/>
                                    

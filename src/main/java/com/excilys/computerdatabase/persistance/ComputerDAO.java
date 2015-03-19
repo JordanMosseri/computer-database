@@ -95,7 +95,9 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	@Override
 	public boolean insert(Computer computer) {
 		
-		int res = getJdbcTemplate().update(QUERY_INSERT, new Object[] { computer.getName(), getTimestamp(computer.getDateAdded()), getTimestamp(computer.getDateRemoved()), computer.getCompany().getId()});
+		Integer computerId = computer.getCompany().getId() > -1 ? computer.getCompany().getId() : null;
+		
+		int res = getJdbcTemplate().update(QUERY_INSERT, new Object[] { computer.getName(), getTimestamp(computer.getDateAdded()), getTimestamp(computer.getDateRemoved()), computerId});
 		
 		if (res != 1){
 			return false;
