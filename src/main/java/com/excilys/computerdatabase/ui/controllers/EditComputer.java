@@ -27,7 +27,6 @@ import com.excilys.computerdatabase.service.IComputerService;
 import com.excilys.computerdatabase.service.ComputerService;
 
 @Controller
-//@RequestMapping("/EditComputer")
 public class EditComputer  {
 	
 	@Autowired
@@ -54,11 +53,8 @@ public class EditComputer  {
 		
 	    model.addAttribute("intId", intId);
 	    model.addAttribute("computer", computer);
-	    
 		model.addAttribute("companyList", companyService.getCompanies());
 	    
-	    //getServletContext().getRequestDispatcher("/static/views"+"/editComputer.jsp").forward(request,response);
-		
 		return "editComputer";
 	}
 	
@@ -70,24 +66,11 @@ public class EditComputer  {
 			@RequestParam(value="discontinued", defaultValue="", required=false) final String discontinued,
 			@RequestParam(value="companyId", defaultValue="", required=false) final String companyId
 			){
-		//PrintWriter p = response.getWriter();
-		
-		
-		/*p.println("computerId="+NumberUtils.toInt(idString));
-		p.println("intCompanyId="+NumberUtils.toInt(companyId));
-		p.println("introduced="+introduced);*/
 		
 		ComputerDTO cdto = new ComputerDTO(NumberUtils.toInt(idString), computerName, introduced, discontinued, new Company(NumberUtils.toInt(companyId)));
 		Computer c = DTOMapper.convert(cdto);
 		
 		boolean ok = computerService.updateComputer(c);
-		
-		//p.println(ok ? "Computer updated !" : "Error while updating the computer.");
-		
-		//getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
-		
-		
-		
 		
 		return "forward:/Dashboard";
 		

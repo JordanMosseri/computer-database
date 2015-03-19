@@ -69,9 +69,6 @@ public class Dashboard {
 	    model.addObject("paginationObject", paginationObject);
 	    
 	    
-	    //getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
-		
-		//return "dashboard";
 		return model;
 	}
 	
@@ -85,19 +82,12 @@ public class Dashboard {
 	public String action (ModelMap model, 
 			@RequestParam(value="selection", defaultValue="", required=false) final String selection
 			) {
-		//PrintWriter p = response.getWriter();
 		
-		String[] str = selection.split(",");
+		String[] stringId = selection.split(",");
 		
-		for (String string : str) {
-			//p.print(string+"<br/>");
-			
+		for (String string : stringId) {
 			boolean ok = service.deleteComputer(NumberUtils.toInt(string));
-			
-			//p.println(ok ? "Computer #" + NumberUtils.toInt(string) + " deleted !" : "Error while deleting the computer.");
 		}
-		
-		//getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
 		
 		return "dashboard";
 	}

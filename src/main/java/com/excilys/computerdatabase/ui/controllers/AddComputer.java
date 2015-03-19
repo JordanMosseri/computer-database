@@ -19,7 +19,6 @@ import com.excilys.computerdatabase.service.IComputerService;
 import com.excilys.computerdatabase.util.Constantes;
 
 @Controller
-//@RequestMapping("/Add")
 public class AddComputer {
 	
 	@Autowired
@@ -31,9 +30,7 @@ public class AddComputer {
 	@RequestMapping(value = "/Add", method = RequestMethod.GET)
 	public String endPoint(ModelMap model){
 		
-		List<Company> companyList = companyService.getCompanies();
-		model.addAttribute("companyList", companyList);
-		
+		model.addAttribute("companyList", companyService.getCompanies());
 		model.addAttribute("formatString", Constantes.FORMAT_DATE);
 		
 		return "addComputer";
@@ -46,13 +43,6 @@ public class AddComputer {
 			@RequestParam(value="discontinued", defaultValue="", required=false) final String discontinued,
 			@RequestParam(value="companyId", defaultValue="", required=false) final String companyId
 			){
-		//PrintWriter p = response.getWriter();
-		
-		
-		/*p.println(computerName);
-		p.println(introduced);
-		p.println(discontinued);
-		p.println(companyId);*/
 		
 		int intCompanyId = NumberUtils.toInt(companyId);
 		ComputerDTO cdto = new ComputerDTO(-1, computerName, introduced, discontinued, new Company(intCompanyId));
@@ -60,16 +50,7 @@ public class AddComputer {
 		
 		boolean ok = computerService.addComputer(c);
 		
-		//p.println(ok ? "Computer added !" : "Error while adding the computer.");
-		
-		//getServletContext().getRequestDispatcher("/static/views"+"/dashboard.jsp").forward(request,response);
-		
-		
-		//TODO forward:
-		model.addAttribute("companyList", companyService.getCompanies());
-		model.addAttribute("formatString", Constantes.FORMAT_DATE);
-		
-		return "addComputer";
+		return "forward:/Dashboard";
 		
 	}
 	
