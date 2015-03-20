@@ -2,8 +2,6 @@ package com.excilys.computerdatabase.ui.controllers;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 //@WebListener

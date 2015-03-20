@@ -7,12 +7,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.excilys.computerdatabase.modele.Company;
-import com.excilys.computerdatabase.service.IComputerService;
-import com.excilys.computerdatabase.service.ComputerService;
 
 public class ListCompaniesTag extends TagSupport {
 	

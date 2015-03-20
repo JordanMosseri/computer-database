@@ -2,15 +2,12 @@ package com.excilys.computerdatabase.modele;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
 import javax.validation.constraints.*;
 
 public class Computer implements Serializable {
 	
 	private int id;
 	
-	@NotNull
 	private String name;
 	
 	private LocalDateTime dateAdded;

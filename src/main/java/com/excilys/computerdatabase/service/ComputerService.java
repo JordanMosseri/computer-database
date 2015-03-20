@@ -15,7 +15,7 @@ import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.persistance.ICompanyDAO;
 import com.excilys.computerdatabase.persistance.IComputerDAO;
-import com.excilys.computerdatabase.util.Constantes;
+import com.excilys.computerdatabase.util.Utils;
 
 @Service
 public class ComputerService implements IComputerService {
@@ -138,25 +138,7 @@ public class ComputerService implements IComputerService {
 	
 	
 	
-	public static boolean checkString(String motif, String chaine){
-		if(chaine == null){
-			return false;
-		}
-		Pattern pattern = Pattern.compile(motif);
-        Matcher matcher = pattern.matcher(chaine);
-        if(matcher.matches()) {
-            return true;
-        }
-        return false;
-	}
 	
-	public static LocalDateTime parse(String strRecuperee){
-		if(strRecuperee==null || !checkString(Constantes.REGEX_DATE, strRecuperee)) {
-			return null;
-		}
-		//TODO faire avec time dans pattern direct?
-		return LocalDate.parse(strRecuperee, DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE)).atTime(0, 0);
-	}
 	
 	
 // String xxx(message,messageError,regex)

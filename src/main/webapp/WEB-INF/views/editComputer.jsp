@@ -33,11 +33,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="introduced.date.th" text="introduced.date.th" /></label>
-                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="${requestScope.computer.dateAddedString}" value="${requestScope.computer.dateAddedString}">
+                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="${requestScope.computer.dateAdded}" value="${requestScope.computer.dateAdded}">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="discontinued.date.th" text="discontinued.date.th" /></label>
-                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="${requestScope.computer.dateRemovedString}" value="${requestScope.computer.dateRemovedString}">
+                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="${requestScope.computer.dateRemoved}" value="${requestScope.computer.dateRemoved}">
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="company.th" text="company.th" /></label>
@@ -52,7 +52,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="<spring:message code="edit" text="edit" />" class="btn btn-primary">
                             or
-                            <a href="dashboard.jsp" class="btn btn-default"><spring:message code="cancel" text="cancel" /></a>
+                            <a href="${pageContext.request.contextPath}/Dashboard" class="btn btn-default"><spring:message code="cancel" text="cancel" /></a>
                         </div>
                     </form>
                 </div>

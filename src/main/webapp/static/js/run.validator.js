@@ -2,6 +2,12 @@
  * 
  */
 
+/*
+ * var strings = new Array();
+  strings['messages.view'] = "<spring:message code='messages.view' javaScriptEscape='true' />";
+  strings['messages.edit'] = "<spring:message code='messages.edit' javaScriptEscape='true' />";
+ */
+
 jQuery.validator.addMethod("regex", 
 	function(value, element, regexp) {
 		if (regexp.constructor != RegExp)

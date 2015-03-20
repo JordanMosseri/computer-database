@@ -4,18 +4,14 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.service.IComputerService;
 import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.util.Constantes;
+import com.excilys.computerdatabase.util.Utils;
 
 @Component
 public class View implements IView {
@@ -75,12 +71,12 @@ public class View implements IView {
 					computerDTO.setName(nomRecupered);
 				}
 				
-				String dateRecupered = this.getDateFromConsole("Please enter an added date formatted "+Constantes.FORMAT_DATE+" (leave empty to skip): ");
+				String dateRecupered = this.getDateFromConsole("Please enter an added date formatted "+Utils.getPatternOfCurrentLocale()+" (leave empty to skip): ");
 				if(dateRecupered != null){
 					computerDTO.setDateAdded(dateRecupered);
 				}
 				
-				String dateRemovedRecupered = this.getDateFromConsole("Please enter a removed date formatted "+Constantes.FORMAT_DATE+" (leave empty to skip): ");
+				String dateRemovedRecupered = this.getDateFromConsole("Please enter a removed date formatted "+Utils.getPatternOfCurrentLocale()+" (leave empty to skip): ");
 				if(dateRemovedRecupered != null){
 					computerDTO.setDateRemoved(dateRemovedRecupered);
 				}
@@ -161,8 +157,8 @@ public class View implements IView {
 	public  ComputerDTO getComputerDTOFromConsole(){
 		String nom = getStringFromConsole("Please enter a computer name: ");
 		String fab = getStringFromConsole("Please enter a company name: ");
-		String dateAddedEntered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
-		String dateRemovedEntered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Constantes.FORMAT_DATE+" (vide pour passer): ");
+		String dateAddedEntered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+Utils.getPatternOfCurrentLocale()+" (vide pour passer): ");
+		String dateRemovedEntered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Utils.getPatternOfCurrentLocale()+" (vide pour passer): ");
 		//Date d = new Date(System.currentTimeMillis());
 		this.println();
 		
@@ -183,7 +179,7 @@ public class View implements IView {
 			}
 			
 			//Check if the string entered is formatted like a date
-			ok = ComputerService.checkString(Constantes.REGEX_DATE, strRecuperee);
+			ok = Utils.isDate(strRecuperee);
 			
 			/*if(strRecuperee.contains("-")){
 				String[] temp = strRecuperee.split("-");

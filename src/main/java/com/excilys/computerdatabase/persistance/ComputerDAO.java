@@ -1,30 +1,20 @@
 package com.excilys.computerdatabase.persistance;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computerdatabase.mappers.DAOMapper;
-import com.excilys.computerdatabase.modele.Company;
+import atej_unused.DAOMapper;
+
+import com.excilys.computerdatabase.mappers.ComputerRowMapper;
 import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.util.Utils;
 
 import org.springframework.jdbc.core.support.*;
 
@@ -62,14 +52,14 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 		return (Computer) getJdbcTemplate().queryForObject(
 			QUERY_GET_ALL+"WHERE computer.id=?", new Object[] { idComputer }, 
 			//new BeanPropertyRowMapper(Computer.class)
-			new DAOMapper()
+			new ComputerRowMapper()
 		);
 	}
 	
 	@Override
 	public List<Computer> getAll(String endOfQuery){
 		
-		return getJdbcTemplate().query(QUERY_GET_ALL+endOfQuery, new DAOMapper());
+		return getJdbcTemplate().query(QUERY_GET_ALL+endOfQuery, new ComputerRowMapper());
 	}
 	
 	@Override
@@ -83,21 +73,12 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	
 	
 	
-	public Timestamp getTimestamp(LocalDateTime date){
-		if(date != null) {
-			return Timestamp.valueOf(date.withHour(0).withMinute(0).withSecond(0));
-		}
-		else {
-			return null;
-		}
-	}
-	
 	@Override
 	public boolean insert(Computer computer) {
 		
 		Integer computerId = computer.getCompany().getId() > -1 ? computer.getCompany().getId() : null;
 		
-		int res = getJdbcTemplate().update(QUERY_INSERT, new Object[] { computer.getName(), getTimestamp(computer.getDateAdded()), getTimestamp(computer.getDateRemoved()), computerId});
+		int res = getJdbcTemplate().update(QUERY_INSERT, new Object[] { computer.getName(), Utils.getTimestamp(computer.getDateAdded()), Utils.getTimestamp(computer.getDateRemoved()), computerId});
 		
 		if (res != 1){
 			return false;
@@ -112,7 +93,7 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	@Override
 	public boolean update(Computer computer){
 		
-		int res = getJdbcTemplate().update(QUERY_UPDATE, new Object[] { computer.getName(), getTimestamp(computer.getDateAdded()), getTimestamp(computer.getDateRemoved()), computer.getCompany().getId(), computer.getId()});
+		int res = getJdbcTemplate().update(QUERY_UPDATE, new Object[] { computer.getName(), Utils.getTimestamp(computer.getDateAdded()), Utils.getTimestamp(computer.getDateRemoved()), computer.getCompany().getId(), computer.getId()});
 		
 		if (res != 1){
 			return false;
@@ -140,7 +121,7 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	@Override
 	public boolean exists(int id){
 		
-		List<Computer> c = getJdbcTemplate().query(QUERY_EXISTS, new Object[] {id}, new DAOMapper());
+		List<Computer> c = getJdbcTemplate().query(QUERY_EXISTS, new Object[] {id}, new ComputerRowMapper());
 		
 		return c.size() >= 1;
 	}
@@ -164,7 +145,7 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	@Override
 	public List<Computer> getThoseFromCompany(int companyId){
 		
-		return getJdbcTemplate().query("SELECT * FROM computer WHERE company_id=?", new Object[] {companyId}, new DAOMapper());
+		return getJdbcTemplate().query("SELECT * FROM computer WHERE company_id=?", new Object[] {companyId}, new ComputerRowMapper());
 	}
 	
 	/*public List<Computer> search(String word){

@@ -1,24 +1,15 @@
 package com.excilys.computerdatabase.persistance;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.mappers.CompanyRowMapper;
-import com.excilys.computerdatabase.mappers.DAOMapper;
 import com.excilys.computerdatabase.modele.Company;
-import com.excilys.computerdatabase.modele.Computer;
 
 @Repository
 public class CompanyDAO extends JdbcDaoSupport implements ICompanyDAO {
@@ -41,11 +32,6 @@ public class CompanyDAO extends JdbcDaoSupport implements ICompanyDAO {
 	public List<Company> getAll(){
 		
 		return getJdbcTemplate().query(QUERY_GET_ALL, new CompanyRowMapper());
-		
-		/*while (rs.next()) {
-			Company fab = new Company(rs.getString("name"), rs.getInt("id"));
-			liste.add(fab);
-		}*/
 	}
 	
 	//NOT USED

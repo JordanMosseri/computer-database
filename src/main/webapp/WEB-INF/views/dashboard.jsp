@@ -88,8 +88,8 @@
 	                        <td>
 	                            <a href="${pageContext.request.contextPath}/EditComputer?id=${c.id}" onclick="">${c.name}</a>
 	                        </td>
-	                        <td>${c.dateAddedString}</td>
-	                        <td>${c.dateRemovedString}</td>
+	                        <td>${c.dateAdded}</td>
+	                        <td>${c.dateRemoved}</td>
 	                        <td>${c.companyName}</td>
 	
 	                    </tr>

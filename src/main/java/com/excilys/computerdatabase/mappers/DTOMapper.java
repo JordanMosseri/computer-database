@@ -7,31 +7,18 @@ import java.util.List;
 
 import com.excilys.computerdatabase.modele.*;
 import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.util.Constantes;
+import com.excilys.computerdatabase.util.Utils;
 
 public class DTOMapper {
 	
 	public static Computer convert(ComputerDTO c){
-		LocalDateTime dintroduced = ComputerService.parse(c.getDateAddedString());
-		LocalDateTime ddiscontinued = ComputerService.parse(c.getDateRemovedString());
 		
-		return new Computer(c.getId(), c.getName(), dintroduced, ddiscontinued, new Company(c.getCompanyName(), c.getCompanyId()));
+		return new Computer(c.getId(), c.getName(), Utils.convert(c.getDateAdded()), Utils.convert(c.getDateRemoved()), new Company(c.getCompanyName(), c.getCompanyId()));
 	}
 	
 	public static ComputerDTO convert(Computer c){
-		String stringDateAdded = "";
-		String stringDateRemoved = "";
 		
-		if (c.getDateAdded() != null) {
-			//stringDateAdded = Constantes.dateFormat.format(c.dateAdded);
-			stringDateAdded = c.getDateAdded().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE));
-		}
-		if (c.getDateRemoved() != null) {
-			//stringDateRemoved = Constantes.dateFormat.format(c.dateRemoved);
-			stringDateRemoved = c.getDateRemoved().format(DateTimeFormatter.ofPattern(Constantes.FORMAT_DATE));
-		}
-		
-		return new ComputerDTO(c.getId(), c.getName(), stringDateAdded, stringDateRemoved, c.getCompany());
+		return new ComputerDTO(c.getId(), c.getName(), Utils.convert(c.getDateAdded()), Utils.convert(c.getDateRemoved()), c.getCompany());
 	}
 	
 	public static List<ComputerDTO> convert(List<Computer> computers){

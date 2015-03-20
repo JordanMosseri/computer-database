@@ -13,12 +13,6 @@ public class Paging <T> implements Serializable {
 	
 	int pageSize;
 	
-	/*public Paging(int offset, int limit) {
-		Paging<Computer> p = ComputerDAO.getInstance().getAll(offset, limit);
-		this.offset = p.offset;
-		this.actualList = (List<T>) p.actualList;
-		this.
-	}*/
 	
 	public Paging() { }
 	
@@ -44,9 +38,6 @@ public class Paging <T> implements Serializable {
 				+ ", indexPage=" + indexPage + ", totalSize=" + totalSize + "]";
 	}
 
-	
-	
-	
 	
 	public List<T> getActualList() {
 		return actualList;

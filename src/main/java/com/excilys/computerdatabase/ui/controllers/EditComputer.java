@@ -1,17 +1,7 @@
 package com.excilys.computerdatabase.ui.controllers;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +14,6 @@ import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.service.IComputerService;
-import com.excilys.computerdatabase.service.ComputerService;
 
 @Controller
 public class EditComputer  {
@@ -68,9 +57,8 @@ public class EditComputer  {
 			){
 		
 		ComputerDTO cdto = new ComputerDTO(NumberUtils.toInt(idString), computerName, introduced, discontinued, new Company(NumberUtils.toInt(companyId)));
-		Computer c = DTOMapper.convert(cdto);
 		
-		boolean ok = computerService.updateComputer(c);
+		boolean ok = computerService.updateComputer(DTOMapper.convert(cdto));
 		
 		return "forward:/Dashboard";
 		

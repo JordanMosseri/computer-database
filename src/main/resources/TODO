@@ -1,17 +1,16 @@
 
 
-validation Spring
-i18n js / i18n dates / regarder sur hangout Locale
-Spring data JPA
-[test unitaires : fake DAO (Mockito)]
-nouvelle taglib
-externaliser properties : spring properties @value
-order by features
 
+Spring data JPA
+externaliser properties : spring properties @value
+[test unitaires : fake DAO (Mockito)]
+nouvelle taglib & pagination : attention aux dernieres pages
+order by features
+check tous les TODO, [chercher les new]
+validation Spring pour EditComputer ou bien fusionner JSPs add & edit
 
 
 tester differentes fonctionnalites
-pagination : attention aux dernieres pages
 voir ce que fait c:url
 github: finir README https://raw.githubusercontent.com/loicortola/spec-cdb/master/README.md
 ThreadLocal?
@@ -26,6 +25,8 @@ Javadoc
 
 comment tester que les donnees soient bien transmises d'un formulaire?
 
+(recup reponses 20mars)
+
 
 
 
@@ -37,8 +38,15 @@ commit :
 
 --------------------------------
 problemes resolus : 
-nommer colonnes lors des requetes
+
+jdbctemplate map error -> nommer colonnes lors des requetes
+
 web.xml : avoir un context-param pour root et un pour un servlet
+
+mettre hibernate-validator a la place de javax-validator
+enlever model.addAttribute("computerDTO", new ComputerDTO()); lors du retour en cas d'erreurs
+
+probleme transmission objet->controlleur et validation (variable null dans validator) : nom getter different du nom de la variable (meme si bon nom getter dans jsp)
 
 
 

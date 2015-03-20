@@ -2,7 +2,6 @@ package com.excilys.computerdatabase.service;
 
 import java.util.List;
 
-import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;

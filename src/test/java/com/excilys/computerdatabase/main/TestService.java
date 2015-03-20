@@ -10,10 +10,9 @@ import static org.junit.Assert.*;
 
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
-import com.excilys.computerdatabase.persistance.DAOUtils;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
 import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.util.Constantes;
+import com.excilys.computerdatabase.util.Utils;
 
 public class TestService {
 	
@@ -31,18 +30,18 @@ public class TestService {
 	
 	@Test
 	public void testCheckString(){
-		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "02"));
-		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "0"));
-		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "1"));
-		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, " "));
-		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, ""));
-		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "12"));
-		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "123"));
-		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, "12.3"));
-		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, "12a3"));
-		assertTrue(ComputerService.checkString(Constantes.REGEX_INTEGER, "-1"));
-		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, "-1.2"));
-		assertFalse(ComputerService.checkString(Constantes.REGEX_INTEGER, null));
+		assertTrue(Utils.checkString(Utils.REGEX_INTEGER, "02"));
+		assertTrue(Utils.checkString(Utils.REGEX_INTEGER, "0"));
+		assertTrue(Utils.checkString(Utils.REGEX_INTEGER, "1"));
+		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, " "));
+		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, ""));
+		assertTrue(Utils.checkString(Utils.REGEX_INTEGER, "12"));
+		assertTrue(Utils.checkString(Utils.REGEX_INTEGER, "123"));
+		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, "12.3"));
+		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, "12a3"));
+		assertTrue(Utils.checkString(Utils.REGEX_INTEGER, "-1"));
+		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, "-1.2"));
+		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, null));
 	}
 	
 	@Test
