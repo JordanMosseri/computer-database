@@ -2,9 +2,8 @@
 
 
 Spring data JPA
-externaliser properties : spring properties @value
 [test unitaires : fake DAO (Mockito)]
-nouvelle taglib & pagination : attention aux dernieres pages
+pagination : attention aux dernieres pages
 order by features
 check tous les TODO, [chercher les new]
 validation Spring pour EditComputer ou bien fusionner JSPs add & edit
@@ -47,6 +46,8 @@ mettre hibernate-validator a la place de javax-validator
 enlever model.addAttribute("computerDTO", new ComputerDTO()); lors du retour en cas d'erreurs
 
 probleme transmission objet->controlleur et validation (variable null dans validator) : nom getter different du nom de la variable (meme si bon nom getter dans jsp)
+
+d'un coup la requete ne trouve pas la bonne mapping : ne pas mettre le dossier webapp en tant que source
 
 
 

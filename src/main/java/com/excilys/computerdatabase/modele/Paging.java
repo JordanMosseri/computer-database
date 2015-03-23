@@ -6,12 +6,16 @@ import java.util.List;
 
 public class Paging <T> implements Serializable {
 	
-	public int offset;
-	public List<T> actualList;
-	public int indexPage;
-	public int totalSize;
+	private int offset;
+	private List<T> actualList;
+	private int indexPage;
 	
-	int pageSize;
+	/**
+	 * Total entries in db
+	 */
+	private int totalSize;
+	
+	private int pageSize;
 	
 	
 	public Paging() { }
@@ -53,6 +57,30 @@ public class Paging <T> implements Serializable {
 
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public int getIndexPage() {
+		return indexPage;
+	}
+
+	public int getTotalSize() {
+		return totalSize;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
+	public void setIndexPage(int indexPage) {
+		this.indexPage = indexPage;
+	}
+
+	public void setTotalSize(int totalSize) {
+		this.totalSize = totalSize;
 	}
 	
 	

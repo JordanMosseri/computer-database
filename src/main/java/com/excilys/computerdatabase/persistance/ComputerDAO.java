@@ -33,12 +33,6 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	final String QUERY_TOTAL = "SELECT count(*) FROM computer";
 	final String QUERY_DELETE_WITH_COMPANYID = "DELETE FROM computer WHERE company_id=?";
 	
-	/*private DataSource dataSource;
-	
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}*/
 	
 	@Autowired 
 	public ComputerDAO(DataSource dataSource) {

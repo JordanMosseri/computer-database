@@ -43,7 +43,6 @@ public class ComputerService implements IComputerService {
 		//Returns Paging object
 		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, computerDAO.getTotalCount());
 		
-		
 		return page;
 	}
 	

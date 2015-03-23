@@ -4,10 +4,10 @@
 <%@ page import="com.excilys.computerdatabase.modele.*"%>
 <%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ page import="com.excilys.computerdatabase.service.*"%>
-<%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
+<%-- <%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %> --%>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 
 
 
@@ -105,15 +105,8 @@
             <ul class="pagination">
             	
             	<%-- ${pageScope.request['paginationObject']} --%>
+            	
             	<mylib:pagination pagingObject="${requestScope.paginationObject}" />
-            	
-            		<%-- indexPage="<%= paging.indexPage %>" 
-            		offset="<%= paging.offset %>" 
-            		limit="<%= paging.getLimit() %>" 
-            		totalSize="<%= paging.totalSize %>" --%> 
-            		
-            	
-	            
 	        </ul>
 	
 	        <div class="btn-group btn-group-sm pull-right" role="group" >

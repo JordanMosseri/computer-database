@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.ui.tags;
+package atej_unused.tags;
 
 import java.io.IOException;
 import javax.servlet.jsp.JspException;
@@ -16,11 +16,6 @@ public class PaginationTag extends TagSupport {
 	Paging<ComputerDTO> pagingObject;
 	
 	
-	/*int indexPage;
-	int offset;
-	int limit;
-	int totalSize;*/
-	
 
 	@Override
 	public int doStartTag() throws JspException {
@@ -37,9 +32,9 @@ public class PaginationTag extends TagSupport {
 			}*/
 			
 			//Left arrow
-			if(pagingObject.indexPage>0) {
+			if(pagingObject.getIndexPage()>0) {
 				out.print("<li>");
-				out.print("	<a href=\"?offset=" + (pagingObject.offset-pagingObject.getLimit()) + "&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\" aria-label=\"Previous\">");
+				out.print("	<a href=\"?offset=" + (pagingObject.getOffset()-pagingObject.getLimit()) + "&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\" aria-label=\"Previous\">");
 				out.print("		<span aria-hidden=\"true\">&laquo;</span>");
 				out.print("	</a>");
 				out.print("</li>");
@@ -49,23 +44,23 @@ public class PaginationTag extends TagSupport {
 			String bold = "style=\"font-weight:bold;\"";
 			int numberOfPages = 1;
 			if(pagingObject.getLimit() != 0){
-				numberOfPages = pagingObject.totalSize/pagingObject.getLimit();
+				numberOfPages = pagingObject.getTotalSize()/pagingObject.getLimit();
 			}
-			for(int i=pagingObject.indexPage-2; i<pagingObject.indexPage+2+1; i++){
+			for(int i=pagingObject.getIndexPage()-2; i<pagingObject.getIndexPage()+2+1; i++){
 				if(i>=0 && i<numberOfPages) {
 					out.print("<li><a ");
-					if(i == pagingObject.indexPage){
+					if(i == pagingObject.getIndexPage()){
 						out.print(bold);
 					}
 					out.print(" href=\"?offset=" + (i*pagingObject.getLimit()) + "&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\">" + i + "</a></li>");
 				}
 			}
-			//<%-- <li><a href="#"><%= paging.indexPage %></a></li> --%>
+			//<%-- <li><a href="#"><%= paging.getIndexPage() %></a></li> --%>
 			
 			//Right arrow
-			if(pagingObject.indexPage<numberOfPages-1) {
+			if(pagingObject.getIndexPage()<numberOfPages-1) {
 				out.print("<li>");
-				out.print("	<a href=\"?offset="+ (pagingObject.offset+pagingObject.getLimit()) +"&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\" aria-label=\"Next\">");
+				out.print("	<a href=\"?offset="+ (pagingObject.getOffset()+pagingObject.getLimit()) +"&pageSize=" + pageContext.getRequest().getAttribute("pageSize") + "\" aria-label=\"Next\">");
 				out.print("		<span aria-hidden=\"true\">&raquo;</span>");
 				out.print("	</a>");
 				out.print("</li>");

@@ -3,7 +3,7 @@
 <%@ page import="com.excilys.computerdatabase.modele.*"%>
 <%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ page import="com.excilys.computerdatabase.service.*"%>
-<%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %>
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 

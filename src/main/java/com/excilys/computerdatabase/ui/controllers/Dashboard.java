@@ -14,8 +14,8 @@ import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.service.IComputerService;
 
 //@WebServlet(name="DashboardServlet", urlPatterns={"/Dashboard"})
-@Controller
 //@RequestMapping("/Dashboard")
+@Controller
 public class Dashboard {
 	
 	@Autowired
@@ -25,7 +25,7 @@ public class Dashboard {
 	public static final int DEFAULT_PAGE_SIZE = 15;
     
 
-	@RequestMapping(value = "/Dashboard", method = RequestMethod.GET)
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public ModelAndView printHello(//ModelMap model,
 			@RequestParam(value="offset", defaultValue="", required=false) final String offset,
 			@RequestParam(value="pageSize", defaultValue="", required=false) final String pageSizeParam,
@@ -60,7 +60,7 @@ public class Dashboard {
 		return model;
 	}
 	
-	@RequestMapping(value = "/Dashboard", method = RequestMethod.POST)
+	@RequestMapping(value = "/dashboard", method = RequestMethod.POST)
 	public ModelAndView doPost(ModelMap model) {
 		return printHello("","","","");
 	}

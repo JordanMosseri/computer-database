@@ -17,6 +17,11 @@ import org.springframework.stereotype.Component;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
+/**
+ * Provides static methods to get a connection object.
+ * @author excilys
+ *
+ */
 @Component
 public class DAOUtils {
 	public static boolean UNIT_TEST = false;
@@ -27,17 +32,11 @@ public class DAOUtils {
     private static final String PROPERTY_NOM_UTILISATEUR = "user";
     private static final String PROPERTY_MOT_DE_PASSE    = "pass";
 	
-	//
-	public static final String URL_DOMAIN = "jdbc:mysql://localhost:3306/";
-	public static final String URL_OPTIONS = "?zeroDateTimeBehavior=convertToNull";
-	
-	public static String DRIVER_NAME = "com.mysql.jdbc.Driver";
-	public static String URL = URL_DOMAIN + "computer-database-db" + URL_OPTIONS;
-	public static String URL_TEST = URL_DOMAIN + "computer-database-db-tests" + URL_OPTIONS;
-	public static String USER = "admincdb";//root
-	public static String PASS = "qwerty1234";//root
-	//
-	
+	public static String DRIVER_NAME;
+	public static String URL;
+	public static String URL_TEST;
+	public static String USER;
+	public static String PASS;
 	
 	static BoneCP connectionPool = null;
 	
@@ -109,6 +108,10 @@ public class DAOUtils {
 		createConnectionPool();
 	}
 	
+	/**
+	 * Public method called from outside. We choose here which private method (way of getting a connection) to call.
+	 * @return
+	 */
 	public static Connection getConnexion() {
         if(UNIT_TEST){
         	return getDriverManagerConnexion(true);
@@ -117,10 +120,6 @@ public class DAOUtils {
 		return getDataSourceConnexion();
 		//return getPoolConnexion();
 	}
-	
-	/*@Autowired
-	@Qualifier(value="dataSource")
-	DataSource dataSource;*/
 	
 	private static Connection getDataSourceConnexion() {
 		

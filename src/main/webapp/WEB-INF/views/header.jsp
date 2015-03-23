@@ -45,7 +45,7 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			
-			<a class="navbar-brand" href="${pageContext.request.contextPath}/Dashboard">
+			<a class="navbar-brand" href="${pageContext.request.contextPath}/dashboard">
 				<i class="fa fa-book fa-lg"></i>&nbsp;
 				<spring:message code="application.name" text="application.name" />
 			</a>

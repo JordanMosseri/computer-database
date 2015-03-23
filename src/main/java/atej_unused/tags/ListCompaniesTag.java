@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.ui.tags;
+package atej_unused.tags;
 
 import java.io.IOException;
 import java.util.List;
