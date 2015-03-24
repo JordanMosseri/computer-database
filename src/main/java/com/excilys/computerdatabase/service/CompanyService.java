@@ -22,7 +22,7 @@ public class CompanyService implements ICompanyService {
 	@Override
 	public List<Company> getCompanies(){
 		
-		return companyDAO.getAll();
+		return companyDAO.findAll();
 	}
 	
 	@Override

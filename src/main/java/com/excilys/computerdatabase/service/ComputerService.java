@@ -13,9 +13,11 @@ import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
+import com.excilys.computerdatabase.persistance.ComputerPaginationRep;
 import com.excilys.computerdatabase.persistance.ICompanyDAO;
 import com.excilys.computerdatabase.persistance.IComputerDAO;
 import com.excilys.computerdatabase.util.Utils;
+
 
 @Service
 public class ComputerService implements IComputerService {
@@ -31,7 +33,7 @@ public class ComputerService implements IComputerService {
 		
 		//System.out.println(""+(computerDAO==null)+" "+(cn==null));
 		
-		return computerDAO.getAll("");
+		return computerDAO.findAll("");
 	}
 	
 	@Override
@@ -39,9 +41,10 @@ public class ComputerService implements IComputerService {
 		
 		//Get part of computers
 		List<Computer> partOfComputers = computerDAO.getPart(offset, limit, word);
+		//List<Computer> partOfComputers = computerDAO.myQueryGetPart(word, offset, limit);
 		
 		//Returns Paging object
-		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, computerDAO.getTotalCount());
+		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, (int) computerDAO.count());
 		
 		return page;
 	}
@@ -49,7 +52,7 @@ public class ComputerService implements IComputerService {
 	@Override
 	public Computer getComputer(int id){
 		
-		return computerDAO.get(id);
+		return computerDAO.getOne(id);
 	}
 	
 	/**
@@ -82,7 +85,7 @@ public class ComputerService implements IComputerService {
 			comp.getCompany().setId(companyDAO.getIdIfNameExists(comp.getCompany().getName()));
 			
 			if(comp.getCompany().getId()<0){
-				comp.getCompany().setId(companyDAO.insert(comp.getCompany().getName()));
+				comp.getCompany().setId(companyDAO.save(comp.getCompany().getName()));
 			}
 		}
 		
@@ -94,20 +97,27 @@ public class ComputerService implements IComputerService {
 			throw new IllegalStateException("Inserting computer : companyId doesn't exists in database.");
 		}*/
 		
-		return computerDAO.insert(comp);
+		computerDAO.save(comp);
+		
+		return true;
 	}
 	
 	
 	@Override
 	public boolean updateComputer(Computer c){
 		
-		return computerDAO.update(c);
+		computerDAO.update(c);
+		//computerDAO.update(c.getName(), c.getDateAdded(), c.getDateRemoved(), c.getCompany().getId(), c.getId());
+		
+		return true;
 	}
 	
 	@Override
 	public boolean deleteComputer(int id){
 		
-		return computerDAO.delete(id);
+		computerDAO.delete(id);
+		
+		return true;
 	}
 	
 	@Override

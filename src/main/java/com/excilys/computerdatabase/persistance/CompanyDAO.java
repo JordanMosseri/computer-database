@@ -29,7 +29,7 @@ public class CompanyDAO extends JdbcDaoSupport implements ICompanyDAO {
 	
 	
 	@Override
-	public List<Company> getAll(){
+	public List<Company> findAll(){
 		
 		return getJdbcTemplate().query(QUERY_GET_ALL, new CompanyRowMapper());
 	}
@@ -57,7 +57,7 @@ public class CompanyDAO extends JdbcDaoSupport implements ICompanyDAO {
 	}*/
 	
 	@Override
-	public int insert(String nomFab){
+	public int save(String nomFab){
 		
 		getJdbcTemplate().update(QUERY_INSERT, new Object[] {nomFab});
 		

@@ -71,7 +71,7 @@ public class TestComputerDAO {
 	
 	@Test
 	public void testGet(){
-		Computer c = computerDAO.get(3);
+		Computer c = computerDAO.getOne(3);
 		
 		Assert.assertEquals("computer3", c.getName());
 		Assert.assertNull(c.getDateAdded());
@@ -102,7 +102,7 @@ public class TestComputerDAO {
 	
 	@Test
 	public void testGetAll(){
-		List<Computer> computers = computerDAO.getAll("");
+		List<Computer> computers = computerDAO.findAll("");
 		
 		Assert.assertEquals(COMPUTERS_COUNT, computers.size());
 		
@@ -130,11 +130,11 @@ public class TestComputerDAO {
 		
 		//insertion
 		Computer c = new Computer(-1, computerName, dateAdded, dateRemoved, new Company(companyId));
-		boolean result = computerDAO.insert(c);
+		boolean result = computerDAO.save(c);
 		Assert.assertTrue(result);
 		
 		//check if well added
-		List<Computer> l = computerDAO.getAll("");
+		List<Computer> l = computerDAO.findAll("");
 		Computer lastComputer = l.get(l.size() - 1);
 		
 		Assert.assertEquals(computerName, lastComputer.getName());
@@ -143,7 +143,7 @@ public class TestComputerDAO {
 		Assert.assertEquals(companyId, lastComputer.getCompany().getId());
 		
 		//check total count
-		int count = computerDAO.getTotalCount();
+		int count = computerDAO.count();
 		Assert.assertEquals(COMPUTERS_COUNT+1, count);
 	}
 	
@@ -167,11 +167,11 @@ public class TestComputerDAO {
 		
 		//insertion
 		Computer c = new Computer(-1, computerName, dateAdded, dateRemoved, new Company(companyId));
-		boolean result = computerDAO.insert(c);
+		boolean result = computerDAO.save(c);
 		Assert.assertFalse(result);
 		
 		//check if well added
-		List<Computer> l = computerDAO.getAll("");
+		List<Computer> l = computerDAO.findAll("");
 		Computer lastComputer = l.get(l.size() - 1);
 		
 		Assert.assertNotEquals(computerName, lastComputer.getName());
@@ -180,7 +180,7 @@ public class TestComputerDAO {
 		Assert.assertNotEquals(companyId, lastComputer.getCompany().getId());
 		
 		//check total count
-		int count = computerDAO.getTotalCount();
+		int count = computerDAO.count();
 		Assert.assertEquals(COMPUTERS_COUNT, count);
 	}
 	
@@ -217,7 +217,7 @@ public class TestComputerDAO {
 	@Test
 	//@Ignore
 	public void testTotal(){
-		Assert.assertEquals(COMPUTERS_COUNT, computerDAO.getTotalCount());
+		Assert.assertEquals(COMPUTERS_COUNT, computerDAO.count());
 	}
 	
 }

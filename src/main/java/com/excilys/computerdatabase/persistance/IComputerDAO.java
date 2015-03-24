@@ -6,9 +6,9 @@ import com.excilys.computerdatabase.modele.Computer;
 
 public interface IComputerDAO {
 
-	public abstract Computer get(int idComputer);
+	public abstract Computer getOne(int idComputer);
 
-	public abstract List<Computer> getAll(String endOfQuery);
+	public abstract List<Computer> findAll(String endOfQuery);
 
 	public abstract List<Computer> getPart(int offset, int limit, String word);
 
@@ -17,7 +17,7 @@ public interface IComputerDAO {
 	 * @param comp
 	 * @return
 	 */
-	public abstract boolean insert(Computer computer);
+	public abstract boolean save(Computer computer);
 
 	public abstract boolean update(Computer computer);
 
@@ -25,7 +25,7 @@ public interface IComputerDAO {
 
 	public abstract boolean exists(int id);
 
-	public abstract int getTotalCount();
+	public abstract int count();
 
 	public abstract boolean deleteThoseFromCompany(int companyId);
 

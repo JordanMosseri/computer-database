@@ -3,15 +3,36 @@ package com.excilys.computerdatabase.modele;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.*;
+import javax.persistence.*;
 
+
+@Entity
+@Table(name="computer")
+@NamedQueries({
+    //@NamedQuery(name = "Compte.findAll", query = "SELECT a FROM Compte a")
+})
 public class Computer implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4682196630919234988L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 	
+	@Column(name="name")
 	private String name;
 	
+	@Column(name="introduced")
 	private LocalDateTime dateAdded;
+	
+	@Column(name="discontinued")
 	private LocalDateTime dateRemoved;
+	
+	@OneToOne
 	private Company company;
 	
 	public Computer() { }

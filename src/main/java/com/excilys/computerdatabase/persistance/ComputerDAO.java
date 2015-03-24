@@ -10,7 +10,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import atej_unused.DAOMapper;
 
 import com.excilys.computerdatabase.mappers.ComputerRowMapper;
 import com.excilys.computerdatabase.modele.Computer;
@@ -41,7 +40,7 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	}
 	
 	@Override
-	public Computer get(int idComputer){
+	public Computer getOne(int idComputer){
 		
 		return (Computer) getJdbcTemplate().queryForObject(
 			QUERY_GET_ALL+"WHERE computer.id=?", new Object[] { idComputer }, 
@@ -51,24 +50,25 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	}
 	
 	@Override
-	public List<Computer> getAll(String endOfQuery){
+	public List<Computer> findAll(String endOfQuery){
 		
 		return getJdbcTemplate().query(QUERY_GET_ALL+endOfQuery, new ComputerRowMapper());
 	}
 	
 	@Override
 	public List<Computer> getPart(int offset, int limit, String word){
+		
 		String whereLike = " ";
 		if(word != null && !word.isEmpty()){
 			whereLike = " WHERE computer.name LIKE '%" + word + "%' || company.name LIKE '%" + word + "%'";
 		}
-		return getAll(whereLike + "LIMIT " + offset + ", "+limit);
+		return findAll(whereLike + "LIMIT " + offset + ", "+limit);
 	}
 	
 	
 	
 	@Override
-	public boolean insert(Computer computer) {
+	public boolean save(Computer computer) {
 		
 		Integer computerId = computer.getCompany().getId() > -1 ? computer.getCompany().getId() : null;
 		
@@ -121,7 +121,7 @@ public class ComputerDAO extends JdbcDaoSupport implements IComputerDAO {
 	}
 	
 	@Override
-	public int getTotalCount(){
+	public int count(){
 		
 		return getJdbcTemplate().queryForObject(QUERY_TOTAL, Integer.class);
 	}
