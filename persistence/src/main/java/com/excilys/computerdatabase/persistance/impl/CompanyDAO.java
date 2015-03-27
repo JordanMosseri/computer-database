@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistance;
+package com.excilys.computerdatabase.persistance.impl;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.mappers.CompanyRowMapper;
 import com.excilys.computerdatabase.modele.Company;
+import com.excilys.computerdatabase.persistance.ICompanyDAO;
 
 @Repository
 public class CompanyDAO extends JdbcDaoSupport implements ICompanyDAO {

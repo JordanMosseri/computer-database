@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistance;
+package com.excilys.computerdatabase.persistance.impl;
 
 
 import java.util.List;
@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
+
 import com.excilys.computerdatabase.mappers.ComputerRowMapper;
 import com.excilys.computerdatabase.modele.Computer;
+import com.excilys.computerdatabase.persistance.IComputerDAO;
 import com.excilys.computerdatabase.util.Utils;
 
 import org.springframework.jdbc.core.support.*;

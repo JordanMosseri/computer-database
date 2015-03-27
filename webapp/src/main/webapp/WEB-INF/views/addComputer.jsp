@@ -1,7 +1,3 @@
-<%@ page import="java.util.*"%>
-<%@ page import="com.excilys.computerdatabase.persistance.*"%>
-<%@ page import="com.excilys.computerdatabase.modele.*"%>
-<%@ page import="com.excilys.computerdatabase.util.*"%>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -89,7 +85,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="<spring:message code="add" text="add" />" class="btn btn-primary">
                             or
-                            <a href="${pageContext.request.contextPath}" class="btn btn-default"><spring:message code="cancel" text="cancel" /></a>
+                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-default"><spring:message code="cancel" text="cancel" /></a>
                         </div>
                         
                     </form:form>
@@ -108,7 +104,7 @@
     
 	<script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/static/js/jquery.validate.min.js" type="text/javascript"></script>
-    <!-- <script src="${pageContext.request.contextPath}/static/js/run.validator.js" type="text/javascript"></script> -->
+    <script src="${pageContext.request.contextPath}/static/js/run.validator.js" type="text/javascript"></script>
     
 </body>
 </html>

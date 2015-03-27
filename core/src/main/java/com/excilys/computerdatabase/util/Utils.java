@@ -16,39 +16,51 @@ public class Utils {
 	private static final String FORMAT_DATE_FR = "dd-MM-yyyy";
 	private static final String FORMAT_DATE_ES = "dd/MM/yyyy";
 	
-	//new SimpleDateFormat(Utils.FORMAT_DATE)//avant LocalDateTime
-	//public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
-	
-	//"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
 	public static final String REGEX_DATE_EN = "[0-9]{4}-[0-9]{2}-[0-9]{2}";
 	public static final String REGEX_DATE_FR = "[0-9]{2}-[0-9]{2}-[0-9]{4}";
 	public static final String REGEX_DATE_ES = "[0-9]{2}/[0-9]{2}/[0-9]{4}";
 	
 	public static final String REGEX_INTEGER = "[+-]?[0-9]++";
 	
-	public static boolean checkString(String motif, String chaine){
-		if(chaine == null){
+	/**
+	 * Checks if a string matches a given regex pattern.
+	 * @param stringPattern
+	 * @param stringToCheck
+	 * @return
+	 */
+	public static boolean checkString(String stringPattern, String stringToCheck){
+		if(stringToCheck == null){
 			return false;
 		}
-		Pattern pattern = Pattern.compile(motif);
-        Matcher matcher = pattern.matcher(chaine);
+		Pattern pattern = Pattern.compile(stringPattern);
+        Matcher matcher = pattern.matcher(stringToCheck);
         if(matcher.matches()) {
             return true;
         }
         return false;
 	}
 	
-	public static boolean isDate(String chaine){
-		return checkString(getRegexOfCurrentLocale(), chaine);
+	/**
+	 * Check if a given string represents a date,based on current locale.
+	 * @param stringToCheck
+	 * @return
+	 */
+	public static boolean isDate(String stringToCheck){
+		return checkString(getRegexOfCurrentLocale(), stringToCheck);
 	}
 	
+	/**
+	 * Gets a DateTimeFormatter object based on the current locale.
+	 * @return
+	 */
 	public static DateTimeFormatter getDateTimeFormatter() {
-		
 		return DateTimeFormatter.ofPattern(getPatternOfCurrentLocale(), LocaleContextHolder.getLocale());
-		
-		//return DateTimeFormatter.ISO_DATE;
 	}
 	
+	/**
+	 * Get the string pattern based on current locale.
+	 * @return
+	 */
 	public static String getPatternOfCurrentLocale(){
 		
 		Locale locale = LocaleContextHolder.getLocale();
@@ -62,10 +74,16 @@ public class Utils {
 		else if(locale.getLanguage().equalsIgnoreCase("es")) {
 			return FORMAT_DATE_ES;
 		}
-		//TODO default
-		return "";
+		/*
+		 * If no locale found
+		 */
+		return FORMAT_DATE_EN;
 	}
 	
+	/**
+	 * Get the string regex based on current locale.
+	 * @return
+	 */
 	public static String getRegexOfCurrentLocale(){
 		
 		Locale locale = LocaleContextHolder.getLocale();
@@ -79,29 +97,43 @@ public class Utils {
 		else if(locale.getLanguage().equalsIgnoreCase("es")) {
 			return REGEX_DATE_ES;
 		}
-		//TODO default
-		return "";
+		/*
+		 * If no locale found
+		 */
+		return REGEX_DATE_EN;
 	}
 	
+	/**
+	 * Converts a String to a LocalDateTime object.
+	 * @param strRecuperee
+	 * @return
+	 */
 	public static LocalDateTime convert(String strRecuperee){
 		
 		if(strRecuperee==null || !isDate(strRecuperee)) {
 			return null;
 		}
-		//TODO faire avec time dans pattern direct?
 		return LocalDate.parse(strRecuperee, getDateTimeFormatter()).atTime(0, 0);
 	}
 	
+	/**
+	 * Converts a LocalDateTime object to a String.
+	 * @param localDate
+	 * @return
+	 */
 	public static String convert(LocalDateTime localDate) {
 		
 		if (localDate != null) {
-			//Constantes.dateFormat.format(c.dateAdded);//avant LocalDateTime
-			//DateTimeFormatter.ofPattern(Utils.FORMAT_DATE)
 			return localDate.format( getDateTimeFormatter() );
 		}
 		return "";
 	}
 	
+	/**
+	 * Converts a LocalDateTime object to a java.sql.Timestamp object.
+	 * @param date
+	 * @return
+	 */
 	public static Timestamp getTimestamp(LocalDateTime date){
 		if(date != null) {
 			return Timestamp.valueOf(date.withHour(0).withMinute(0).withSecond(0));
@@ -111,6 +143,11 @@ public class Utils {
 		}
 	}
 	
+	/**
+	 * Converts a java.sql.Timestamp object to a LocalDateTime object.
+	 * @param timestamp
+	 * @return
+	 */
 	public static LocalDateTime getLocalDateTime(Timestamp timestamp) {
 		
 		if(timestamp != null) {

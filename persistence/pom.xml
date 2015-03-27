@@ -17,6 +17,7 @@
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>binding</artifactId>

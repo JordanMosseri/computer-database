@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<!-- computerdatabase_test_maven -->
-	
+
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>ComputerdatabaseMaven</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -11,7 +12,7 @@
 
 	<name>ComputerdatabaseMaven</name>
 	<url>http://127.0.0.1/</url>
-	
+
 	<modules>
 		<module>core</module>
 		<module>persistence</module>
@@ -20,231 +21,262 @@
 		<module>webapp</module>
 		<module>console</module>
 	</modules>
-	
+
 	<properties>
 		<parent.version>0.0.1-SNAPSHOT</parent.version>
-		
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<!-- Testing -->
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.9.5</mockito.version>
+
 		<!-- Database -->
 		<mysql.version>5.1.34</mysql.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
+
 		<!-- Logging -->
 		<slf4j.version>1.7.10</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j-log4j12.version>1.7.10</slf4j-log4j12.version>
+
 		<!-- Web -->
 		<servlet.jsp.jstl.version>1.2.1</servlet.jsp.jstl.version>
 		<taglibs.version>1.1.2</taglibs.version>
+		<jstl.version>1.2</jstl.version>
+
 		<!-- Others -->
 		<apache-commons-lang3.version>3.3.2</apache-commons-lang3.version>
+
 		<!-- Spring -->
 		<spring.version>4.1.5.RELEASE</spring.version>
+		<spring.security.version>3.2.6.RELEASE</spring.security.version>
+		
+		<hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
+		
+		<javax.persistence.api>1.0.2</javax.persistence.api>
+		
+		<maven.compiler.plugin.version>3.2</maven.compiler.plugin.version>
+		<maven.compiler.plugin.java.version>1.8</maven.compiler.plugin.java.version>
+
 	</properties>
-	<!-- <build> <finalName>ComputerdatabaseMaven</finalName> </build> -->
 
 	<build>
-		<finalName>ComputerdatabaseMaven</finalName>
+		<finalName>${artifactId}-${version}</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.2</version>
+					<version>${maven.compiler.plugin.version}</version>
 					<configuration>
 						<!-- <compilerVersion>1.5</compilerVersion> -->
-						<source>1.8</source>
-						<target>1.8</target>
+						<source>${maven.compiler.plugin.java.version}</source>
+						<target>${maven.compiler.plugin.java.version}</target>
 					</configuration>
 				</plugin>
-				
+
 			</plugins>
 		</pluginManagement>
 	</build>
+	
+	<!-- Used by all submodules -->
+
+	<dependencies>
+
+		<!-- Logging -->
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j-log4j12.version}</version>
+		</dependency>
+
+		<!-- Testing -->
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
-			
-			<!-- Testing -->
-			
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
-				<version>${mockito.version}</version>
-				<scope>test</scope>
-			</dependency>
-			
-			<!-- Logging -->
-	
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-	
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-	
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j-log4j12.version}</version>
-			</dependency>
-			
-			<!-- Others -->
-			
+
+			<!-- For Utils classes -->
+
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>${apache-commons-lang3.version}</version>
 			</dependency>
-			
+
 			<!-- Spring -->
-		
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-	
+
+			<!-- Uses spring-core -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-			
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			
-			
-					
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-tx</artifactId>
-				<version>4.1.5.RELEASE</version>
+				<version>${spring.version}</version>
 			</dependency>
-			
-			
-			
-			
-			
-			
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aspects</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
 			<!-- Web -->
-		
+
 			<dependency>
 				<groupId>javax.servlet.jsp.jstl</groupId>
 				<artifactId>javax.servlet.jsp.jstl-api</artifactId>
 				<version>${servlet.jsp.jstl.version}</version>
+				<!-- <scope>provided</scope> -->
 			</dependency>
-	
+
 			<dependency>
 				<groupId>taglibs</groupId>
 				<artifactId>standard</artifactId>
 				<scope>provided</scope>
 				<version>${taglibs.version}</version>
 			</dependency>
-			
-			<!-- Spring web -->
-			
+
+			<dependency>
+				<groupId>jstl</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl.version}</version>
+				<!-- <scope>provided</scope> -->
+			</dependency>
+
+			<!-- Spring web/MVC -->
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-		
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-			
-			<!-- <dependency>
-				<groupId>javax.validation</groupId>
-				<artifactId>validation-api</artifactId>
-				<version>1.0.0.GA</version>
-			</dependency> -->
-			
+
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
-				<version>5.1.3.Final</version>
+				<version>${hibernate.validator.version}</version>
 			</dependency>
-			
-			<!-- Database -->
-	
+
+			<!-- Database driver -->
+
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql.version}</version>
 			</dependency>
-			
+
+			<!-- For a connection pool -->
+
 			<dependency>
 				<groupId>com.jolbox</groupId>
 				<artifactId>bonecp</artifactId>
 				<version>${bonecp.version}</version>
 			</dependency>
-			
+
+			<!-- For JDBCTemplate -->
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-			
+
 			<!-- Spring data JPA -->
-			
+
 			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
 				<version>1.7.2.RELEASE</version>
 			</dependency>
-			
-			<!-- <dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-orm</artifactId>
-				<version>4.1.5.RELEASE</version>
-			</dependency>
-					
-			<dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-framework-bom</artifactId>
-	            <version>${spring.version}</version>
-	            <type>pom</type>
-	            <scope>import</scope>
-	        </dependency>
-			
-			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>persistence-api</artifactId>
-				<version>1.0.2</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-core</artifactId>
-				<version>4.3.8.Final</version>
-			</dependency> -->
-			
+
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>4.3.8.Final</version>
 			</dependency>
+
+			<!-- Spring Security -->
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
 			
+			<!-- Used in core -->
+
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>persistence-api</artifactId>
+				<version>${javax.persistence.api}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

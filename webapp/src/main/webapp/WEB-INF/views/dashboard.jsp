@@ -1,19 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="java.util.*"%>
-<%@ page import="com.excilys.computerdatabase.persistance.*"%>
-<%@ page import="com.excilys.computerdatabase.modele.*"%>
-<%@ page import="com.excilys.computerdatabase.util.*"%>
-<%@ page import="com.excilys.computerdatabase.service.*"%>
-<%-- <%@ taglib uri="/WEB-INF/mylib.tld" prefix="mylib" %> --%>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@page session="true"%>
 
 
 
 	<%-- <mylib:initDashboard /> --%>
 
-    <jsp:include page="header.jsp"></jsp:include>
+    <jsp:include page="header.jsp" />
     
     <%-- Current Locale : ${pageContext.response.locale}<br/> --%>
 	
@@ -34,7 +29,7 @@
                 </div>
                 <div class="pull-right">
 	                <!-- static/views/addComputer.jsp -->
-                    <a class="btn btn-success" id="addComputer" href="${pageContext.request.contextPath}/Add"><spring:message code="add.computer" text="add.computer" /></a> 
+                    <a class="btn btn-success" id="addComputer" href="${pageContext.request.contextPath}/add"><spring:message code="add.computer" text="add.computer" /></a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="edit" text="edit" /></a>
                 </div>
             </div>
@@ -86,7 +81,7 @@
 	                            <input type="checkbox" name="cb" class="cb" value="${c.id}">
 	                        </td>
 	                        <td>
-	                            <a href="${pageContext.request.contextPath}/EditComputer?id=${c.id}" onclick="">${c.name}</a>
+	                            <a href="${pageContext.request.contextPath}/editComputer?id=${c.id}" onclick="">${c.name}</a>
 	                        </td>
 	                        <td>${c.dateAdded}</td>
 	                        <td>${c.dateRemoved}</td>
@@ -118,6 +113,7 @@
 	            <a href="?pageSize=100" type="button" class="btn btn-default">100</a>
 	        </div>
 		</div>
+		
     </footer>
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>

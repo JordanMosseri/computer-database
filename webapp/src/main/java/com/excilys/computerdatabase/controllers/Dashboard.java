@@ -13,6 +13,11 @@ import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.service.IComputerService;
 
+/**
+ * Controller for the list page.
+ * @author excilys
+ *
+ */
 @Controller
 public class Dashboard {
 	
@@ -21,10 +26,16 @@ public class Dashboard {
 	
 	
 	public static final int DEFAULT_PAGE_SIZE = 15;
-    
+	
+	
+	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
+	public String welcomePage(ModelMap model) {
+		return "hello";
+	}
+	
 
-	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public ModelAndView printHello(
+	@RequestMapping(value = "/dashboard**")
+	public ModelAndView dashboard(
 			@RequestParam(value="offset", defaultValue="", required=false) final String offset,
 			@RequestParam(value="pageSize", defaultValue="", required=false) final String pageSizeParam,
 			@RequestParam(value="search", defaultValue="", required=false) final String searchParam,
@@ -56,11 +67,6 @@ public class Dashboard {
 	    
 	    
 		return model;
-	}
-	
-	@RequestMapping(value = "/dashboard", method = RequestMethod.POST)
-	public ModelAndView doPost(ModelMap model) {
-		return printHello("","","","");
 	}
 	
 	

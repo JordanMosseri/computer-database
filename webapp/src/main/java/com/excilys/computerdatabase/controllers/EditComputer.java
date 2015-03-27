@@ -14,6 +14,11 @@ import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.service.IComputerService;
 
+/**
+ * Controller for the edit functionality. 
+ * @author excilys
+ *
+ */
 @Controller
 public class EditComputer  {
 	
@@ -23,7 +28,7 @@ public class EditComputer  {
 	@Autowired
 	ICompanyService companyService;
 	
-	@RequestMapping(value = "/EditComputer", method = RequestMethod.GET)
+	@RequestMapping(value = "/editComputer**", method = RequestMethod.GET)
 	public String endPoint(ModelMap model,
 			@RequestParam(value="id", defaultValue="", required=false) final String idParam
 			){

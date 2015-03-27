@@ -17,6 +17,7 @@
 	</properties>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>service</artifactId>
@@ -28,11 +29,6 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-		</dependency>
-
 	</dependencies>
 
 

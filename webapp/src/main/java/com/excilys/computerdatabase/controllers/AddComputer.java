@@ -19,6 +19,11 @@ import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.service.IComputerService;
 import com.excilys.computerdatabase.util.Utils;
 
+/**
+ * Controller for the add functionality. 
+ * @author excilys
+ *
+ */
 @Controller
 public class AddComputer {
 	
@@ -28,7 +33,12 @@ public class AddComputer {
 	@Autowired
 	ICompanyService companyService;
 	
-	public void prepareModel(ModelMap model, boolean atEndpoint){
+	/**
+	 * Inject attributes into the ModelMap object.
+	 * @param model
+	 * @param atEndpoint
+	 */
+	private void prepareModel(ModelMap model, boolean atEndpoint){
 		
 		//TODO passer par les proprietes?
 		model.addAttribute("formatString", Utils.getPatternOfCurrentLocale());
@@ -51,17 +61,12 @@ public class AddComputer {
 		model.addAttribute("companyList", country);
 	}
 	
-	@RequestMapping(value = "/Add", method = RequestMethod.GET)
+	@RequestMapping(value = "/add**")
 	public String endPoint(ModelMap model){
 		
 		prepareModel(model, true);
 		
 		return "addComputer";
-	}
-	
-	@RequestMapping(value = "/Add", method = RequestMethod.POST)
-	public String endPointPOST(ModelMap model){
-		return endPoint(model);
 	}
 	
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
@@ -76,7 +81,7 @@ public class AddComputer {
 		else {
 			boolean ok = computerService.addComputer(DTOMapper.convert(computerDTO));
 			
-			return "forward:/Dashboard";
+			return "forward:/dashboard";
 		}
 	}
 	

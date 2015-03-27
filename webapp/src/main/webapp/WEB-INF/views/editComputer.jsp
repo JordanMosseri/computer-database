@@ -1,8 +1,3 @@
-<%-- <%@ page import="java.util.*"%>
-<%@ page import="com.excilys.computerdatabase.persistance.*"%>
-<%@ page import="com.excilys.computerdatabase.modele.*"%>
-<%@ page import="com.excilys.computerdatabase.util.*"%>
-<%@ page import="com.excilys.computerdatabase.service.*"%> --%>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
@@ -52,7 +47,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="<spring:message code="edit" text="edit" />" class="btn btn-primary">
                             or
-                            <a href="${pageContext.request.contextPath}" class="btn btn-default"><spring:message code="cancel" text="cancel" /></a>
+                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-default"><spring:message code="cancel" text="cancel" /></a>
                         </div>
                     </form>
                 </div>

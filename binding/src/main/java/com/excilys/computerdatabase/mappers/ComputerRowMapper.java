@@ -13,11 +13,15 @@ public class ComputerRowMapper implements RowMapper<Computer> {
 	@Override
 	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
-		Company company;
+		Company company = null;
 		
-		//if (rs.getString("company.name") != null) {
+		
+		try {
 			company = (new Company(rs.getString("company.name"), rs.getInt("company.id")));
-		//}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return new Computer(rs.getInt("id"), rs.getString("name"), Utils.getLocalDateTime(rs.getTimestamp("introduced")), Utils.getLocalDateTime(rs.getTimestamp("discontinued")), company);
 	}

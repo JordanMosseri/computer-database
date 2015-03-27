@@ -27,3 +27,18 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+
+/* Custom style for this app */
+
+.navbar-inverse {
+	background: #383838;//#888
+}
+.navbar-inverse .navbar-brand, .fa-book{
+	color: #ccc;//#F2F2F2 
+}
+.navbar-brand{
+	font-variant: small-caps;
+}
+
+

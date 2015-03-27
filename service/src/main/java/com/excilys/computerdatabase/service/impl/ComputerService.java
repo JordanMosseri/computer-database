@@ -1,5 +1,6 @@
-package com.excilys.computerdatabase.service;
+package com.excilys.computerdatabase.service.impl;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.persistance.ICompanyDAO;
 import com.excilys.computerdatabase.persistance.IComputerDAO;
+import com.excilys.computerdatabase.service.IComputerService;
 
 
 @Service
