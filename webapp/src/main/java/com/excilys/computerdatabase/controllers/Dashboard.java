@@ -15,7 +15,7 @@ import com.excilys.computerdatabase.service.IComputerService;
 
 /**
  * Controller for the list page.
- * @author excilys
+ * @author Jordan Mosseri
  *
  */
 @Controller

@@ -16,7 +16,7 @@ import com.excilys.computerdatabase.service.IComputerService;
 
 /**
  * Controller for the edit functionality. 
- * @author excilys
+ * @author Jordan Mosseri
  *
  */
 @Controller

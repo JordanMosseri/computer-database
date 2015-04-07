@@ -19,7 +19,7 @@ import com.jolbox.bonecp.BoneCPConfig;
 
 /**
  * Provides static methods to get a connection object.
- * @author excilys
+ * @author Jordan Mosseri
  *
  */
 public class DAOUtils {

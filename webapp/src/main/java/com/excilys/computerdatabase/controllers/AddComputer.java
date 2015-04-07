@@ -21,7 +21,7 @@ import com.excilys.computerdatabase.util.Utils;
 
 /**
  * Controller for the add functionality. 
- * @author excilys
+ * @author Jordan Mosseri
  *
  */
 @Controller
