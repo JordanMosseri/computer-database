@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistance.impl;
+package com.excilys.computerdatabase.persistence.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,11 +14,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computerdatabase.mappers.ComputerRowMapper;
-import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.User;
 import com.excilys.computerdatabase.modele.UserRole;
-import com.excilys.computerdatabase.persistance.IUserDao;
+import com.excilys.computerdatabase.persistence.IUserDao;
 
 @Repository
 public class UserDao extends JdbcDaoSupport implements IUserDao {

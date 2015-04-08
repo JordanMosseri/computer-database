@@ -1,38 +1,55 @@
 package com.excilys.computerdatabase.service.impl;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+//import javax.transaction.Transactional;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
-import com.excilys.computerdatabase.persistance.ICompanyDAO;
-import com.excilys.computerdatabase.persistance.IComputerDAO;
+import com.excilys.computerdatabase.persistence.CompanyPaginationRep;
+import com.excilys.computerdatabase.persistence.ComputerPaginationRep;
 import com.excilys.computerdatabase.service.IComputerService;
 
 
 @Service
+@Transactional(readOnly = true)
 public class ComputerService implements IComputerService {
 	
 	@Autowired
-	IComputerDAO computerDAO;
+	ComputerPaginationRep computerDAO;
 	
 	@Autowired
-	ICompanyDAO companyDAO;
+	CompanyPaginationRep companyDAO;
 	
 	@Override
 	public List<Computer> getComputers(){
-		return computerDAO.findAll("");
+		
+		return computerDAO.findAll();
 	}
 	
 	@Override
 	public Paging<ComputerDTO> getComputers(int offset, int limit, String word){
 		
 		//Get part of computers
-		List<Computer> partOfComputers = computerDAO.getPart(offset, limit, word);
-		//List<Computer> partOfComputers = computerDAO.myQueryGetPart(word, offset, limit);
+		List<Computer> partOfComputers = null;
+		//TODO retourne 0, voir le &&, voir si cest pas mieux dutiliser Page fourni
+		if(word != null && !word.isEmpty()) {
+			partOfComputers = computerDAO.findByNameLike(word, new PageRequest(offset/limit, limit)).getContent();
+		}
+		else {
+			partOfComputers = computerDAO.findAll(new PageRequest(offset/limit, limit)).getContent();
+		}
+		
 		
 		//Returns Paging object
 		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, (int) computerDAO.count());
@@ -43,7 +60,7 @@ public class ComputerService implements IComputerService {
 	@Override
 	public Computer getComputer(int id){
 		
-		return computerDAO.getOne(id);
+		return computerDAO.findOne(id);
 	}
 	
 	/**
@@ -69,8 +86,9 @@ public class ComputerService implements IComputerService {
 			}
 		}
 		
+		//TODO
 		//Company Name is provided
-		else if( computer.getCompany().getName() != null && !computer.getCompany().getName().trim().isEmpty() ) {
+		/*else if( computer.getCompany().getName() != null && !computer.getCompany().getName().trim().isEmpty() ) {
 			
 			//Company Name exists in db
 			computer.getCompany().setId(companyDAO.getIdIfNameExists(computer.getCompany().getName()));
@@ -78,7 +96,7 @@ public class ComputerService implements IComputerService {
 			if(computer.getCompany().getId()<0){
 				computer.getCompany().setId(companyDAO.save(computer.getCompany().getName()));
 			}
-		}
+		}*/
 		
 		//Else companyId < 0 and companyName not entered
 		
@@ -91,12 +109,13 @@ public class ComputerService implements IComputerService {
 		return true;
 	}
 	
+	@PersistenceContext private EntityManager em;
 	
 	@Override
+	@Transactional
 	public boolean updateComputer(Computer c){
-		
-		computerDAO.update(c);
-		//computerDAO.update(c.getName(), c.getDateAdded(), c.getDateRemoved(), c.getCompany().getId(), c.getId());
+
+		computerDAO.save(c);
 		
 		return true;
 	}

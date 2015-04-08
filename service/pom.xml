@@ -12,10 +12,6 @@
 	<name>service</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
-
-	</properties>
-
 	<dependencies>
 	
 		<dependency>
@@ -35,7 +31,5 @@
 		</dependency>
 
 	</dependencies>
-
-
 
 </project>

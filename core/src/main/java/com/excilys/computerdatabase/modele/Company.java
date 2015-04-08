@@ -15,13 +15,13 @@ public class Company implements Serializable {
 	
 	private static final long serialVersionUID = 2736843274120613787L;
 
-	@Column(name="name")
-	private String name=null;
-	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private int id=-1;
+	
+	@Column(name="name")
+	private String name=null;
 	
 	public Company() { }
 
@@ -46,7 +46,7 @@ public class Company implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.name;
+		return this.id + "-" + this.name;
 	}
 	
 	

@@ -12,7 +12,7 @@ public class Computer implements Serializable {
 	private static final long serialVersionUID = 4682196630919234988L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private int id;
 	
@@ -20,15 +20,17 @@ public class Computer implements Serializable {
 	private String name;
 	
 	@Column(name="introduced")
+	@Convert(converter = LocalDatePersistenceConverter.class)
 	private LocalDateTime dateAdded;
 	
 	@Column(name="discontinued")
+	@Convert(converter = LocalDatePersistenceConverter.class)
 	private LocalDateTime dateRemoved;
 	
-	@OneToOne
+	@ManyToOne(optional=true)//, fetch = FetchType.EAGER//@JoinColumn(name="company.id")
 	private Company company;
 	
-	public Computer() { }
+	protected Computer() { }
 	
 
 	public Computer(int pid, String pname, LocalDateTime pdateAdded, LocalDateTime pdateRemoved, Company pcompany) {
@@ -44,8 +46,8 @@ public class Computer implements Serializable {
 	@Override
 	public String toString() {
 		String nameToShow = name.length()>=30 ? name.substring(0, 30) : String.format("%30s", name);
-		return "\nComputer " + nameToShow + "\t added " + dateAdded
-				+ "\t company " + company + "";
+		return "\n" + id + "-" + nameToShow + "\t added " + dateAdded + "\t removed " + dateRemoved
+				+ "\t company " + company.toString();
 	}
 	
 	@Override

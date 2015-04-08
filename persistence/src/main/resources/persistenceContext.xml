@@ -33,53 +33,50 @@
 	</bean>
 	
 	
-    
-    <!-- Hibernate session factory -->
-	<!-- <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-	 
-	    <property name="dataSource">
-	      <ref bean="dataSource"/>
-	    </property>
-	 
-	    <property name="hibernateProperties">
-	       <props>
-	         <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-	         <prop key="hibernate.show_sql">true</prop>
-	         <prop key="hibernate.hbm2ddl.auto">update</prop>
-	       </props>
-	    </property>
-	    
-	    <property name="packagesToScan" value="com.excilys.computerdatabase.modele" />
-	 
-	    comm:<property name="annotatedClasses">
+	<!-- JPA config -->
+	
+	<jpa:repositories base-package="com.excilys.computerdatabase.persistance" entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
+	
+	<bean id="sessionFactory"
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <!-- <prop key="hibernate.show_sql">true</prop> -->
+            </props>
+        </property>
+        <!-- <property name="packagesToScan" value="com.excilys.computerdatabase.modele" /> -->
+        <!-- <property name="annotatedClasses">
 			<list>
 				<value>com.excilys.computerdatabase.modele.ComputerPaginationRep</value>
 			</list>
-	    </property>:fin comm
-	    
- 
+	    </property> -->
     </bean>
-    
-    <jpa:repositories base-package="com.excilys.computerdatabase.persistance" entity-manager-factory-ref="emf" />
-    
-    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-	    <property name="packagesToScan" value="com.excilys.computerdatabase" />
-	    <property name="dataSource" ref="dataSource" />
-	
-	    <property name="jpaProperties">
+
+    <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="showSql" value="true"/>
+        <property name="generateDdl" value="true"/>
+        <property name="database" value="MYSQL"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+        <property name="packagesToScan" value="com.excilys.computerdatabase.modele"/>
+        
+        <property name="jpaProperties">
 	        <props>
 	            <prop key="hibernate.show_sql">true</prop>
-	            commentaire:<prop key="hibernate.hbm2ddl.auto">create</prop>
+	            <!-- <prop key="hibernate.hbm2ddl.auto">create</prop> -->
 	            <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 	        </props>
 	    </property>
 	
-	    <property name="persistenceProvider">
+	    <!--<property name="persistenceProvider">
 	        <bean class="org.hibernate.jpa.HibernatePersistenceProvider"></bean>
-	    </property>
-	</bean>
-    
-     -->
-    
- 
+	    </property>-->
+    </bean>
+	
 </beans>

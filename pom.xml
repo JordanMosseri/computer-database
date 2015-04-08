@@ -3,8 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- computerdatabase_test_maven -->
-
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>ComputerdatabaseMaven</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -248,7 +246,7 @@
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>4.3.8.Final</version>
 			</dependency>
-
+			
 			<!-- Spring Security -->
 
 			<dependency>
@@ -269,14 +267,6 @@
 				<version>${spring.security.version}</version>
 			</dependency>
 			
-			<!-- Used in core -->
-
-			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>persistence-api</artifactId>
-				<version>${javax.persistence.api}</version>
-			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 

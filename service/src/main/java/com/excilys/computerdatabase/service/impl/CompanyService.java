@@ -7,18 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.modele.Company;
-import com.excilys.computerdatabase.persistance.ICompanyDAO;
-import com.excilys.computerdatabase.persistance.IComputerDAO;
+import com.excilys.computerdatabase.persistence.CompanyPaginationRep;
+import com.excilys.computerdatabase.persistence.ComputerPaginationRep;
 import com.excilys.computerdatabase.service.ICompanyService;
 
 @Service
 public class CompanyService implements ICompanyService {
 	
 	@Autowired
-	IComputerDAO computerDAO;
+	ComputerPaginationRep computerDAO;
 	
 	@Autowired
-	ICompanyDAO companyDAO;
+	CompanyPaginationRep companyDAO;
 	
 	@Override
 	public List<Company> getCompanies(){
@@ -31,12 +31,13 @@ public class CompanyService implements ICompanyService {
 	public boolean deleteCompany(int id){
 		
 		//Delete computers linked to the company first (avoid exception due to constraint key)
-		boolean ok1 = computerDAO.deleteThoseFromCompany(id);
+		/*boolean ok1 = computerDAO.deleteThoseFromCompany(id);
 		
 		//Delete company
 		boolean ok2 = companyDAO.delete(id);
 		
-		return ok1 && ok2;
+		return ok1 && ok2;*/
+		return false;
 	}
 	
 }

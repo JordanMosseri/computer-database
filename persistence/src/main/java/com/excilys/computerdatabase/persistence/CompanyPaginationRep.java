@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistance;
+package com.excilys.computerdatabase.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.modele;
 import org.hibernate.validator.constraints.NotEmpty;
 //import org.springframework.format.annotation.DateTimeFormat;
 
+
 import com.excilys.computerdatabase.validator.MyDate;
 
 public class ComputerDTO {
@@ -34,8 +35,17 @@ public class ComputerDTO {
 		this.name = name;
 		this.dateAdded = dateAdded;
 		this.dateRemoved = dateRemoved;
-		this.companyName = company.getName();
-		this.companyId = company.getId();
+		if(company != null){
+			this.companyName = company.getName();
+			this.companyId = company.getId();
+		}
+	}
+	
+	@Override
+	public String toString() {
+		String nameToShow = name.length()>=30 ? name.substring(0, 30) : String.format("%30s", name);
+		return "\n" + id + "-" + nameToShow + "\t added " + dateAdded + "\t removed " + dateRemoved
+				+ "\t company " + companyId + "-" + companyName;
 	}
 	
 	

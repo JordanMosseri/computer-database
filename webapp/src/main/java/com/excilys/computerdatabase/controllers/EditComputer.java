@@ -64,7 +64,7 @@ public class EditComputer  {
 		
 		boolean ok = computerService.updateComputer(DTOMapper.convert(cdto));
 		
-		return "forward:/Dashboard";
+		return "forward:/dashboard";
 		
 	}
 
