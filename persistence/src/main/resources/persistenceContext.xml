@@ -17,7 +17,7 @@
         
  	
  	<context:annotation-config/>
-	<context:component-scan base-package="com.excilys.computerdatabase.persistance"/>
+	<context:component-scan base-package="com.excilys.computerdatabase.persistence"/>
 	
 	
     <!-- To use a property file -->
@@ -35,7 +35,7 @@
 	
 	<!-- JPA config -->
 	
-	<jpa:repositories base-package="com.excilys.computerdatabase.persistance" entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
+	<jpa:repositories base-package="com.excilys.computerdatabase.persistence" entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
 	
 	<bean id="sessionFactory"
         class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">

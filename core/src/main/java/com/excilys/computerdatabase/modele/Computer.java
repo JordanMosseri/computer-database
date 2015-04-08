@@ -47,7 +47,7 @@ public class Computer implements Serializable {
 	public String toString() {
 		String nameToShow = name.length()>=30 ? name.substring(0, 30) : String.format("%30s", name);
 		return "\n" + id + "-" + nameToShow + "\t added " + dateAdded + "\t removed " + dateRemoved
-				+ "\t company " + company.toString();
+				+ "\t company " + (company != null ? company.toString() : "null");
 	}
 	
 	@Override
