@@ -78,5 +78,6 @@
 	        <bean class="org.hibernate.jpa.HibernatePersistenceProvider"></bean>
 	    </property>-->
     </bean>
-	
+    
+    
 </beans>

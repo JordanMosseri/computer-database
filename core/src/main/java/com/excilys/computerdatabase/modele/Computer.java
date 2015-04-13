@@ -2,35 +2,24 @@ package com.excilys.computerdatabase.modele;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import javax.persistence.*;
 
 
 @Entity
 @Table(name="computer")
+//TODO contraintes etc
 public class Computer implements Serializable {
 	
 	private static final long serialVersionUID = 4682196630919234988L;
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
 	private int id;
-	
-	@Column(name="name")
 	private String name;
-	
-	@Column(name="introduced")
-	@Convert(converter = LocalDatePersistenceConverter.class)
 	private LocalDateTime dateAdded;
-	
-	@Column(name="discontinued")
-	@Convert(converter = LocalDatePersistenceConverter.class)
 	private LocalDateTime dateRemoved;
-	
-	@ManyToOne(optional=true)//, fetch = FetchType.EAGER//@JoinColumn(name="company.id")
 	private Company company;
 	
-	protected Computer() { }
+	public Computer() { }
 	
 
 	public Computer(int pid, String pname, LocalDateTime pdateAdded, LocalDateTime pdateRemoved, Company pcompany) {
@@ -50,28 +39,56 @@ public class Computer implements Serializable {
 				+ "\t company " + (company != null ? company.toString() : "null");
 	}
 	
+	/**
+	 * Doesn't check computer id and company object.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		
-		// Vérification de l'égalité des références
+		//Check references
         if (obj==this) {
             return true;
         }
  
-        // Vérification du type du paramètre
+        //Check typeof obj
         if (obj instanceof Computer) {
-            // Vérification des valeurs des attributs
+        	
+            //Check members
         	Computer other = (Computer) obj;
  
-            //compare les references
+            //If not the same object
             if (this.name != other.name) {
-                //compare avec equals
+                //Check with equals
                 if (this.name == null || !this.name.equals(other.name)) {
                     return false; 
                 }
             }
  
-            // Si on arrive ici c'est que tous les attributs sont égaux :
+            //If not the same object
+            if (this.dateAdded != other.dateAdded) {
+                //Check with equals
+                if (this.dateAdded == null || !this.dateAdded.equals(other.dateAdded)) {
+                    return false; 
+                }
+            }
+ 
+            //If not the same object
+            if (this.dateRemoved != other.dateRemoved) {
+                //Check with equals
+                if (this.dateRemoved == null || !this.dateRemoved.equals(other.dateRemoved)) {
+                    return false; 
+                }
+            }
+ 
+            //If not the same object
+            /*if (this.company != other.company) {
+                //Check with equals
+                if (this.company == null || !this.company.equals(other.company)) {
+                    return false; 
+                }
+            }*/
+ 
+            //Here all members are the same
             return true;
         }
  
@@ -81,22 +98,33 @@ public class Computer implements Serializable {
 	
 	
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	public int getId() {
 		return id;
 	}
 
+	@Column(name="name")
 	public String getName() {
 		return name;
 	}
 
+	@Column(name="introduced")
+	//TODO @Temporal(TemporalType.DATE) a la place de @Convert?
+	@Convert(converter = LocalDatePersistenceConverter.class)
 	public LocalDateTime getDateAdded() {
 		return dateAdded;
 	}
 
+	@Column(name="discontinued")
+	@Convert(converter = LocalDatePersistenceConverter.class)
 	public LocalDateTime getDateRemoved() {
 		return dateRemoved;
 	}
 
+	@ManyToOne(optional=true, fetch = FetchType.EAGER)//, cascade=CascadeType.ALL
+	@JoinColumn(name = "company_id", nullable = false)
 	public Company getCompany() {
 		return company;
 	}

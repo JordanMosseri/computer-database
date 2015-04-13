@@ -20,7 +20,6 @@ import com.excilys.computerdatabase.service.IComputerService;
 
 
 @Service
-@Transactional(readOnly = true)
 public class ComputerService implements IComputerService {
 	
 	@Autowired
@@ -69,7 +68,6 @@ public class ComputerService implements IComputerService {
 	@Override
 	public boolean addComputer(Computer computer) {
 		
-		
 		//Company Id is provided
 		if(computer.getCompany().getId() >= 0) {
 			
@@ -86,21 +84,26 @@ public class ComputerService implements IComputerService {
 		
 		//TODO
 		//Company Name is provided
-		/*else if( computer.getCompany().getName() != null && !computer.getCompany().getName().trim().isEmpty() ) {
-			
+		else if( computer.getCompany().getName() != null && !computer.getCompany().getName().trim().isEmpty() ) {
+			/*
 			//Company Name exists in db
 			computer.getCompany().setId(companyDAO.getIdIfNameExists(computer.getCompany().getName()));
 			
 			if(computer.getCompany().getId()<0){
 				computer.getCompany().setId(companyDAO.save(computer.getCompany().getName()));
-			}
-		}*/
+			}*/
+		}
 		
 		//Else companyId < 0 and companyName not entered
-		
 		if (!companyDAO.exists(computer.getCompany().getId())) {
 			computer.getCompany().setId(-1);
 		}
+		
+		//TODO
+		//test avec nvelle company a chaque fois
+		/*companyDAO.save(computer.getCompany());
+		computer.getCompany().getComputers().add(computer);*/
+		//fin test
 		
 		computerDAO.save(computer);
 		
@@ -110,7 +113,7 @@ public class ComputerService implements IComputerService {
 	@PersistenceContext private EntityManager em;
 	
 	@Override
-	@Transactional
+	//@Transactional
 	public boolean updateComputer(Computer computer){
 
 		computerDAO.save(computer);

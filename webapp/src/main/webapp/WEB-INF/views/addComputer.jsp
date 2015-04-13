@@ -95,6 +95,8 @@
         </div>
     </section>
     
+    <jsp:include page="footer.jsp"></jsp:include>
+    
     <style>
     	label.error{
     		font-weight: initial;

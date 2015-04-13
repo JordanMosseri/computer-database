@@ -1,6 +1,6 @@
 <%@page session="false"%>
 
-<jsp:include page="header.jsp" />
+	<jsp:include page="header.jsp" />
 
     <section id="main">
         <div class="container">
@@ -12,6 +12,8 @@
             </div>
         </div>
     </section>
+    
+    <jsp:include page="footer.jsp"></jsp:include>
 
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>

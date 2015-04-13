@@ -115,9 +115,12 @@
 		</div>
 		
     </footer>
-<script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/dashboard.js"></script>
+    
+    <jsp:include page="footer.jsp"></jsp:include>
+    
+	<script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/static/js/dashboard.js"></script>
 
 </body>
 </html>

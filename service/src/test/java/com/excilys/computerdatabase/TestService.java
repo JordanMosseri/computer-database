@@ -39,19 +39,53 @@ public class TestService {
 	}
 	
 	@Test
-	public void testService1() {
+	public void testServiceGetAll() {
+		
+		//List to fake
 		List<Computer> computers = new ArrayList<Computer>();
 		computers.add(new Computer(-1, "computerMocked", null, null, new Company(1)));
+		computers.add(new Computer(-1, "computerMocked number 2", null, null, new Company("abcd", 2)));
 		
+		//Mock DAOs functions
 		Mockito.when(computerDAO.findAll()).thenReturn(computers);
 		
+		//Check if everything fine
 		List<Computer> computersFromService = computerService.getComputers();
-		Assert.assertEquals("computerMocked", computersFromService.get(0).getName());
+		Assert.assertEquals(computers, computersFromService);
 	}
 	
 	@Test
-	//TODO
+	public void testGetOne() {
+		
+		//Computer to fake
+		Computer computer = new Computer(2, "computerMocked", null, null, new Company(1));
+		
+		//Mock DAOs functions
+		Mockito.when(computerDAO.findOne(computer.getId())).thenReturn(computer);
+		
+		//Check if everything fine
+		Computer computerFromService = computerService.getComputer(computer.getId());
+		Assert.assertEquals(computer, computerFromService);
+	}
+	
+	@Test
 	public void testServiceAdd() {
+		
+		//Computer to add
+		Computer computer = new Computer(-1, "computerMocked", null, null, new Company(1));
+		
+		//Mock DAOs functions
+		Mockito.when(companyDAO.exists(computer.getCompany().getId())).thenReturn(true);
+		Mockito.when(computerDAO.save(computer)).thenReturn(computer);
+		
+		//Check if everything fine
+		boolean result = computerService.addComputer(computer);
+		Assert.assertTrue(result);
+	}
+	
+	//TODO
+	@Test
+	public void testGetPart() {
 		
 	}
 	

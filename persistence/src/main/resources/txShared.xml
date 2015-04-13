@@ -1,23 +1,26 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
         ">
         
-    <import resource="classpath:coreContext.xml"/>
-    <import resource="classpath:persistenceContext.xml"/>
-        
- 	<context:annotation-config/>
-	<context:component-scan base-package="com.excilys.computerdatabase.service"/>
- 	
-    <import resource="classpath:txShared.xml"/>
- 
+    <!-- This Spring config is used by the Service layer and by the tests of the Persistence layer -->
+    
+    <!-- Enable Annotation based Declarative Transaction Management -->
+    
+    <tx:annotation-driven mode="proxy" transaction-manager="transactionManager" />
+    
+    
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	    <property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
+
 </beans>
