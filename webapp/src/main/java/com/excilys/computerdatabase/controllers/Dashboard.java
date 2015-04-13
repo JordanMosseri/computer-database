@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.service.IComputerService;
@@ -60,7 +61,7 @@ public class Dashboard {
 	    	search = searchParam;
 	    }
 	    
-	    paginationObject = service.getComputers(intOffset, pageSize, search);
+	    paginationObject = DTOMapper.convert(service.getComputers(intOffset, pageSize, search));
 		
 	    model.addObject("pageSize", pageSize);
 	    model.addObject("paginationObject", paginationObject);

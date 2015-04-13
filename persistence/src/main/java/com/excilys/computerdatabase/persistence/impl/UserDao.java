@@ -30,8 +30,8 @@ public class UserDao extends JdbcDaoSupport implements IUserDao {
 	/*@Autowired
 	private SessionFactory sessionFactory;*/
  
-	@SuppressWarnings("unchecked")
-	public User findByUserName(String username) {
+	//@SuppressWarnings("unchecked")
+	public User findByUsername(String username) {
  
 		List<User> users = new ArrayList<User>();
 		

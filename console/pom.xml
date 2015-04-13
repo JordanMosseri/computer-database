@@ -25,6 +25,18 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		
+		<!-- Jersey webservice client -->
+		
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 </project>

@@ -17,7 +17,7 @@ import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.service.IComputerService;
-import com.excilys.computerdatabase.util.Utils;
+import com.excilys.computerdatabase.util.LocaleUtils;
 
 /**
  * Controller for the add functionality. 
@@ -41,7 +41,7 @@ public class AddComputer {
 	private void prepareModel(ModelMap model, boolean atEndpoint){
 		
 		//TODO passer par les proprietes?
-		model.addAttribute("formatString", Utils.getPatternOfCurrentLocale());
+		model.addAttribute("formatString", LocaleUtils.getPatternOfCurrentLocale());
 		
 		if(atEndpoint) {
 			//For the spring form validation/paths

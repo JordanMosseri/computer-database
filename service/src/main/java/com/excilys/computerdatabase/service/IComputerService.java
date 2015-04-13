@@ -10,7 +10,7 @@ public interface IComputerService {
 
 	public abstract List<Computer> getComputers();
 
-	public abstract Paging<ComputerDTO> getComputers(int offset, int limit,
+	public abstract Paging<Computer> getComputers(int offset, int limit,
 			String word);
 	
 	public abstract Computer getComputer(int id);

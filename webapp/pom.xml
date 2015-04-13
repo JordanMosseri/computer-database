@@ -28,10 +28,10 @@
 		</dependency>
 
 		<!-- Web -->
-
+		
 		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>
-			<artifactId>javax.servlet.jsp.jstl-api</artifactId>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
 		</dependency>
 
 		<dependency>
@@ -74,11 +74,6 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
 		</dependency>
 
 		<dependency>

@@ -8,8 +8,19 @@ public class Paging <T> implements Serializable {
 	
 	private static final long serialVersionUID = 6047144449202457970L;
 	
+	/**
+	 * 
+	 */
 	private int offset;
+	
+	/**
+	 * 
+	 */
 	private List<T> actualList;
+	
+	/**
+	 * 
+	 */
 	private int indexPage;
 	
 	/**
@@ -17,6 +28,9 @@ public class Paging <T> implements Serializable {
 	 */
 	private int totalSize;
 	
+	/**
+	 * 
+	 */
 	private int pageSize;
 	
 	

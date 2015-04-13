@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.modele.UserRole;
 import com.excilys.computerdatabase.persistence.IUserDao;
+import com.excilys.computerdatabase.persistence.IUserRepository;
 
 @Service("userDetailsService")
 public class MyUserDetailsService implements UserDetailsService {
@@ -30,7 +31,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(final String username) 
 		throws UsernameNotFoundException {
  
-		com.excilys.computerdatabase.modele.User user = userDao.findByUserName(username);
+		com.excilys.computerdatabase.modele.User user = userDao.findByUsername(username);
 		List<GrantedAuthority> authorities = 
                                       buildUserAuthority(user.getUserRole());
  

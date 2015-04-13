@@ -1,25 +1,29 @@
 package com.excilys.computerdatabase.cli;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang3.math.NumberUtils;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Company;
-import com.excilys.computerdatabase.modele.Computer;
 import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.service.ICompanyService;
-import com.excilys.computerdatabase.service.IComputerService;
+import com.excilys.computerdatabase.util.LocaleUtils;
 import com.excilys.computerdatabase.util.Utils;
 
 @Component
 public class View implements IView {
-	
-	@Autowired
-	IComputerService computerService;
 	
 	@Autowired
 	ICompanyService companyService;
@@ -37,9 +41,20 @@ public class View implements IView {
 	
 	Scanner in = new Scanner(System.in);
 	
+	public final static String webserviceURL = "http://localhost:8080/webservice/rest/computerWebService";
+	Client client;
+	WebTarget computerTarget;
+	
+	public void initWebservice() {
+		client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+		computerTarget = client.target(webserviceURL);
+	}
+	
 	
 	@Override
 	public  void lancerProgramme() {
+		
+		initWebservice();
 		
 		boolean continuer = true;
 		
@@ -50,41 +65,66 @@ public class View implements IView {
 			
 			switch (selection) {
 			case 1:
-				this.println( computerService.getComputers() );
+				this.println(
+						computerTarget.path("/getAll").request(MediaType.APPLICATION_JSON).get(new GenericType<ArrayList<ComputerDTO>>() {})
+						);
 				break;
 			case 2:
-				this.println( companyService.getCompanies() );
+				this.println(
+						companyService.getCompanies()
+						);
 				break;
 			case 3:
-				this.println( computerService.getComputer( this.getIntFromConsole("Please enter a computer id: ") ) );
+				int idToGet = this.getIntFromConsole("Please enter a computer id: ");
+				this.println(
+						computerTarget.path("/get/"+idToGet).request(MediaType.APPLICATION_JSON).get(new GenericType<ComputerDTO>() {})
+						);
 				break;
 			case 4:
-				println(computerService.addComputer( DTOMapper.convert(this.getComputerDTOFromConsole()) ));
+				
+				Response responseAdd = computerTarget.path("/add").request(MediaType.APPLICATION_JSON).post(Entity.entity(this.getComputerDTOFromConsole(), MediaType.APPLICATION_JSON));
+				if(responseAdd.getStatus() != 200 && responseAdd.getStatus() != 204 ) {
+					System.out.println("Error http " + responseAdd.getStatus());
+				}
+				
+				println(responseAdd.getEntity());
 				break;
 			case 5:
 				int id = this.getIntFromConsole("Please enter a computer id: ");
 				
-				ComputerDTO computerDTO = DTOMapper.convert(computerService.getComputer(id));
+				ComputerDTO computerDTO = computerTarget.path("/get/"+id).request(MediaType.APPLICATION_JSON).get(new GenericType<ComputerDTO>() {});
 				
 				String nomRecupered = this.getStringFromConsole("Veuillez entrer un nouveau nom d'ordi (vide pour passer): ");
 				if(!nomRecupered.equals("")){
 					computerDTO.setName(nomRecupered);
 				}
 				
-				String dateRecupered = this.getDateFromConsole("Please enter an added date formatted "+Utils.getPatternOfCurrentLocale()+" (leave empty to skip): ");
+				String dateRecupered = this.getDateFromConsole("Please enter an added date formatted "+LocaleUtils.getPatternOfCurrentLocale()+" (leave empty to skip): ");
 				if(dateRecupered != null){
 					computerDTO.setDateAdded(dateRecupered);
 				}
 				
-				String dateRemovedRecupered = this.getDateFromConsole("Please enter a removed date formatted "+Utils.getPatternOfCurrentLocale()+" (leave empty to skip): ");
+				String dateRemovedRecupered = this.getDateFromConsole("Please enter a removed date formatted "+LocaleUtils.getPatternOfCurrentLocale()+" (leave empty to skip): ");
 				if(dateRemovedRecupered != null){
 					computerDTO.setDateRemoved(dateRemovedRecupered);
 				}
 				
-				println(computerService.updateComputer(DTOMapper.convert(computerDTO)));
+				Response responseUpdate = computerTarget.path("/update").request(MediaType.APPLICATION_JSON).post(Entity.entity(computerDTO, MediaType.APPLICATION_JSON));
+				if(responseUpdate.getStatus() != 200 && responseUpdate.getStatus() != 204 ) {
+					System.out.println("Error http " + responseUpdate.getStatus());
+				}
+				
+				println(responseUpdate.getEntity());
 				break;
 			case 6:
-				println(computerService.deleteComputer( this.getIntFromConsole("Please enter a computer id: ") ));
+				int idToDelete = this.getIntFromConsole("Please enter a computer id: ");
+				
+				Response responseDelete = computerTarget.path("/delete/" + idToDelete).request(MediaType.APPLICATION_JSON).delete();
+				if(responseDelete.getStatus() != 200 && responseDelete.getStatus() != 204 ) {
+					System.out.println("Error http " + responseDelete.getStatus());
+				}
+				
+				println(responseDelete.getEntity());
 				break;
 			case 7:
 				println(companyService.deleteCompany(getIntFromConsole("Please enter a computer id: ")));
@@ -156,8 +196,8 @@ public class View implements IView {
 	public  ComputerDTO getComputerDTOFromConsole(){
 		String nom = getStringFromConsole("Please enter a computer name: ");
 		String fab = getStringFromConsole("Please enter a company name: ");
-		String dateAddedEntered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+Utils.getPatternOfCurrentLocale()+" (vide pour passer): ");
-		String dateRemovedEntered = getDateFromConsole("Veuillez entrer une date de suppression au format "+Utils.getPatternOfCurrentLocale()+" (vide pour passer): ");
+		String dateAddedEntered = getDateFromConsole("Veuillez entrer une date d'ajout au format "+LocaleUtils.getPatternOfCurrentLocale()+" (vide pour passer): ");
+		String dateRemovedEntered = getDateFromConsole("Veuillez entrer une date de suppression au format "+LocaleUtils.getPatternOfCurrentLocale()+" (vide pour passer): ");
 		//Date d = new Date(System.currentTimeMillis());
 		this.println();
 		

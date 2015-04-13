@@ -8,22 +8,19 @@
 		http://www.springframework.org/schema/security/spring-security-3.2.xsd
         ">
  
-	<http auto-config="true">
+	<http entry-point-ref="digestEntryPoint">
 		<intercept-url pattern="/dashboard**" access="ROLE_USER" />
 		<intercept-url pattern="/add**" access="ROLE_USER" />
 		<intercept-url pattern="/editComputer**" access="ROLE_USER" />
 		
+		<!-- <http-basic /> -->
+		
 		<custom-filter ref="digestFilter" position="DIGEST_AUTH_FILTER" />
+		<!-- <logout logout-success-url="/dashboard" logout-url="/j_spring_security_logout"/> -->
 	</http>
  
 	<authentication-manager>
-	  <authentication-provider user-service-ref="userDetailsService">
-	  
-	    <!-- <user-service>
-			<user name="mkyong" password="123456" authorities="ROLE_USER" />
-	    </user-service> -->
-	    
-	  </authentication-provider>
+		<authentication-provider user-service-ref="userDetailsService"/>
 	</authentication-manager>
 	
 	<!-- HTTP Digest configuration -->

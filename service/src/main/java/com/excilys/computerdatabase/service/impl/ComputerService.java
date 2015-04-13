@@ -12,9 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.computerdatabase.mappers.DTOMapper;
 import com.excilys.computerdatabase.modele.Computer;
-import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.modele.Paging;
 import com.excilys.computerdatabase.persistence.CompanyPaginationRep;
 import com.excilys.computerdatabase.persistence.ComputerPaginationRep;
@@ -38,7 +36,7 @@ public class ComputerService implements IComputerService {
 	}
 	
 	@Override
-	public Paging<ComputerDTO> getComputers(int offset, int limit, String word){
+	public Paging<Computer> getComputers(int offset, int limit, String word){
 		
 		//Get part of computers
 		List<Computer> partOfComputers = null;
@@ -52,7 +50,7 @@ public class ComputerService implements IComputerService {
 		
 		
 		//Returns Paging object
-		Paging<ComputerDTO> page = new Paging<ComputerDTO>(offset, DTOMapper.convert(partOfComputers), (offset+1)/limit, (int) computerDAO.count());
+		Paging<Computer> page = new Paging<Computer>(offset, partOfComputers, (offset+1)/limit, (int) computerDAO.count());
 		
 		return page;
 	}
@@ -113,9 +111,9 @@ public class ComputerService implements IComputerService {
 	
 	@Override
 	@Transactional
-	public boolean updateComputer(Computer c){
+	public boolean updateComputer(Computer computer){
 
-		computerDAO.save(c);
+		computerDAO.save(computer);
 		
 		return true;
 	}

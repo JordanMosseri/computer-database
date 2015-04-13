@@ -1,13 +1,19 @@
-package com.excilys.computerdatabase.mappers;
+package com.excilys.computerdatabase.mappers.DBMappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.springframework.jdbc.core.RowMapper;
 
+import com.excilys.computerdatabase.mappers.DateMapper;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
-import com.excilys.computerdatabase.util.Utils;
 
+/**
+ * To map Computer objects from database.
+ * @author Jordan Mosseri
+ *
+ */
 public class ComputerRowMapper implements RowMapper<Computer> {
 	
 	@Override
@@ -23,7 +29,7 @@ public class ComputerRowMapper implements RowMapper<Computer> {
 			e.printStackTrace();
 		}
 		
-		return new Computer(rs.getInt("id"), rs.getString("name"), Utils.getLocalDateTime(rs.getTimestamp("introduced")), Utils.getLocalDateTime(rs.getTimestamp("discontinued")), company);
+		return new Computer(rs.getInt("id"), rs.getString("name"), DateMapper.getLocalDateTime(rs.getTimestamp("introduced")), DateMapper.getLocalDateTime(rs.getTimestamp("discontinued")), company);
 	}
 
 }
