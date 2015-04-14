@@ -111,7 +111,6 @@ public class Computer implements Serializable {
 	}
 
 	@Column(name="introduced")
-	//TODO @Temporal(TemporalType.DATE) a la place de @Convert?
 	@Convert(converter = LocalDatePersistenceConverter.class)
 	public LocalDateTime getDateAdded() {
 		return dateAdded;

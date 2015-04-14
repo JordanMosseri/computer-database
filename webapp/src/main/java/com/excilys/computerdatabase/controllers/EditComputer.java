@@ -30,17 +30,10 @@ public class EditComputer  {
 	
 	@RequestMapping(value = "/editComputer**", method = RequestMethod.GET)
 	public String endPoint(ModelMap model,
-			@RequestParam(value="id", defaultValue="", required=false) final String idParam
+			@RequestParam(value="id", defaultValue="", required=false) final int intId
 			){
 		
-		int intId;
 		ComputerDTO computer;
-		
-	    if (idParam == null) {
-	    	intId=-1;
-	    } else {
-	    	intId = NumberUtils.toInt( idParam );
-	    }
 	    
 	    computer = DTOMapper.convert(computerService.getComputer(intId));
 		
@@ -53,7 +46,7 @@ public class EditComputer  {
 	
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
 	public String action(ModelMap model,
-			@RequestParam(value="idHidden", defaultValue="", required=false) final String idString,
+			@RequestParam(value="idHidden", defaultValue="", required=true) final String idString,
 			@RequestParam(value="computerName", defaultValue="", required=false) final String computerName,
 			@RequestParam(value="introduced", defaultValue="", required=false) final String introduced,
 			@RequestParam(value="discontinued", defaultValue="", required=false) final String discontinued,
@@ -62,7 +55,7 @@ public class EditComputer  {
 		
 		ComputerDTO cdto = new ComputerDTO(NumberUtils.toInt(idString), computerName, introduced, discontinued, new Company(NumberUtils.toInt(companyId)));
 		
-		boolean ok = computerService.updateComputer(DTOMapper.convert(cdto));
+		computerService.updateComputer(DTOMapper.convert(cdto));
 		
 		return "forward:/dashboard";
 		

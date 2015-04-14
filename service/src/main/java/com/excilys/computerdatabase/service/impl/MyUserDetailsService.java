@@ -17,12 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.modele.UserRole;
 import com.excilys.computerdatabase.persistence.IUserDao;
-import com.excilys.computerdatabase.persistence.IUserRepository;
 
+/**
+ * Service to get authorizations for Spring security
+ * @author excilys
+ *
+ */
 @Service("userDetailsService")
 public class MyUserDetailsService implements UserDetailsService {
- 
-	//get user from the database, via Hibernate
+	
 	@Autowired
 	private IUserDao userDao;
  
@@ -39,8 +42,13 @@ public class MyUserDetailsService implements UserDetailsService {
  
 	}
  
-	// Converts com.mkyong.users.model.User user to
-	// org.springframework.security.core.userdetails.User
+	/**
+	 * Converts com.excilys.computerdatabase.modele.User user to 
+	 * org.springframework.security.core.userdetails.User
+	 * @param user
+	 * @param authorities
+	 * @return
+	 */
 	private User buildUserForAuthentication(com.excilys.computerdatabase.modele.User user, 
 		List<GrantedAuthority> authorities) {
 		return new User(user.getUsername(), user.getPassword(), 

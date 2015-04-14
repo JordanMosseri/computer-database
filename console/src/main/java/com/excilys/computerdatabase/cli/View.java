@@ -13,20 +13,15 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.ComputerDTO;
-import com.excilys.computerdatabase.service.ICompanyService;
 import com.excilys.computerdatabase.util.LocaleUtils;
 import com.excilys.computerdatabase.util.Utils;
 
 @Component
 public class View implements IView {
-	
-	@Autowired
-	ICompanyService companyService;
 	
 	public static final String[] POSSIBILITES = {
 		"List computers", 
@@ -41,13 +36,16 @@ public class View implements IView {
 	
 	Scanner in = new Scanner(System.in);
 	
-	public final static String webserviceURL = "http://localhost:8080/webservice/rest/computerWebService";
-	Client client;
+	public final static String computerWebserviceURL = "http://localhost:8080/webservice/rest/computerWebService";
+	public final static String companyWebserviceURL = "http://localhost:8080/webservice/rest/companyWebService";
+	Client wsClient;
 	WebTarget computerTarget;
+	WebTarget companyTarget;
 	
 	public void initWebservice() {
-		client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
-		computerTarget = client.target(webserviceURL);
+		wsClient = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+		computerTarget = wsClient.target(computerWebserviceURL);
+		companyTarget = wsClient.target(companyWebserviceURL);
 	}
 	
 	
@@ -71,7 +69,7 @@ public class View implements IView {
 				break;
 			case 2:
 				this.println(
-						companyService.getCompanies()
+						companyTarget.path("/getAll").request(MediaType.APPLICATION_JSON).get(new GenericType<ArrayList<Company>>() {})
 						);
 				break;
 			case 3:
@@ -127,7 +125,14 @@ public class View implements IView {
 				println(responseDelete.getEntity());
 				break;
 			case 7:
-				println(companyService.deleteCompany(getIntFromConsole("Please enter a computer id: ")));
+				int idToDeleteCompany = getIntFromConsole("Please enter a computer id: ");
+				
+				Response responseDeleteCompany = companyTarget.path("/delete/" + idToDeleteCompany).request(MediaType.APPLICATION_JSON).delete();
+				if(responseDeleteCompany.getStatus() != 200 && responseDeleteCompany.getStatus() != 204 ) {
+					System.out.println("Error http " + responseDeleteCompany.getStatus());
+				}
+				
+				println(responseDeleteCompany.getEntity());
 				break;
 			case 8:
 				continuer=false;

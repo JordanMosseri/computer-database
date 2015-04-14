@@ -26,9 +26,6 @@ public class UserDao extends JdbcDaoSupport implements IUserDao {
 	    super();
 	    setDataSource(dataSource);
 	}
-	
-	/*@Autowired
-	private SessionFactory sessionFactory;*/
  
 	//@SuppressWarnings("unchecked")
 	public User findByUsername(String username) {

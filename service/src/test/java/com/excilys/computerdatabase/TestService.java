@@ -14,8 +14,6 @@ import com.excilys.computerdatabase.persistence.CompanyPaginationRep;
 import com.excilys.computerdatabase.persistence.ComputerPaginationRep;
 import com.excilys.computerdatabase.service.impl.ComputerService;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations={"/serviceContext.xml"})
 public class TestService {
 	
 	//@Autowired
@@ -69,6 +67,30 @@ public class TestService {
 	}
 	
 	@Test
+	public void testServiceAddWithNullCompany() {
+		
+		//Computer to add
+		Computer computer = new Computer(-1, "computerMocked", null, null, null);
+		
+		computerService.addComputer(computer);
+	}
+	
+	@Test
+	public void testServiceAddWithNegativeCompanyId() {
+		
+		//Computer to add
+		Computer computer = new Computer(-1, "computerMocked", null, null, new Company(-1));
+		
+		//Mock DAOs functions
+		Mockito.when(computerDAO.save(computer)).thenReturn(computer);
+		
+		computerService.addComputer(computer);
+	}
+	
+	/**
+	 * Company id provided, exists in db
+	 */
+	@Test
 	public void testServiceAdd() {
 		
 		//Computer to add
@@ -83,7 +105,63 @@ public class TestService {
 		Assert.assertTrue(result);
 	}
 	
-	//TODO
+	/**
+	 * Company name provided, doesn't exists, attempt to create it
+	 */
+	@Test
+	public void testServiceAddWithNewCompany() {
+		
+		//Computer to add
+		Computer computer = new Computer(-1, "computerMocked", null, null, new Company("hello, I am a new company to be added"));
+		
+		//Mock DAOs functions
+		Mockito.when(companyDAO.exists(computer.getCompany().getId())).thenReturn(false);
+		Mockito.when(companyDAO.findByName(computer.getCompany().getName())).thenReturn(null);
+		Mockito.when(companyDAO.save(computer.getCompany())).thenReturn(new Company(computer.getCompany().getName(), 50));
+		Mockito.when(companyDAO.exists(50)).thenReturn(true);
+		Mockito.when(computerDAO.save(computer)).thenReturn(computer);
+		
+		//Check if everything fine
+		boolean result = computerService.addComputer(computer);
+		Assert.assertTrue(result);
+	}
+	
+	/**
+	 * Company name provided, exists in db
+	 */
+	@Test
+	public void testServiceAddWithExistantCompany() {
+		
+		//Computer to add
+		Computer computer = new Computer(-1, "computerMocked", null, null, new Company("hello, I am an existant company"));
+		
+		//Mock DAOs functions
+		Mockito.when(companyDAO.exists(computer.getCompany().getId())).thenReturn(false);
+		Mockito.when(companyDAO.findByName(computer.getCompany().getName())).thenReturn(new Company(computer.getCompany().getName(), 25));
+		Mockito.when(companyDAO.exists(25)).thenReturn(true);
+		Mockito.when(computerDAO.save(computer)).thenReturn(computer);
+		
+		//Check if everything fine
+		boolean result = computerService.addComputer(computer);
+		Assert.assertTrue(result);
+	}
+	
+	/**
+	 * Company id provided, doesn't exists, an error happen
+	 */
+	@Test(expected = IllegalStateException.class)
+	public void testServiceAddWithUnexistantCompanyError() {
+		
+		//Computer to add
+		Computer computer = new Computer(-1, "computerMocked", null, null, new Company(12));
+		
+		//Mock DAOs functions
+		Mockito.when(companyDAO.exists(12)).thenReturn(false);
+		
+		//Attempt to call addComputer()
+		computerService.addComputer(computer);
+	}
+	
 	@Test
 	public void testGetPart() {
 		

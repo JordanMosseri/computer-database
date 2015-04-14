@@ -1,24 +1,16 @@
-/**
- * 
- */
+//$("#addForm").removeAttr("novalidate");
 
-/*
- * var strings = new Array();
-  strings['messages.view'] = "<spring:message code='messages.view' javaScriptEscape='true' />";
-  strings['messages.edit'] = "<spring:message code='messages.edit' javaScriptEscape='true' />";
- */
+jQuery.validator.addMethod("regex", 
+		function(value, element, regexp) {
+			if (regexp.constructor != RegExp)
+				regexp = new RegExp(regexp);
+			else if (regexp.global)
+				regexp.lastIndex = 0;
+			return this.optional(element) || regexp.test(value);
+		}, "Incorrect date, out of bounds.");
 
-jQuery(document).ready(function() {
-	jQuery.validator.addMethod("regex", 
-			function(value, element, regexp) {
-				if (regexp.constructor != RegExp)
-					regexp = new RegExp(regexp);
-				else if (regexp.global)
-					regexp.lastIndex = 0;
-				return this.optional(element) || regexp.test(value);
-			}, "Incorrect date, out of bounds.");
-
-	jQuery("#addForm").validate({
+$("#addForm input[type=submit]").click(function(e) {
+	$("#addForm").validate({
 		rules : {
 			"computerName" : {
 				"required" : true,
@@ -33,8 +25,4 @@ jQuery(document).ready(function() {
 			}
 		}
 	});
-//});
-
-//$(document).ready(function() {
-	//$("#addForm").validate();
 });

@@ -1,13 +1,7 @@
 package com.excilys.computerdatabase.util;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class LocaleUtils {

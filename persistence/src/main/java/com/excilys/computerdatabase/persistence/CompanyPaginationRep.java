@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.excilys.computerdatabase.modele.Company;
 
 public interface CompanyPaginationRep extends JpaRepository<Company, Integer> {
-
+	
+	public Company findByName(String name);
 }

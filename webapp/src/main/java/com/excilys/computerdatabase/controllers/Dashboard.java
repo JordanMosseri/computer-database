@@ -79,7 +79,7 @@ public class Dashboard {
 		String[] stringId = selection.split(",");
 		
 		for (String string : stringId) {
-			boolean ok = service.deleteComputer(NumberUtils.toInt(string));
+			service.deleteComputer(NumberUtils.toInt(string));
 		}
 		
 		return "dashboard";

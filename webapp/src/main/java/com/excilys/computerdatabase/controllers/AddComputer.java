@@ -79,7 +79,7 @@ public class AddComputer {
 			return "addComputer";
 		}
 		else {
-			boolean ok = computerService.addComputer(DTOMapper.convert(computerDTO));
+			computerService.addComputer(DTOMapper.convert(computerDTO));
 			
 			return "forward:/dashboard";
 		}
