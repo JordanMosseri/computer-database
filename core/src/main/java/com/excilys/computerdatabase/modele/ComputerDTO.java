@@ -6,8 +6,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.excilys.computerdatabase.validator.MyDate;
 
+/**
+ * Holds primitive and String values
+ * @author Jordan Mosseri
+ *
+ */
 public class ComputerDTO {
-	
 	
 	private int id;
 	
@@ -49,7 +53,6 @@ public class ComputerDTO {
 	}
 	
 	
-	
 	public int getId() {
 		return id;
 	}
@@ -68,7 +71,6 @@ public class ComputerDTO {
 	public String getDateRemoved() {
 		return dateRemoved;
 	}
-
 
 
 	public void setId(int id) {

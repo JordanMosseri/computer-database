@@ -18,6 +18,11 @@ import com.excilys.computerdatabase.modele.User;
 import com.excilys.computerdatabase.modele.UserRole;
 import com.excilys.computerdatabase.persistence.IUserDao;
 
+/**
+ * Implementation of {@link IUserDao}
+ * @author Jordan Mosseri
+ *
+ */
 @Repository
 public class UserDao extends JdbcDaoSupport implements IUserDao {
  

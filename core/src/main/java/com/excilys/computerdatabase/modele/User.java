@@ -5,6 +5,11 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+/**
+ * Used to manage users' permissions for Spring security
+ * @author Jordan Mosseri
+ *
+ */
 @Entity
 @Table(name = "users", catalog = "test")
 public class User {

@@ -5,7 +5,11 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.excilys.computerdatabase.util.Utils;
 
-
+/**
+ * Used by Spring validator
+ * @author Jordan Mosseri
+ *
+ */
 public class MyDateValidator implements ConstraintValidator<MyDate, String> {
 	 
     @Override

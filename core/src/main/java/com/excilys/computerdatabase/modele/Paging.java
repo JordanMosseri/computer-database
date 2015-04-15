@@ -3,33 +3,38 @@ package com.excilys.computerdatabase.modele;
 import java.io.Serializable;
 import java.util.List;
 
-
+/**
+ * Contains all informations when transferring part of Ts
+ * @author Jordan Mosseri
+ *
+ * @param <T>
+ */
 public class Paging <T> implements Serializable {
 	
 	private static final long serialVersionUID = 6047144449202457970L;
 	
 	/**
-	 * 
+	 * Offset that indicate where to begin
 	 */
 	private int offset;
 	
 	/**
-	 * 
+	 * Holds the part of Ts
 	 */
 	private List<T> actualList;
 	
 	/**
-	 * 
+	 * Actual page number
 	 */
 	private int indexPage;
 	
 	/**
-	 * Total entries in db
+	 * Total entries in the database
 	 */
 	private int totalSize;
 	
 	/**
-	 * 
+	 * Number of items in the list
 	 */
 	private int pageSize;
 	

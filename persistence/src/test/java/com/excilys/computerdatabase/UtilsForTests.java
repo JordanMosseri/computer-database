@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import com.excilys.computerdatabase.modele.Company;
 import com.excilys.computerdatabase.modele.Computer;
 
+/**
+ * Holds variables and methods used by test classes
+ * @author Jordan Mosseri
+ *
+ */
 public class UtilsForTests {
 	
 	//Expected data from the database

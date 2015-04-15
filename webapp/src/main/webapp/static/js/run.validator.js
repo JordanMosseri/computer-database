@@ -1,3 +1,7 @@
+/**
+ * jQuery validate script
+ */
+
 //$("#addForm").removeAttr("novalidate");
 
 jQuery.validator.addMethod("regex", 

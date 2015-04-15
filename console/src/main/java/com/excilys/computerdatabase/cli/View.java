@@ -20,9 +20,17 @@ import com.excilys.computerdatabase.modele.ComputerDTO;
 import com.excilys.computerdatabase.util.LocaleUtils;
 import com.excilys.computerdatabase.util.Utils;
 
+/**
+ * Implementation of {@link IView}
+ * @author Jordan Mosseri
+ *
+ */
 @Component
 public class View implements IView {
 	
+	/**
+	 * Functionalities to display in the menu
+	 */
 	public static final String[] POSSIBILITES = {
 		"List computers", 
 		"List companies", 
@@ -34,23 +42,45 @@ public class View implements IView {
 		"Quitter"
 		};
 	
+	/**
+	 * Used to get user's typing
+	 */
 	Scanner in = new Scanner(System.in);
 	
+	/**
+	 * Computer webservice's URL
+	 */
 	public final static String computerWebserviceURL = "http://localhost:8080/webservice/rest/computerWebService";
+	
+	/**
+	 * Company webservice's URL
+	 */
 	public final static String companyWebserviceURL = "http://localhost:8080/webservice/rest/companyWebService";
+	
+	/**
+	 * Web service client
+	 */
 	Client wsClient;
+	
+	/**
+	 * Computer webservice target to execute functions and get the results
+	 */
 	WebTarget computerTarget;
+	
+	/**
+	 * Company webservice target to execute functions and get the results
+	 */
 	WebTarget companyTarget;
 	
+	@Override
 	public void initWebservice() {
 		wsClient = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
 		computerTarget = wsClient.target(computerWebserviceURL);
 		companyTarget = wsClient.target(companyWebserviceURL);
 	}
 	
-	
 	@Override
-	public  void lancerProgramme() {
+	public  void runProgram() {
 		
 		initWebservice();
 		

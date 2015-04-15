@@ -24,14 +24,5 @@ public class TestUtils {
 		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, "-1.2"));
 		assertFalse(Utils.checkString(Utils.REGEX_INTEGER, null));
 	}
-	
-	/*@Test
-	public void testStringToInt(){
-		assertEquals(1, NumberUtils.toInt("1"));
-		assertEquals(12, NumberUtils.toInt("12"));
-		assertEquals(-1, NumberUtils.toInt("a"));
-		assertEquals(-1, NumberUtils.toInt("5a"));
-	}*/
-	
 
 }

@@ -28,13 +28,24 @@ public class Dashboard {
 	
 	public static final int DEFAULT_PAGE_SIZE = 15;
 	
-	
+	/**
+	 * To display the non-admin page
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
 	public String welcomePage(ModelMap model) {
 		return "hello";
 	}
 	
-
+	/**
+	 * To display the dashboard page
+	 * @param offset
+	 * @param pageSizeParam
+	 * @param searchParam
+	 * @param lang
+	 * @return
+	 */
 	@RequestMapping(value = "/dashboard**")
 	public ModelAndView dashboard(
 			@RequestParam(value="offset", defaultValue="", required=false) final String offset,
@@ -70,7 +81,12 @@ public class Dashboard {
 		return model;
 	}
 	
-	
+	/**
+	 * To delete some computers
+	 * @param model
+	 * @param selection
+	 * @return
+	 */
 	@RequestMapping(value = "/deleteComputer", method = RequestMethod.POST)
 	public String action (ModelMap model, 
 			@RequestParam(value="selection", defaultValue="", required=false) final String selection

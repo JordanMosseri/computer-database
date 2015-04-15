@@ -61,6 +61,11 @@ public class AddComputer {
 		model.addAttribute("companyList", country);
 	}
 	
+	/**
+	 * To display the form page
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/add**")
 	public String endPoint(ModelMap model){
 		
@@ -69,6 +74,13 @@ public class AddComputer {
 		return "addComputer";
 	}
 	
+	/**
+	 * To receive data after user's submit
+	 * @param model
+	 * @param computerDTO
+	 * @param result
+	 * @return
+	 */
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
 	public String action(ModelMap model, @Valid ComputerDTO computerDTO, BindingResult result){
 		

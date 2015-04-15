@@ -4,6 +4,11 @@ import java.lang.annotation.*;
 
 import javax.validation.*;
 
+/**
+ * Used by Spring validator
+ * @author Jordan Mosseri
+ *
+ */
 @Documented
 @Constraint(validatedBy = MyDateValidator.class)
 @Target( { ElementType.FIELD })

@@ -4,6 +4,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+/**
+ * Contains functions to deal with Locale
+ * @author Jordan Mosseri
+ *
+ */
 public class LocaleUtils {
 	
 	private static final String FORMAT_DATE_EN = "yyyy-MM-dd";

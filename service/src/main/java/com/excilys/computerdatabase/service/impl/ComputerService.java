@@ -18,7 +18,11 @@ import com.excilys.computerdatabase.persistence.CompanyPaginationRep;
 import com.excilys.computerdatabase.persistence.ComputerPaginationRep;
 import com.excilys.computerdatabase.service.IComputerService;
 
-
+/**
+ * Implementation of {@link IComputerService}
+ * @author Jordan Mosseri
+ *
+ */
 @Service
 public class ComputerService implements IComputerService {
 	

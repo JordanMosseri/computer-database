@@ -14,6 +14,11 @@ import com.excilys.computerdatabase.persistence.CompanyPaginationRep;
 import com.excilys.computerdatabase.persistence.ComputerPaginationRep;
 import com.excilys.computerdatabase.service.impl.ComputerService;
 
+/**
+ * Tests for the service
+ * @author Jordan Mosseri
+ *
+ */
 public class TestService {
 	
 	//@Autowired

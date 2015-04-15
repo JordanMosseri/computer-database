@@ -3,6 +3,11 @@ package com.excilys.computerdatabase.modele;
 import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * Used to manage users' permissions for Spring security
+ * @author Jordan Mosseri
+ *
+ */
 @Entity
 @Table(name = "user_roles", catalog = "test", 
 	uniqueConstraints = @UniqueConstraint(

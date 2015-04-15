@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.modele.Computer;
 
+/**
+ * Computer's DAO sub interface (to use with JPA)
+ * @author Jordan Mosseri
+ *
+ */
 @Repository
 public interface ComputerPaginationRep extends JpaRepository<Computer, Integer> {
 	

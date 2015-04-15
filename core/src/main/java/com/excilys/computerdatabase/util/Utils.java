@@ -3,6 +3,11 @@ package com.excilys.computerdatabase.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Contains utility functions
+ * @author Jordan Mosseri
+ *
+ */
 public class Utils {
 
 	public static final String REGEX_INTEGER = "[+-]?[0-9]++";

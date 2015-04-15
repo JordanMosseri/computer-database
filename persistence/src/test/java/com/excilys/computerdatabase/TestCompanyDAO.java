@@ -16,7 +16,7 @@ import com.excilys.computerdatabase.persistence.CompanyPaginationRep;
 import com.excilys.computerdatabase.persistence.ComputerPaginationRep;
 
 /**
- * 
+ * Tests for company DAO's functions
  * @author Jordan Mosseri
  *
  */

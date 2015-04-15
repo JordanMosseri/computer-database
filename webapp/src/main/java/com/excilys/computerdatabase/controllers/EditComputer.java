@@ -28,6 +28,12 @@ public class EditComputer  {
 	@Autowired
 	ICompanyService companyService;
 	
+	/**
+	 * To display the form page
+	 * @param model
+	 * @param intId
+	 * @return
+	 */
 	@RequestMapping(value = "/editComputer**", method = RequestMethod.GET)
 	public String endPoint(ModelMap model,
 			@RequestParam(value="id", defaultValue="", required=false) final int intId
@@ -44,6 +50,16 @@ public class EditComputer  {
 		return "editComputer";
 	}
 	
+	/**
+	 * To receive data after user's submit
+	 * @param model
+	 * @param idString
+	 * @param computerName
+	 * @param introduced
+	 * @param discontinued
+	 * @param companyId
+	 * @return
+	 */
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
 	public String action(ModelMap model,
 			@RequestParam(value="idHidden", defaultValue="", required=true) final String idString,

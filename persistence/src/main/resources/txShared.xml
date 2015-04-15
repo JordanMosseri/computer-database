@@ -15,7 +15,6 @@
     <!-- This Spring config is used by the Service layer and by the tests of the Persistence layer -->
     
     <!-- Enable Annotation based Declarative Transaction Management -->
-    
     <tx:annotation-driven mode="proxy" transaction-manager="transactionManager" />
     
     

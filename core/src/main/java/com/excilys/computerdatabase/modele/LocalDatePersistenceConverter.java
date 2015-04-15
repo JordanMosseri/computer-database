@@ -5,6 +5,11 @@ import java.time.LocalDateTime;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+/**
+ * Used to convert date type from the database to the date type of the program, in case of the use of an ORM
+ * @author Jordan Mosseri
+ *
+ */
 @Converter
 public class LocalDatePersistenceConverter implements AttributeConverter<LocalDateTime, java.sql.Date> {
 

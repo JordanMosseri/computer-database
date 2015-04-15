@@ -20,7 +20,7 @@ import com.excilys.computerdatabase.persistence.IUserDao;
 
 /**
  * Service to get authorizations for Spring security
- * @author excilys
+ * @author Jordan Mosseri
  *
  */
 @Service("userDetailsService")
